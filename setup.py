@@ -37,9 +37,11 @@ setup(name='breadability',
     url='http://docs.bmark.us',
     license='BSD',
     packages=find_packages('src'),
-    package_dir = {'': 'src'},include_package_data=True,
+    package_dir = {'': 'src'},
+    include_package_data=True,
     zip_safe=False,
     install_requires=install_requires,
+    tests_require=tests_require,
     extras_require={
         'test': tests_require
     },
