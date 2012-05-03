@@ -6,12 +6,21 @@ README = open(os.path.join(here, 'README.rst')).read()
 NEWS = open(os.path.join(here, 'NEWS.txt')).read()
 
 
-version = '0.1'
+version = '0.1.0'
 
 install_requires = [
     # List your project dependencies here.
     # For more details, see:
     # http://packages.python.org/distribute/setuptools.html#declaring-dependencies
+    'chardet',
+    'lxml',
+]
+
+tests_require = [
+    'coverage',
+    'nose',
+    'pep8',
+    'pylint',
 ]
 
 
@@ -31,6 +40,9 @@ setup(name='breadability',
     package_dir = {'': 'src'},include_package_data=True,
     zip_safe=False,
     install_requires=install_requires,
+    extras_require={
+        'test': tests_require
+    },
     entry_points={
         'console_scripts':
             ['breadability=breadability:main']
