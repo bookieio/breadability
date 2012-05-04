@@ -1,19 +1,12 @@
 from collections import defaultdict
-from os import path
 from unittest import TestCase
 
 from breadability.document import OriginalDocument
-
-
-TEST_DIR = path.dirname(__file__)
-
-
-def load_snippet(filename):
-    """Helper to fetch in the content of a test snippet"""
-    return open(path.join(TEST_DIR, 'test_snippets', filename)).read()
+from breadability.tests import load_snippet
 
 
 class TestOriginalDocuemtn(TestCase):
+
     """Verify we can process html into a document to work off of."""
 
     def test_readin_min_document(self):
@@ -44,5 +37,3 @@ class TestOriginalDocuemtn(TestCase):
 
         self.assertEqual(link_counts['blog'], 2)
         self.assertEqual(link_counts['other'], 1)
-
-
