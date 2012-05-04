@@ -1,4 +1,5 @@
 import re
+from lxml.etree import tostring
 from lxml.etree import tounicode
 from lxml.html import document_fromstring
 from lxml.html import HTMLParser
@@ -46,7 +47,7 @@ def build_doc(page):
     return doc
 
 
-class OriginalDocument(unicode):
+class OriginalDocument(object):
     """The original document to process"""
     _base_href = None
 
@@ -54,9 +55,13 @@ class OriginalDocument(unicode):
         self.orig_html = html
         self.url = url
 
+    def __str__(self):
+        """Render out our document as a string"""
+        return tostring(self.html)
+
     def __unicode__(self):
         """Render out our document as a string"""
-        tounicode(self.html)
+        return tounicode(self.html)
 
     def _parse(self, html):
         """Generate an lxml document from our html."""
@@ -72,8 +77,12 @@ class OriginalDocument(unicode):
     @cached_property(ttl=600)
     def html(self):
         """The parsed html document from the input"""
-        print 'PARSED'
         return self._parse(self.orig_html)
+
+    @cached_property(ttl=600)
+    def links(self):
+        """Links within the document"""
+        return self.html.findall(".//a")
 
     @cached_property(ttl=600)
     def title(self):
