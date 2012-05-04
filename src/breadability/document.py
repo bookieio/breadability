@@ -1,3 +1,4 @@
+import chardet
 import re
 from lxml.etree import tostring
 from lxml.etree import tounicode
@@ -29,6 +30,12 @@ def get_encoding(page):
     if enc == 'MacCyrillic':
         enc = 'cp1251'
     return enc
+
+
+def replace_multi_br_to_paragraphs(html):
+    """Convert multiple <br>s into paragraphs"""
+    rep = re.compile("(<br[^>]*>[ \n\r\t]*){2,}", re.I)
+    return rep.sub('</p><p>', html)
 
 
 def build_doc(page):
@@ -65,6 +72,7 @@ class OriginalDocument(object):
 
     def _parse(self, html):
         """Generate an lxml document from our html."""
+        html = replace_multi_br_to_paragraphs(html)
         doc = build_doc(html)
         # doc = html_cleaner.clean_html(doc)
         base_href = self.url

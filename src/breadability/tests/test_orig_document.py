@@ -5,7 +5,7 @@ from breadability.document import OriginalDocument
 from breadability.tests import load_snippet
 
 
-class TestOriginalDocuemtn(TestCase):
+class TestOriginalDocument(TestCase):
 
     """Verify we can process html into a document to work off of."""
 
@@ -37,3 +37,8 @@ class TestOriginalDocuemtn(TestCase):
 
         self.assertEqual(link_counts['blog'], 2)
         self.assertEqual(link_counts['other'], 1)
+
+    def test_no_br_allowed(self):
+        """We convert all <br/> tags to <p> tags"""
+        doc = OriginalDocument(load_snippet('document_min.html'))
+        self.assertIsNone(doc.html.find('.//br'))
