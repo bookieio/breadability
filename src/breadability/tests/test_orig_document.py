@@ -2,7 +2,7 @@ from collections import defaultdict
 from os import path
 from unittest import TestCase
 
-from breadability.readable import OriginalDocument
+from breadability.document import OriginalDocument
 
 
 TEST_DIR = path.dirname(__file__)
@@ -37,7 +37,6 @@ class TestOriginalDocuemtn(TestCase):
         # and one link that starts with amazon
         link_counts = defaultdict(int)
         for link in links:
-            print link.get('href')
             if link.get('href').startswith('http://blog.mitechie.com'):
                 link_counts['blog'] += 1
             else:
