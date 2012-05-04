@@ -69,7 +69,12 @@ def transform_misused_divs_into_paragraphs(doc):
 
 
 def process(doc):
-    """Process this doc to make it readable."""
+    """Process this doc to make it readable.
+
+    Here's we're going to remove unlikely nodes, find scores on the rest, and
+    clean up and return the final best match.
+
+    """
     unlikely = []
     scorable_node_tags = ['p', 'td', 'pre']
     nodes_to_score = []
@@ -92,14 +97,8 @@ def process(doc):
 
     # process our clean up instructions
     [n.drop_tree() for n in unlikely]
+    return doc
 
-# def transform_misused_divs_into_paragraphs(self):
-#     for elem in self.html.iter():
-# if elem.tag.lower() == "div":
-#     # transform <div>s that do not contain other block elements into <p>s
-#     if not REGEXES['divToPElementsRe'].search(unicode(''.join(map(tostring, list(elem))))):
-#         self.debug("Altering div(#%s.%s) to p" % (elem.get('id', ''), elem.get('class', '')))
-#         elem.tag = "p"
 
 class Article(object):
     """Parsed readable object"""
@@ -114,6 +113,7 @@ class Article(object):
         doc = build_base_document(doc)
         doc = drop_tag(doc, 'script', 'link', 'style', 'noscript')
         doc = transform_misused_divs_into_paragraphs(doc)
+        doc = process(doc)
         return doc
 
 
