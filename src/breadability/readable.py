@@ -69,6 +69,18 @@ def build_base_document(html):
     return found_body
 
 
+def get_link_density(node):
+    """Generate a value for the number of links in the node.
+
+    :param node: pared elementree node
+    :returns float:
+
+    """
+    link_length = len("".join([a.text or "" for a in node.findall(".//a")]))
+    text_length = len(node.text_content())
+    return float(link_length) / max(text_length, 1)
+
+
 def transform_misused_divs_into_paragraphs(doc):
     """Turn all divs that don't have children block level elements into p's
 
@@ -96,16 +108,58 @@ def transform_misused_divs_into_paragraphs(doc):
     return doc
 
 
-def get_link_density(node):
-    """Generate a value for the number of links in the node.
+def check_siblings(candidate_node, candidate_list):
+    """Look through siblings for content that might also be related.
 
-    :param node: pared elementree node
-    :returns float:
+    Things like preambles, content split by ads that we removed, etc.
 
     """
-    link_length = len("".join([a.text or "" for a in node.findall(".//a")]))
-    text_length = len(node.text_content())
-    return float(link_length) / max(text_length, 1)
+    candidate_css = candidate_node.node.get('class')
+    potential_target = candidate_node.content_score * 0.2
+    sibling_target_score = potential_target if potential_target > 10 else 10
+    parent = candidate_node.node.getparent()
+    siblings = parent.getchildren() if parent is not None else []
+
+    for sibling in siblings:
+        append = False
+        content_bonus = 0;
+
+        if sibling is candidate_node.node:
+            append = True
+
+        # Give a bonus if sibling nodes and top candidates have the example
+        # same classname
+        if candidate_css and sibling.get('class') == candidate_css:
+            content_bonus += candidate_node.content_score * 0.2;
+
+        if sibling in candidate_list:
+            adjusted_score = candidate_list[sibling].content_score + \
+                content_bonus
+
+            if adjusted_score >= sibling_target_score:
+                append = True
+
+        if sibling.tag == 'p':
+            link_density = get_link_density(sibling)
+            content = sibling.text_content()
+            content_length  = len(content)
+
+            if content_length > 80 and link_density < 0.25:
+                append = true;
+            elif content_length < 80 and link_density == 0:
+                if ". " in content:
+                    append = True
+
+        if append:
+            if sibling.tag not in ['div', 'p']:
+                # We have a node that isn't a common block level element, like
+                # a form or td tag. Turn it into a div so it doesn't get
+                # filtered out later by accident.
+                sibling.tag = 'div'
+
+            candidate_node.node.append(sibling)
+
+    return candidate_node
 
 
 ###### SCORING
@@ -277,7 +331,11 @@ class Article(object):
             by_score = sorted([c for c in candidates.values()],
                 key=attrgetter('content_score'), reverse=True)
 
-            doc = build_base_document(by_score[0].node)
+            # since we have several candidates, check the winner's siblings
+            # for extra content
+            winner = by_score[0]
+            updated_winner = check_siblings(winner, candidates)
+            doc = build_base_document(updated_winner.node)
         else:
             doc = build_base_document(doc)
 

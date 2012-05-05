@@ -36,7 +36,6 @@ class TestReadableDocument(TestCase):
         No sense processing anything other than the body content.
 
         """
-        print "MIN DOCUMENT"
         doc = Article(load_snippet('document_min.html'))
         self.assertEqual(doc.readable.tag, 'div')
         self.assertEqual(doc.readable.get('id'), 'readabilityBody')

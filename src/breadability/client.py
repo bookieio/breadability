@@ -58,7 +58,7 @@ def main():
         #     print m.html.encode(enc, 'replace')
         # else:
         #     print doc.summary().encode(enc, 'replace')
-        print unicode(doc)
+        print doc
     finally:
         target.close()
 
