@@ -56,7 +56,6 @@ def build_base_document(html):
         found_body = html
     else:
         found_body = html.find('.//body')
-        found_body.tag = 'div'
 
     if found_body is None:
         fragment = fragment_fromstring('<div/>')
@@ -64,6 +63,7 @@ def build_base_document(html):
         fragment.append(html)
         return fragment
     else:
+        found_body.tag = 'div'
         found_body.set('id', 'readabilityBody')
 
     return found_body
