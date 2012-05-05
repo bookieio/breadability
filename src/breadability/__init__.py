@@ -1,4 +1,3 @@
-# Example package with a console entry point
+VERSION = '0.1.0'
 
-def main():
-    print "Hello World"
+import client

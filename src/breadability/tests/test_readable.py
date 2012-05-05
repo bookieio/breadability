@@ -20,7 +20,7 @@ class TestReadableDocument(TestCase):
         """We get back an element tree from our original doc"""
         doc = Article(load_snippet('document_min.html'))
         # We get back the document as a div tag currently by default.
-        self.assertEqual(doc.readable.tag, 'html')
+        self.assertEqual(doc.readable.tag, 'div')
 
     def test_doc_no_scripts_styles(self):
         """Step #1 remove all scripts from the document"""
@@ -36,6 +36,7 @@ class TestReadableDocument(TestCase):
         No sense processing anything other than the body content.
 
         """
+        print "MIN DOCUMENT"
         doc = Article(load_snippet('document_min.html'))
         self.assertEqual(doc.readable.tag, 'div')
         self.assertEqual(doc.readable.get('id'), 'readabilityBody')
@@ -47,9 +48,8 @@ class TestReadableDocument(TestCase):
 
         """
         doc = Article(load_snippet('document_no_body.html'))
-        self.assertEqual(doc.readable.tag, 'html')
-        found_body = doc.readable.find('.//body')
-        self.assertEqual(found_body.get('id'), 'readabilityBody')
+        self.assertEqual(doc.readable.tag, 'div')
+        self.assertEqual(doc.readable.get('id'), 'readabilityBody')
 
     def test_bare_content(self):
         """If the document is just pure content, no html tags we should be ok

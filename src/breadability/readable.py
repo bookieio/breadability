@@ -1,8 +1,9 @@
 import re
-from collections import namedtuple
 from operator import attrgetter
 from lxml.etree import tounicode
+from lxml.etree import tostring
 from lxml.html import fragment_fromstring
+from lxml.html import fromstring
 from breadability.document import OriginalDocument
 from breadability.utils import cached_property
 
@@ -50,7 +51,12 @@ def build_base_document(html):
     :param html: Parsed Element object
 
     """
-    found_body = html.find('.//body')
+    if html.tag == 'body':
+        html.tag = 'div'
+        found_body = html
+    else:
+        found_body = html.find('.//body')
+        found_body.tag = 'div'
 
     if found_body is None:
         fragment = fragment_fromstring('<div/>')
@@ -59,7 +65,8 @@ def build_base_document(html):
         return fragment
     else:
         found_body.set('id', 'readabilityBody')
-        return html
+
+    return found_body
 
 
 def transform_misused_divs_into_paragraphs(doc):
@@ -81,10 +88,10 @@ def transform_misused_divs_into_paragraphs(doc):
             # We need to create a <p> and put all it's contents in there
             # We'll just stringify it, then regex replace the first/last
             # div bits to turn them into <p> vs <div>.
-            orig = tounicode(elem)
+            orig = tounicode(elem).strip()
             started = re.sub(r'^<\s*div', '<p', orig)
             ended = re.sub(r'div>$', 'p>', started)
-            elem.getparent().replace(elem, fragment_fromstring(ended))
+            elem.getparent().replace(elem, fromstring(ended))
 
     return doc
 
@@ -250,6 +257,12 @@ class Article(object):
 
     def __init__(self, html, url=None):
         self.orig = OriginalDocument(html, url=url)
+
+    def __str__(self):
+        return tostring(self.readable)
+
+    def __unicode__(self):
+        return tounicode(self.readable)
 
     @cached_property(ttl=600)
     def readable(self):
