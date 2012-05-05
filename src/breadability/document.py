@@ -1,4 +1,5 @@
 import chardet
+import logging
 import re
 from lxml.etree import tostring
 from lxml.etree import tounicode
@@ -8,6 +9,7 @@ from lxml.html import HTMLParser
 from breadability.utils import cached_property
 
 
+LOG = logging.getLogger(__name__)
 utf8_parser = HTMLParser(encoding='utf-8')
 
 

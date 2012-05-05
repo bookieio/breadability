@@ -1,6 +1,6 @@
 import re
 from collections import namedtuple
-
+from operator import attrgetter
 from lxml.etree import tounicode
 from lxml.html import fragment_fromstring
 from breadability.document import OriginalDocument
@@ -21,6 +21,13 @@ READABLERE = RegexList(
     negative=()
 )
 
+CLS_WEIGHT_POSITIVE = set(['article', 'body', 'content', 'entry', 'hentry',
+    'main', 'page', 'pagination', 'post', 'text', 'blog', 'story'])
+CLS_WEIGHT_NEGATIVE = set(['combx', 'comment', 'com-', 'contact', 'foot',
+    'footer', 'footnote', 'masthead', 'media', 'meta', 'outbrain', 'promo',
+    'related', 'scroll', 'shoutbox', 'sidebar', 'sponsor', 'shopping', 'tags',
+    'tool', 'widget'])
+
 
 def drop_tag(doc, *tags):
     [[n.drop_tree() for n in doc.iterfind(".//" + tag)]
@@ -35,11 +42,15 @@ def build_base_document(html):
 
     """
     found_body = html.find('.//body')
-    if found_body is not None:
-        # remove any CSS and set our own
-        found_body.set('id', 'readabilityBody')
-        return found_body
 
+    if found_body is None:
+        fragment = fragment_fromstring('<div/>')
+        fragment.set('id', 'readabilityBody')
+        fragment.append(html)
+        return fragment
+    else:
+        found_body.set('id', 'readabilityBody')
+        return html
 
 def transform_misused_divs_into_paragraphs(doc):
     """Turn all divs that don't have children block level elements into p's
@@ -68,6 +79,78 @@ def transform_misused_divs_into_paragraphs(doc):
     return doc
 
 
+###### SCORING
+
+def get_class_weight(node):
+    """Get an elements class/id weight.
+
+    We're using sets to help efficiently check for existence of matches.
+
+    """
+    weight = 0
+    cls = set(node.get('class', default="").split(' '))
+    ids = node.get('id', default="None")
+    if cls:
+        if cls.intersection(CLS_WEIGHT_NEGATIVE):
+            weight = weight - 25
+        if cls.intersection(CLS_WEIGHT_POSITIVE):
+            weight = weight + 25
+
+    if ids:
+        if ids in CLS_WEIGHT_NEGATIVE:
+            weight = weight - 25
+        if ids in CLS_WEIGHT_POSITIVE:
+            weight = weight + 25
+
+    return weight
+
+
+def score_candidates(nodes):
+    """Given a list of potential nodes, find some initial scores to start"""
+    MIN_HIT_LENTH = 25
+    candidates = {}
+
+    for node in nodes:
+        content_score = 0
+        parent = node.getparent()
+        grand  = parent.getparent() if parent is not None else None
+        innertext = node.text
+
+        if parent is None or grand is None:
+            continue
+
+        # If this paragraph is less than 25 characters, don't even count it.
+        if innertext and len(innertext) < MIN_HIT_LENTH:
+            continue
+
+        # Initialize readability data for the parent.
+        # if the parent node isn't in the candidate list, add it
+        if parent not in candidates:
+            candidates[parent] = CandidateNode(parent)
+
+        if grand not in candidates:
+            candidates[grand] = CandidateNode(grand)
+
+        # Add a point for the paragraph itself as a base.
+        content_score += 1;
+
+        # Add points for any commas within this paragraph
+        content_score += innertext.count(',') if innertext else 0
+
+        # For every 100 characters in this paragraph, add another point. Up to
+        # 3 points.
+        length_points = len(innertext) % 100 if innertext else 0
+        content_score = length_points if length_points > 3 else 3
+
+        # Add the score to the parent. The grandparent gets half. */
+        if parent is not None:
+            candidates[parent].content_score += content_score
+        if grand is not None:
+            candidates[grand].content_score += content_score
+
+    return candidates
+
+
 def process(doc):
     """Process this doc to make it readable.
 
@@ -83,21 +166,44 @@ def process(doc):
         """Short helper for checking unlikely status."""
         if READABLERE.unlikely.match(nodeid):
             if not READABLERE.maybe.match(nodeid):
-                if n.tag != "body":
+                if node.tag != "body":
                     return True
 
-    for n in doc.getiterator():
+    for node in doc.getiterator():
         # if the id or clsas show up in the unlikely list, mark for removal
-        nodeid = "%s%s" % (n.get('class', ''), n.get('id', ''))
-        if is_unlikely_node(n):
-            unlikely.append(n)
+        nodeid = "%s%s" % (node.get('class', ''), node.get('id', ''))
+        if is_unlikely_node(node):
+            unlikely.append(node)
 
-        if n.tag in scorable_node_tags:
-            nodes_to_score.append(n)
+        if node.tag in scorable_node_tags:
+            nodes_to_score.append(node)
 
     # process our clean up instructions
     [n.drop_tree() for n in unlikely]
-    return doc
+
+    candidates = score_candidates(nodes_to_score)
+    return candidates
+
+
+class CandidateNode(object):
+    __slots__ = ['node', 'content_score']
+
+    def __init__(self, node):
+        self.node = node
+        content_score = 0
+        if node.tag == 'div':
+            content_score = 5
+
+        if node.tag in ['pre', 'td', 'blockquote']:
+            content_score = 3
+
+        if node.tag in ['address', 'ol', 'ul', 'dl', 'dd', 'dt', 'li',
+            'form']:
+            content_score = -3
+        if node.tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'th']:
+            content_score = -5
+        content_score += get_class_weight(node)
+        self.content_score = content_score
 
 
 class Article(object):
@@ -110,10 +216,19 @@ class Article(object):
     def readable(self):
         """The readable parsed article"""
         doc = self.orig.html
-        doc = build_base_document(doc)
         doc = drop_tag(doc, 'script', 'link', 'style', 'noscript')
         doc = transform_misused_divs_into_paragraphs(doc)
-        doc = process(doc)
+        candidates = process(doc)
+
+        if candidates:
+            # right now we return the highest scoring candidate content
+            by_score = sorted([c for c in candidates.values()],
+                key=attrgetter('content_score'), reverse=True)
+
+            doc = build_base_document(by_score[0].node)
+        else:
+            doc = build_base_document(doc)
+
         return doc
 
 
