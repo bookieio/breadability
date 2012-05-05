@@ -6,6 +6,7 @@ from unittest import TestCase
 from breadability.readable import Article
 from breadability.readable import CandidateNode
 from breadability.readable import get_class_weight
+from breadability.readable import get_link_density
 from breadability.readable import score_candidates
 from breadability.readable import transform_misused_divs_into_paragraphs
 from breadability.tests import load_snippet
@@ -36,9 +37,8 @@ class TestReadableDocument(TestCase):
 
         """
         doc = Article(load_snippet('document_min.html'))
-        self.assertEqual(doc.readable.tag, 'html')
-        found_body = doc.readable.find('.//body')
-        self.assertEqual(found_body.get('id'), 'readabilityBody')
+        self.assertEqual(doc.readable.tag, 'div')
+        self.assertEqual(doc.readable.get('id'), 'readabilityBody')
 
     def test_body_doesnt_exist(self):
         """If we can't find a body, then we create one.
@@ -191,3 +191,30 @@ class TestScoringNodes(TestCase):
         # one of these should have a decent score
         scores = sorted([c.content_score for c in candidates.values()])
         self.assertTrue(scores[-1] > 100)
+
+class TestLinkDensityScoring(TestCase):
+    """Link density will adjust out candidate scoresself."""
+
+    def test_link_density(self):
+        """Test that we get a link density"""
+        doc = document_fromstring(load_article('ars/ars.001.html'))
+        for node in doc.getiterator():
+            if node.tag in ['p', 'td', 'pre']:
+                density = get_link_density(node)
+
+                # the density must be between 0, 1
+                self.assertTrue(density >= 0.0 and density <= 1.0)
+
+
+class TestSiblings(TestCase):
+    """Siblings will be included if their content is related."""
+
+    def test_bad_siblings_not_counted(self):
+        """"""
+
+        assert False, "TBD"
+
+    def test_good_siblings_counted(self):
+        """"""
+
+        assert False, "TBD"

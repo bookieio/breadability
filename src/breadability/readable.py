@@ -6,25 +6,31 @@ from lxml.html import fragment_fromstring
 from breadability.document import OriginalDocument
 from breadability.utils import cached_property
 
-
-RegexList = namedtuple('RegexList', ['unlikely', 'maybe'])
-
-
-READABLERE = RegexList(
-    unlikely=(re.compile(
-        'combx|comment|community|disqus|extra|foot|header|menu|'
-        'remark|rss|shoutbox|sidebar|sponsor|ad-break|agegate|pagination'
-        '|pager|popup|tweet|twitter', re.I)),
-    maybe=(re.compile('and|article|body|column|main|shadow', re.I)),
-)
-
-
+# A series of sets of attributes we check to help in determining if a node is
+# a potential candidate or not.
+CLS_UNLIKELY = set([
+    'combx', 'comment', 'community', 'disqus', 'extra', 'foot', 'header',
+    'menu', '' 'remark', 'rss', 'shoutbox', 'sidebar', 'sponsor', 'ad-break',
+    'agegate', 'pagination' '', 'pager', 'popup', 'tweet', 'twitter',
+])
+CLS_MAYBE = set([
+    'and', 'article', 'body', 'column', 'main', 'shadow',
+])
 CLS_WEIGHT_POSITIVE = set(['article', 'body', 'content', 'entry', 'hentry',
     'main', 'page', 'pagination', 'post', 'text', 'blog', 'story'])
 CLS_WEIGHT_NEGATIVE = set(['combx', 'comment', 'com-', 'contact', 'foot',
     'footer', 'footnote', 'masthead', 'media', 'meta', 'outbrain', 'promo',
     'related', 'scroll', 'shoutbox', 'sidebar', 'sponsor', 'shopping', 'tags',
     'tool', 'widget'])
+
+
+def check_node_attr(node, attr, checkset):
+    attr = node.get(attr) or ""
+    check = set(attr.lower().split(' '))
+    if check.intersection(checkset):
+        return True
+    else:
+        return False
 
 
 def drop_tag(doc, *tags):
@@ -83,6 +89,18 @@ def transform_misused_divs_into_paragraphs(doc):
     return doc
 
 
+def get_link_density(node):
+    """Generate a value for the number of links in the node.
+
+    :param node: pared elementree node
+    :returns float:
+
+    """
+    link_length = len("".join([a.text or "" for a in node.findall(".//a")]))
+    text_length = len(node.text_content())
+    return float(link_length) / max(text_length, 1)
+
+
 ###### SCORING
 
 
@@ -93,19 +111,15 @@ def get_class_weight(node):
 
     """
     weight = 0
-    cls = set(node.get('class', default="").split(' '))
-    ids = node.get('id', default="None")
-    if cls:
-        if cls.intersection(CLS_WEIGHT_NEGATIVE):
-            weight = weight - 25
-        if cls.intersection(CLS_WEIGHT_POSITIVE):
-            weight = weight + 25
+    if check_node_attr(node, 'class', CLS_WEIGHT_NEGATIVE):
+        weight = weight - 25
+    if check_node_attr(node, 'class', CLS_WEIGHT_POSITIVE):
+        weight = weight + 25
 
-    if ids:
-        if ids in CLS_WEIGHT_NEGATIVE:
-            weight = weight - 25
-        if ids in CLS_WEIGHT_POSITIVE:
-            weight = weight + 25
+    if check_node_attr(node, 'id', CLS_WEIGHT_NEGATIVE):
+        weight = weight - 25
+    if check_node_attr(node, 'id', CLS_WEIGHT_POSITIVE):
+        weight = weight + 25
 
     return weight
 
@@ -153,6 +167,10 @@ def score_candidates(nodes):
         if grand is not None:
             candidates[grand].content_score += content_score
 
+        for candidate in candidates.values():
+            candidate.content_score = candidate.content_score * (1 -
+                    get_link_density(candidate.node))
+
     return candidates
 
 
@@ -167,16 +185,25 @@ def process(doc):
     scorable_node_tags = ['p', 'td', 'pre']
     nodes_to_score = []
 
-    def is_unlikely_node(n):
-        """Short helper for checking unlikely status."""
-        if READABLERE.unlikely.match(nodeid):
-            if not READABLERE.maybe.match(nodeid):
-                if node.tag != "body":
-                    return True
+    def is_unlikely_node(node):
+        """Short helper for checking unlikely status.
+
+        If the class or id are in the unlikely list, and there's not also a
+        class/id in the likely list then it might need to be removed.
+
+        """
+        unlikely = check_node_attr(node, 'class', CLS_UNLIKELY) or \
+            check_node_attr(node, 'id', CLS_UNLIKELY)
+
+        maybe = check_node_attr(node, 'class', CLS_MAYBE) or \
+            check_node_attr(node, 'id', CLS_MAYBE)
+
+        if unlikely and not maybe and node.tag != 'body':
+            return True
+        else:
+            return False
 
     for node in doc.getiterator():
-        # if the id or clsas show up in the unlikely list, mark for removal
-        nodeid = "%s%s" % (node.get('class', ''), node.get('id', ''))
         if is_unlikely_node(node):
             unlikely.append(node)
 
@@ -191,9 +218,16 @@ def process(doc):
 
 
 class CandidateNode(object):
+    """We need Candidate nodes we use to track possible article matches
+
+    We might have a bunch of these so we use __slots__ to keep memory usage
+    down.
+
+    """
     __slots__ = ['node', 'content_score']
 
     def __init__(self, node):
+        """Given node, set an initial score and weigh based on css and id"""
         self.node = node
         content_score = 0
         if node.tag == 'div':
