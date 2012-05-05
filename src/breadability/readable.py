@@ -7,8 +7,7 @@ from breadability.document import OriginalDocument
 from breadability.utils import cached_property
 
 
-RegexList = namedtuple('RegexList',
-    ['unlikely', 'maybe', 'positive', 'negative'])
+RegexList = namedtuple('RegexList', ['unlikely', 'maybe'])
 
 
 READABLERE = RegexList(
@@ -17,9 +16,8 @@ READABLERE = RegexList(
         'remark|rss|shoutbox|sidebar|sponsor|ad-break|agegate|pagination'
         '|pager|popup|tweet|twitter', re.I)),
     maybe=(re.compile('and|article|body|column|main|shadow', re.I)),
-    positive=(),
-    negative=()
 )
+
 
 CLS_WEIGHT_POSITIVE = set(['article', 'body', 'content', 'entry', 'hentry',
     'main', 'page', 'pagination', 'post', 'text', 'blog', 'story'])
@@ -30,6 +28,11 @@ CLS_WEIGHT_NEGATIVE = set(['combx', 'comment', 'com-', 'contact', 'foot',
 
 
 def drop_tag(doc, *tags):
+    """Helper to just remove any nodes that match this html tag passed in
+
+    :param *tags: one or more html tag strings to remove e.g. style, script
+
+    """
     [[n.drop_tree() for n in doc.iterfind(".//" + tag)]
             for tag in tags]
     return doc
@@ -38,7 +41,7 @@ def drop_tag(doc, *tags):
 def build_base_document(html):
     """Return a base document with the body as root.
 
-    html should be a parsed Element object.
+    :param html: Parsed Element object
 
     """
     found_body = html.find('.//body')
@@ -51,6 +54,7 @@ def build_base_document(html):
     else:
         found_body.set('id', 'readabilityBody')
         return html
+
 
 def transform_misused_divs_into_paragraphs(doc):
     """Turn all divs that don't have children block level elements into p's
@@ -80,6 +84,7 @@ def transform_misused_divs_into_paragraphs(doc):
 
 
 ###### SCORING
+
 
 def get_class_weight(node):
     """Get an elements class/id weight.
@@ -113,7 +118,7 @@ def score_candidates(nodes):
     for node in nodes:
         content_score = 0
         parent = node.getparent()
-        grand  = parent.getparent() if parent is not None else None
+        grand = parent.getparent() if parent is not None else None
         innertext = node.text
 
         if parent is None or grand is None:
@@ -132,7 +137,7 @@ def score_candidates(nodes):
             candidates[grand] = CandidateNode(grand)
 
         # Add a point for the paragraph itself as a base.
-        content_score += 1;
+        content_score += 1
 
         # Add points for any commas within this paragraph
         content_score += innertext.count(',') if innertext else 0
