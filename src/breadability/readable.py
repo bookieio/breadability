@@ -104,7 +104,7 @@ def check_siblings(candidate_node, candidate_list):
             append = True
 
         # Give a bonus if sibling nodes and top candidates have the example
-        # same classname
+        # same class name
         if candidate_css and sibling.get('class') == candidate_css:
             content_bonus += candidate_node.content_score * 0.2
 
@@ -148,7 +148,6 @@ def prep_article(doc):
     - extra tags
 
     """
-
     def clean_document(node):
         """Remove the style attribute on every element."""
         clean_list = ['object', 'h1']
@@ -201,9 +200,6 @@ def prep_article(doc):
 
     def clean_conditionally(doc, clean_el):
         """Remove the clean_el if it looks like bad content based on rules."""
-
-    def clean_objects():
-        pass
 
     doc = clean_document(doc)
     return doc
