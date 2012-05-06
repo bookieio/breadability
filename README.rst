@@ -2,7 +2,7 @@ breadability - another readability Python port
 ===============================================
 I've tried to work with the various forks of some ancient codebase that ported
 `readability`_ to Python. The lack of tests, unused regex's, and commented out
-sections of code just drove me nuts.
+sections of code in other Python ports just drove me nuts.
 
 I put forth an effort to bring in several of the better forks into one
 codebase, but they've diverged so much that I just can't work with it.
