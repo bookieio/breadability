@@ -8,10 +8,10 @@ from lxml.etree import tounicode
 from lxml.html import document_fromstring
 from lxml.html import HTMLParser
 
+from breadability.logconfig import LOG
 from breadability.utils import cached_property
 
 
-LOG = logging.getLogger(__name__)
 utf8_parser = HTMLParser(encoding='utf-8')
 
 
@@ -38,6 +38,7 @@ def get_encoding(page):
 
 def replace_multi_br_to_paragraphs(html):
     """Convert multiple <br>s into paragraphs"""
+    LOG.debug('Replacing multiple <br/> to <p>')
     rep = re.compile("(<br[^>]*>[ \n\r\t]*){2,}", re.I)
     return rep.sub('</p><p>', html)
 
@@ -81,6 +82,7 @@ class OriginalDocument(object):
         # doc = html_cleaner.clean_html(doc)
         base_href = self.url
         if base_href:
+            LOG.debug('Making links absolute')
             doc.make_links_absolute(base_href, resolve_base_href=True)
         else:
             doc.resolve_base_href()

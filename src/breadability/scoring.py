@@ -138,6 +138,10 @@ class ScoredNode(object):
     """
     __slots__ = ['node', 'content_score']
 
+    def __repr__(self):
+        """Helpful representation of our Scored Node"""
+        return "{0:0.1F}\t{1}".format(self.content_score, self.node)
+
     def __init__(self, node):
         """Given node, set an initial score and weigh based on css and id"""
         self.node = node

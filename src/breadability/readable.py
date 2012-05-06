@@ -5,6 +5,8 @@ from lxml.etree import tostring
 from lxml.html.clean import Cleaner
 from lxml.html import fragment_fromstring
 from lxml.html import fromstring
+from pprint import PrettyPrinter
+
 from breadability.document import OriginalDocument
 from breadability.logconfig import LOG
 from breadability.scoring import score_candidates
@@ -30,8 +32,9 @@ def drop_tag(doc, *tags):
     """
     for tag in tags:
         found = doc.iterfind(".//" + tag)
-        if found:
-            [n.drop_tree for n in found]
+        for n in found:
+            LOG.debug("Dropping tag: " + str(n))
+            n.drop_tree()
     return doc
 
 
@@ -78,11 +81,11 @@ def transform_misused_divs_into_paragraphs(doc):
             # We need to create a <p> and put all it's contents in there
             # We'll just stringify it, then regex replace the first/last
             # div bits to turn them into <p> vs <div>.
+            LOG.debug('Turning leaf <div> into <p>')
             orig = tounicode(elem).strip()
             started = re.sub(r'^<\s*div', '<p', orig)
             ended = re.sub(r'div>$', 'p>', started)
             elem.getparent().replace(elem, fromstring(ended))
-
     return doc
 
 
@@ -129,6 +132,7 @@ def check_siblings(candidate_node, candidate_list):
                     append = True
 
         if append:
+            LOG.debug('Sibling being appended' + str(sibling))
             if sibling.tag not in ['div', 'p']:
                 # We have a node that isn't a common block level element, like
                 # a form or td tag. Turn it into a div so it doesn't get
@@ -152,12 +156,14 @@ def prep_article(doc):
     """
     def clean_document(node):
         """Clean up the final document we return as the readable article"""
+        LOG.debug('Cleaning document')
         clean_list = ['object', 'h1']
         keep_keywords = ['youtube', 'blip.tv', 'vimeo']
 
         # If there is only one h2, they are probably using it as a header and
         # not a subheader, so remove it since we already have a header.
         if len(node.findall('.//h2')) == 1:
+            LOG.debug('Adding H2 to list of nodes to clean.')
             clean_list.append('h2')
 
         for n in node.iter():
@@ -183,7 +189,10 @@ def prep_article(doc):
                         if not allow and key in node_str:
                             allow = True
                 if not allow:
+                    LOG.debug('Dropping node: ' + str(n))
                     n.drop_tree()
+                    # go on with next loop, this guy is gone
+                    continue
 
             if n.tag in ['h1', 'h2', 'h3', 'h4']:
                 # clean headings
@@ -192,15 +201,22 @@ def prep_article(doc):
                 if get_class_weight(n) < 0 or get_link_density(n) > .33:
                     # for some reason we get nodes here without a parent
                     if n.getparent() is not None:
+                        LOG.debug(
+                            "Dropping <hX>, it's insignificant: " + str(n))
                         n.drop_tree()
+                        # go on with next loop, this guy is gone
+                        continue
+
 
             # clean out extra <p>
             if n.tag == 'p':
                 # if the p has no children and has no content...well then down
                 # with it.
                 if not n.getchildren() and len(n.text_content()) < 5:
+                    LOG.debug('Dropping extra <p>: ' + str(n))
                     n.drop_tree()
-
+                    # go on with next loop, this guy is gone
+                    continue
         return node
 
     def clean_conditionally(doc, clean_el):
@@ -222,6 +238,7 @@ def find_candidates(doc):
 
     for node in doc.iter():
         if is_unlikely_node(node):
+            LOG.debug('Dropping unlikely: ' + str(node))
             node.drop_tree()
         elif node.tag in scorable_node_tags:
             nodes_to_score.append(node)
@@ -252,6 +269,10 @@ class Article(object):
         candidates = find_candidates(doc)
 
         if candidates:
+            LOG.debug('Candidates found:')
+            pp = PrettyPrinter(indent=2)
+            LOG.debug(pp.pformat(candidates))
+
             # right now we return the highest scoring candidate content
             by_score = sorted([c for c in candidates.values()],
                 key=attrgetter('content_score'), reverse=True)
@@ -259,10 +280,14 @@ class Article(object):
             # since we have several candidates, check the winner's siblings
             # for extra content
             winner = by_score[0]
+            LOG.debug('Selected winning node: ' + str(winner))
             updated_winner = check_siblings(winner, candidates)
+            LOG.debug('Begin final prep of article')
             updated_winner.node = prep_article(updated_winner.node)
             doc = build_base_document(updated_winner.node)
         else:
+            LOG.warning('No candidates found: using document.')
+            LOG.debug('Begin final prep of article')
             doc = prep_article(doc)
             doc = build_base_document(doc)
 
