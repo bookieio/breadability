@@ -12,6 +12,7 @@ from breadability.scoring import get_class_weight
 from breadability.scoring import is_unlikely_node
 from breadability.utils import cached_property
 
+
 html_cleaner = Cleaner(scripts=True, javascript=True, comments=True,
                   style=True, links=True, meta=False, add_nofollow=False,
                   page_structure=False, processing_instructions=True,
@@ -149,7 +150,7 @@ def prep_article(doc):
 
     """
     def clean_document(node):
-        """Remove the style attribute on every element."""
+        """Clean up the final document we return as the readable article"""
         clean_list = ['object', 'h1']
         keep_keywords = ['youtube', 'blip.tv', 'vimeo']
 
@@ -158,9 +159,10 @@ def prep_article(doc):
         if len(node.findall('.//h2')) == 1:
             clean_list.append('h2')
 
-        for n in node.getiterator():
+        for n in node.iter():
             # clean out any incline style properties
-            n.set('style', '')
+            if 'style' in n.attrib:
+                n.set('style', '')
 
             # remove all of the following tags
             # Clean a node of all elements of type "tag".
@@ -187,7 +189,9 @@ def prep_article(doc):
                 # if the heading has no css weight or a high link density,
                 # remove it
                 if get_class_weight(n) < 0 or get_link_density(n) > .33:
-                    n.drop_tree()
+                    # for some reason we get nodes here without a parent
+                    if n.getparent() is not None:
+                        n.drop_tree()
 
             # clean out extra <p>
             if n.tag == 'p':
@@ -205,29 +209,22 @@ def prep_article(doc):
     return doc
 
 
-def process(doc):
-    """Process this doc to make it readable.
+def find_candidates(doc):
+    """Find cadidate nodes for the readable version of the article.
 
     Here's we're going to remove unlikely nodes, find scores on the rest, and
     clean up and return the final best match.
 
     """
-    unlikely = []
     scorable_node_tags = ['p', 'td', 'pre']
     nodes_to_score = []
 
-    for node in doc.getiterator():
+    for node in doc.iter():
         if is_unlikely_node(node):
-            unlikely.append(node)
-
-        if node.tag in scorable_node_tags:
+            node.drop_tree()
+        elif node.tag in scorable_node_tags:
             nodes_to_score.append(node)
-
-    # process our clean up instructions
-    [n.drop_tree() for n in unlikely]
-
-    candidates = score_candidates(nodes_to_score)
-    return candidates
+    return score_candidates(nodes_to_score)
 
 
 class Article(object):
@@ -250,7 +247,7 @@ class Article(object):
         html_cleaner(doc)
         doc = drop_tag(doc, 'noscript')
         doc = transform_misused_divs_into_paragraphs(doc)
-        candidates = process(doc)
+        candidates = find_candidates(doc)
 
         if candidates:
             # right now we return the highest scoring candidate content

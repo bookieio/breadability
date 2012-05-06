@@ -1,3 +1,5 @@
+"""Generate a clean nice starting html document to process for an article."""
+
 import chardet
 import logging
 import re

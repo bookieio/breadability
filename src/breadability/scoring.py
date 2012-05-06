@@ -1,3 +1,6 @@
+"""Handle dealing with scoring nodes and content for our parsing."""
+import re
+
 # A series of sets of attributes we check to help in determining if a node is
 # a potential candidate or not.
 CLS_UNLIKELY = set([
@@ -32,7 +35,7 @@ def get_link_density(node):
     :returns float:
 
     """
-    link_length = len("".join([a.text or "" for a in node.findall(".//a")]))
+    link_length = sum([len(a.text_content()) or 0 for a in node.findall(".//a")])
     text_length = len(node.text_content())
     return float(link_length) / max(text_length, 1)
 
@@ -152,6 +155,3 @@ class ScoredNode(object):
             content_score = -5
         content_score += get_class_weight(node)
         self.content_score = content_score
-
-
-
