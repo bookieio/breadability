@@ -2,6 +2,7 @@ import re
 from operator import attrgetter
 from lxml.etree import tounicode
 from lxml.etree import tostring
+from lxml.html.clean import Cleaner
 from lxml.html import fragment_fromstring
 from lxml.html import fromstring
 from breadability.document import OriginalDocument
@@ -24,6 +25,13 @@ CLS_WEIGHT_NEGATIVE = set(['combx', 'comment', 'com-', 'contact', 'foot',
     'related', 'scroll', 'shoutbox', 'sidebar', 'sponsor', 'shopping', 'tags',
     'tool', 'widget'])
 
+html_cleaner = Cleaner(scripts=True, javascript=True, comments=True,
+                  style=True, links=True, meta=False, add_nofollow=False,
+                  page_structure=False, processing_instructions=True,
+                  embedded=False, frames=False, forms=False,
+                  annoying_tags=False, remove_tags=None,
+                  remove_unknown_tags=False, safe_attrs_only=False)
+
 
 def check_node_attr(node, attr, checkset):
     attr = node.get(attr) or ""
@@ -40,8 +48,10 @@ def drop_tag(doc, *tags):
     :param *tags: one or more html tag strings to remove e.g. style, script
 
     """
-    [[n.drop_tree() for n in doc.iterfind(".//" + tag)]
-            for tag in tags]
+    for tag in tags:
+        found = doc.iterfind(".//" + tag)
+        if found:
+            [n.drop_tree for n in found]
     return doc
 
 
@@ -122,7 +132,7 @@ def check_siblings(candidate_node, candidate_list):
 
     for sibling in siblings:
         append = False
-        content_bonus = 0;
+        content_bonus = 0
 
         if sibling is candidate_node.node:
             append = True
@@ -130,7 +140,7 @@ def check_siblings(candidate_node, candidate_list):
         # Give a bonus if sibling nodes and top candidates have the example
         # same classname
         if candidate_css and sibling.get('class') == candidate_css:
-            content_bonus += candidate_node.content_score * 0.2;
+            content_bonus += candidate_node.content_score * 0.2
 
         if sibling in candidate_list:
             adjusted_score = candidate_list[sibling].content_score + \
@@ -142,10 +152,10 @@ def check_siblings(candidate_node, candidate_list):
         if sibling.tag == 'p':
             link_density = get_link_density(sibling)
             content = sibling.text_content()
-            content_length  = len(content)
+            content_length = len(content)
 
             if content_length > 80 and link_density < 0.25:
-                append = true;
+                append = true
             elif content_length < 80 and link_density == 0:
                 if ". " in content:
                     append = True
@@ -235,6 +245,77 @@ def score_candidates(nodes):
     return candidates
 
 
+def prep_article(doc):
+    """Once we've found our target article we want to clean it up.
+
+    Clean out:
+    - inline styles
+    - forms
+    - strip empty <p>
+    - extra tags
+
+    """
+
+    def clean_document(candidate):
+        """Remove the style attribute on every element."""
+        clean_list = ['object', 'h1']
+        keep_keywords = ['youtube', 'blip.tv', 'vimeo']
+
+        # If there is only one h2, they are probably using it as a header and
+        # not a subheader, so remove it since we already have a header.
+        if len(candidate.node.findall('.//h2')) == 1:
+            clean_list.append('h2')
+
+        for n in candidate.node.getiterator():
+            # clean out any incline style properties
+            n.set('style', '')
+
+            # remove all of the following tags
+            # Clean a node of all elements of type "tag".
+            # (Unless it's a youtube/vimeo video. People love movies.)
+            is_embed = True if n.tag in ['object', 'embed'] else False
+            if n.tag in clean_list:
+                allow = False
+
+                # Allow youtube and vimeo videos through as people usually
+                # want to see those.
+                if is_embed:
+                    # if this object or embed has any of the keywords in the
+                    # html from here on out, then let it live.
+                    node_str = tounicode(n)
+
+                    for key in keep_keywords:
+                        if not allow and key in node_str:
+                            allow = True
+                if not allow:
+                    n.drop_tree()
+
+            if n.tag in ['h1', 'h2', 'h3', 'h4']:
+                # clean headings
+                # if the heading has no css weight or a high link density,
+                # remove it
+                if get_class_weight(n) < 0 or get_link_density(n) > .33:
+                    n.drop_tree()
+
+            # clean out extra <p>
+            if n.tag == 'p':
+                # if the p has no children and has no content...well then down
+                # with it.
+                if not n.getchildren() and len(n.text_content()) < 5:
+                    n.drop_tree()
+
+        return candidate
+
+    def clean_conditionally(doc, clean_el):
+        """Remove the clean_el if it looks like bad content based on rules."""
+
+    def clean_objects():
+        pass
+
+    doc = clean_document(doc)
+    return doc
+
+
 def process(doc):
     """Process this doc to make it readable.
 
@@ -322,7 +403,9 @@ class Article(object):
     def readable(self):
         """The readable parsed article"""
         doc = self.orig.html
-        doc = drop_tag(doc, 'script', 'link', 'style', 'noscript')
+        # cleaning doesn't return, just wipes in place
+        html_cleaner(doc)
+        doc = drop_tag(doc, 'noscript')
         doc = transform_misused_divs_into_paragraphs(doc)
         candidates = process(doc)
 
@@ -335,11 +418,14 @@ class Article(object):
             # for extra content
             winner = by_score[0]
             updated_winner = check_siblings(winner, candidates)
+            doc = prep_article(updated_winner)
             doc = build_base_document(updated_winner.node)
         else:
+            doc = prep_article(doc)
             doc = build_base_document(doc)
 
         return doc
+
 
 
 """
