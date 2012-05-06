@@ -82,3 +82,10 @@ Off the top of my heads todo list:
   - More docs for things, but sphinx docs and in code comments to help
     understand wtf we're doing and why. That's the biggest hurdle to some of
     this stuff.
+
+Helping out
+------------
+If you want to help, shoot me a pull request, an issue report with broken
+urls, etc.
+
+You can ping me on irc, I'm always in the `#bookie` channel in freenode.
