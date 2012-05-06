@@ -1,23 +1,84 @@
-This file requires editing
-==========================
+breadability - another readability Python port
+===============================================
+I've tried to work with the various forks of some ancient codebase that ported
+`readability`_ to Python. The lack of tests, unused regex's, and commented out
+sections of code just drove me nuts.
 
-Note to the author: Please add something informative to this README *before*
-releasing your software, as `a little documentation goes a long way`_.  Both
-README.rst (this file) and NEWS.txt (release notes) will be included in your
-package metadata which gets displayed in the PyPI page for your project.
+I put forth an effort to bring in several of the better forks into one
+codebase, but they've diverged so much that I just can't work with it.
 
-You can take a look at the README.txt of other projects, such as repoze.bfg
-(http://bfg.repoze.org/trac/browser/trunk/README.txt) for some ideas.
+So what's any sane person to do? Re-port it with my own repo, add some tests,
+infrastructure, and try to make this port better. OSS FTW (and yea, NIH FML,
+but oh well I did try)
 
-.. _`a little documentation goes a long way`: http://www.martinaspeli.net/articles/a-little-documentation-goes-a-long-way
+This is a pretty straight port of the JS here:
 
-Credits
--------
+- http://code.google.com/p/arc90labs-readability/source/browse/trunk/js/readability.js#82
 
-- `Distribute`_
-- `Buildout`_
-- `modern-package-template`_
 
-.. _Buildout: http://www.buildout.org/
-.. _Distribute: http://pypi.python.org/pypi/distribute
-.. _`modern-package-template`: http://pypi.python.org/pypi/modern-package-template
+Installation
+-------------
+Currently it's git only until I get everything ready for a submission to PyPi.
+
+
+Usage
+------
+
+cmd line
+~~~~~~~~~
+
+::
+
+    $ breadability http://wiki.python.org/moin/BeginnersGuide
+
+Add the `-v` flag to get some details on how we actually parsed this thing. I
+want to grow that debugging info into enough to try to track good/bad things
+we did in processing.
+
+::
+
+    $ breadability -v http://wiki.python.org/moin/BeginnersGuide
+
+
+Using from Python
+~~~~~~~~~~~~~~~~~~
+
+::
+
+    from breadability.readable import Article
+    readable_article = Article(html_text, url=url_came_from)
+    print readable_article
+
+
+Work to be done
+---------------
+Yep, I've got some catching up to do. I don't do pagination, I've got a lot of
+custom tweaks I need to get going, there are some articles that fail to parse.
+I also have more tests to write on a lot of the cleaning helpers, but
+hopefully things are setup in a way that those can/will be added.
+
+Fortunately, I need this library for my tools:
+
+- https://bmark.us
+- http://readable.bmark.us
+
+so I really need this to be an active and improving project.
+
+
+Off the top of my heads todo list:
+
+  - Support metadata from parsed article [url, confidence scores, all
+    candidates we thought about?]
+  - More tests, more thorough tests
+  - More sample articles we need to test against in the test_articles
+  - Tests that run through and check for regressions of the test_articles
+  - Tidy'ing the HTML that comes out, might help with regression tests ^^
+  - Multiple page articles
+  - Performance tuning, we do a lot of looping and re-drop some nodes that
+    should be skipped. We should have a set of regression tests for this so
+    that if we implement a change that blows up performance we know it right
+    away.
+  - Get up on pypi along with the rest of the ports
+  - More docs for things, but sphinx docs and in code comments to help
+    understand wtf we're doing and why. That's the biggest hurdle to some of
+    this stuff.
