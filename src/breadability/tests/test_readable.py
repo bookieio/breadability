@@ -4,11 +4,11 @@ from lxml.html import fragment_fromstring
 from unittest import TestCase
 
 from breadability.readable import Article
-from breadability.readable import CandidateNode
 from breadability.readable import get_class_weight
 from breadability.readable import get_link_density
 from breadability.readable import score_candidates
 from breadability.readable import transform_misused_divs_into_paragraphs
+from breadability.scoring import ScoredNode
 from breadability.tests import load_snippet
 from breadability.tests import load_article
 
@@ -130,19 +130,19 @@ class TestCandidateNodes(TestCase):
 
         for n in fives:
             doc = fragment_fromstring(n)
-            self.assertEqual(CandidateNode(doc).content_score, 5)
+            self.assertEqual(ScoredNode(doc).content_score, 5)
 
         for n in threes:
             doc = fragment_fromstring(n)
-            self.assertEqual(CandidateNode(doc).content_score, 3)
+            self.assertEqual(ScoredNode(doc).content_score, 3)
 
         for n in neg_threes:
             doc = fragment_fromstring(n)
-            self.assertEqual(CandidateNode(doc).content_score, -3)
+            self.assertEqual(ScoredNode(doc).content_score, -3)
 
         for n in neg_fives:
             doc = fragment_fromstring(n)
-            self.assertEqual(CandidateNode(doc).content_score, -5)
+            self.assertEqual(ScoredNode(doc).content_score, -5)
 
 
 class TestClassWeights(TestCase):
