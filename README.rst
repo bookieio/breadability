@@ -89,3 +89,6 @@ If you want to help, shoot me a pull request, an issue report with broken
 urls, etc.
 
 You can ping me on irc, I'm always in the `#bookie` channel in freenode.
+
+
+.. _readability: http://code.google.com/p/arc90labs-readability/
