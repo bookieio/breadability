@@ -2,8 +2,12 @@ import argparse
 import sys
 
 from breadability import VERSION
+from breadability.logconfig import LOG
+from breadability.logconfig import set_logging_level
 from breadability.readable import Article
 
+
+LOGLEVEL = 'WARNING'
 
 def parse_args():
     desc = "A fast python port of arc90's readability tool"
@@ -31,7 +35,11 @@ def parse_args():
 def main():
     args = parse_args()
 
+    if args.verbose:
+        set_logging_level('DEBUG')
+
     target = args.path[0]
+    LOG.debug("Target: " + target)
 
     if target.startswith('http') or target.startswith('www'):
         is_url = True

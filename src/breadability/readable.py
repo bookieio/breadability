@@ -6,6 +6,7 @@ from lxml.html.clean import Cleaner
 from lxml.html import fragment_fromstring
 from lxml.html import fromstring
 from breadability.document import OriginalDocument
+from breadability.logconfig import LOG
 from breadability.scoring import score_candidates
 from breadability.scoring import get_link_density
 from breadability.scoring import get_class_weight
@@ -231,6 +232,7 @@ class Article(object):
     """Parsed readable object"""
 
     def __init__(self, html, url=None):
+        LOG.debug('Url: ' + str(url))
         self.orig = OriginalDocument(html, url=url)
 
     def __str__(self):
