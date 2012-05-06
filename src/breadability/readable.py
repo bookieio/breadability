@@ -38,6 +38,16 @@ def drop_tag(doc, *tags):
     return doc
 
 
+def ok_embedded_video(node):
+    """Check if this embed/video is an ok one to count."""
+    keep_keywords = ['youtube', 'blip.tv', 'vimeo']
+    node_str = tounicode(n)
+    for key in keep_keywords:
+        if not allow and key in node_str:
+            return True
+    return False
+
+
 def build_base_document(html):
     """Return a base document with the body as root.
 
@@ -158,7 +168,6 @@ def prep_article(doc):
         """Clean up the final document we return as the readable article"""
         LOG.debug('Cleaning document')
         clean_list = ['object', 'h1']
-        keep_keywords = ['youtube', 'blip.tv', 'vimeo']
 
         # If there is only one h2, they are probably using it as a header and
         # not a subheader, so remove it since we already have a header.
@@ -181,13 +190,9 @@ def prep_article(doc):
                 # Allow youtube and vimeo videos through as people usually
                 # want to see those.
                 if is_embed:
-                    # if this object or embed has any of the keywords in the
-                    # html from here on out, then let it live.
-                    node_str = tounicode(n)
+                    if ok_embedded_video(n):
+                        allow = True
 
-                    for key in keep_keywords:
-                        if not allow and key in node_str:
-                            allow = True
                 if not allow:
                     LOG.debug('Dropping node: ' + str(n))
                     n.drop_tree()
@@ -207,7 +212,6 @@ def prep_article(doc):
                         # go on with next loop, this guy is gone
                         continue
 
-
             # clean out extra <p>
             if n.tag == 'p':
                 # if the p has no children and has no content...well then down
@@ -217,10 +221,82 @@ def prep_article(doc):
                     n.drop_tree()
                     # go on with next loop, this guy is gone
                     continue
+
+            # finally try out the conditional cleaning of the target node
+            clean_conditionally(n)
+
         return node
 
-    def clean_conditionally(doc, clean_el):
+    def clean_conditionally(node):
         """Remove the clean_el if it looks like bad content based on rules."""
+        target_tags = ['form', 'table', 'ul', 'div', 'p']
+
+        if node.tag not in target_tags:
+            # this is not the tag you're looking for
+            return
+
+        weight = get_class_weight(node)
+        # content_score = LOOK up the content score for this node we found
+        # before else default to 0
+        content_score = 0
+
+        if (weight + content_score < 0):
+            LOG.debug('Dropping conditional node: ' + str(node))
+            node.drop_tree()
+
+        if node.text_content().count(',') < 10:
+            LOG.debug("There aren't 10 ,s so we're processing more")
+
+            # If there are not very many commas, and the number of
+            # non-paragraph elements is more than paragraphs or other ominous
+            # signs, remove the element.
+            p = len(node.findall('.//p'))
+            img = len(node.findall('.//img'))
+            li = len(node.findall('.//li')) - 100
+            inputs = len(node.findall('.//input'))
+
+            embed = 0
+            embeds = node.findall('.//embed')
+            for e in embeds:
+                if ok_embedded_video(e):
+                    embed += 1
+            link_density = get_link_density(node)
+            content_length = len(node.text_content())
+
+            remove_node = False
+
+            if img > p:
+                # this one has shown to do some extra image removals.
+                # we could get around this by checking for caption info in the
+                # images to try to do some scoring of good v. bad images.
+                # failing example: 
+                # arstechnica.com/science/news/2012/05/1859s-great-auroral-stormthe-week-the-sun-touched-the-earth.ars
+                LOG.debug('Conditional drop: img > p')
+                remove_node = True
+            elif li > p and node.tag != 'ul' and node.tag != 'ol':
+                LOG.debug('Conditional drop: li > p and not ul/ol')
+                remove_node = True
+            elif inputs > p / 3.0:
+                LOG.debug('Conditional drop: inputs > p/3.0')
+                remove_node = True
+            elif content_length < 25 and (img == 0 or img > 2):
+                LOG.debug('Conditional drop: len < 25 and 0/>2 images')
+                remove_node = True
+            elif weight < 25 and link_density > 0.2:
+                LOG.debug('Conditional drop: weight small and link is dense')
+                remove_node = True
+            elif weight >= 25 and link_density > 0.5:
+                LOG.debug('Conditional drop: weight big but link heavy')
+                remove_node = True
+            elif (embed == 1 and content_length < 75) or embed > 1:
+                LOG.debug('Conditional drop: embed without much content or many embed')
+                remove_node = True
+
+            if remove_node:
+                # For some reason the parent is none so we can't drop, we're
+                # not in a tree that can take dropping this node.
+                if node.getparent() is not None:
+                    node.drop_tree()
 
     doc = clean_document(doc)
     return doc
