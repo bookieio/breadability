@@ -6,18 +6,10 @@
 News
 ====
 
-0.2a1
------
 
-*Release date: UNRELEASED*
-
-* Example news entry for the in-development version
-
-
-0.1
+0.1.0
 ---
 
-*Release date: 15-Mar-2010*
+*Release date: May 6th 2012*
 
-* Example news entry for a released version
-
+* Initial release and upload to PyPi
