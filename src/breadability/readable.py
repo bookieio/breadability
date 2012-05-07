@@ -223,7 +223,11 @@ def prep_article(doc):
                     continue
 
             # finally try out the conditional cleaning of the target node
-            clean_conditionally(n)
+            if clean_conditionally(n):
+                # For some reason the parent is none so we can't drop, we're
+                # not in a tree that can take dropping this node.
+                if n.getparent() is not None:
+                    n.drop_tree()
 
         return node
 
@@ -242,7 +246,7 @@ def prep_article(doc):
 
         if (weight + content_score < 0):
             LOG.debug('Dropping conditional node: ' + str(node))
-            node.drop_tree()
+            return True
 
         if node.text_content().count(',') < 10:
             LOG.debug("There aren't 10 ,s so we're processing more")
@@ -269,7 +273,7 @@ def prep_article(doc):
                 # this one has shown to do some extra image removals.
                 # we could get around this by checking for caption info in the
                 # images to try to do some scoring of good v. bad images.
-                # failing example: 
+                # failing example:
                 # arstechnica.com/science/news/2012/05/1859s-great-auroral-stormthe-week-the-sun-touched-the-earth.ars
                 LOG.debug('Conditional drop: img > p')
                 remove_node = True
@@ -291,12 +295,10 @@ def prep_article(doc):
             elif (embed == 1 and content_length < 75) or embed > 1:
                 LOG.debug('Conditional drop: embed without much content or many embed')
                 remove_node = True
+            return remove_node
 
-            if remove_node:
-                # For some reason the parent is none so we can't drop, we're
-                # not in a tree that can take dropping this node.
-                if node.getparent() is not None:
-                    node.drop_tree()
+        # nope, don't remove anything
+        return False
 
     doc = clean_document(doc)
     return doc
@@ -309,16 +311,18 @@ def find_candidates(doc):
     clean up and return the final best match.
 
     """
-    scorable_node_tags = ['p', 'td', 'pre']
+    scorable_node_tags = ['div', 'p', 'td', 'pre']
     nodes_to_score = []
+    should_remove = []
 
     for node in doc.iter():
         if is_unlikely_node(node):
-            LOG.debug('Dropping unlikely: ' + str(node))
-            node.drop_tree()
-        elif node.tag in scorable_node_tags:
+            LOG.debug('We should drop unlikely: ' + str(node))
+            should_remove.append(node)
+            continue
+        if node.tag in scorable_node_tags:
             nodes_to_score.append(node)
-    return score_candidates(nodes_to_score)
+    return score_candidates(nodes_to_score), should_remove
 
 
 class Article(object):
@@ -342,7 +346,7 @@ class Article(object):
         html_cleaner(doc)
         doc = drop_tag(doc, 'noscript')
         doc = transform_misused_divs_into_paragraphs(doc)
-        candidates = find_candidates(doc)
+        candidates, should_drop = find_candidates(doc)
 
         if candidates:
             LOG.debug('Candidates found:')
@@ -364,6 +368,9 @@ class Article(object):
         else:
             LOG.warning('No candidates found: using document.')
             LOG.debug('Begin final prep of article')
+            # since we've not found a good candidate we're should help this
+            # cleanup by removing the should_drop we spotted.
+            [n.drop_tree() for n in should_drop]
             doc = prep_article(doc)
             doc = build_base_document(doc)
 

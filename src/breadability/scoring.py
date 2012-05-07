@@ -1,28 +1,25 @@
 """Handle dealing with scoring nodes and content for our parsing."""
 import re
 
+from breadability.logconfig import LOG
+
 # A series of sets of attributes we check to help in determining if a node is
 # a potential candidate or not.
-CLS_UNLIKELY = set([
-    'combx', 'comment', 'community', 'disqus', 'extra', 'foot', 'header',
-    'menu', '' 'remark', 'rss', 'shoutbox', 'sidebar', 'sponsor', 'ad-break',
-    'agegate', 'pagination' '', 'pager', 'popup', 'tweet', 'twitter',
-])
-CLS_MAYBE = set([
-    'and', 'article', 'body', 'column', 'main', 'shadow',
-])
-CLS_WEIGHT_POSITIVE = set(['article', 'body', 'content', 'entry', 'hentry',
-    'main', 'page', 'pagination', 'post', 'text', 'blog', 'story'])
-CLS_WEIGHT_NEGATIVE = set(['combx', 'comment', 'com-', 'contact', 'foot',
-    'footer', 'footnote', 'masthead', 'media', 'meta', 'outbrain', 'promo',
-    'related', 'scroll', 'shoutbox', 'sidebar', 'sponsor', 'shopping', 'tags',
-    'tool', 'widget'])
+CLS_UNLIKELY = re.compile(('combx|comment|community|disqus|extra|foot|header|'
+    'menu|remark|rss|shoutbox|sidebar|sponsor|ad-break|agegate|pagination|'
+    'pager|popup|tweet|twitter'), re.I)
+CLS_MAYBE = re.compile('and|article|body|column|main|shadow', re.I)
+CLS_WEIGHT_POSITIVE = re.compile(('article|body|content|entry|hentry|main|'
+    'page|pagination|post|text|blog|story'), re.I)
+CLS_WEIGHT_NEGATIVE = re.compile(('combx|comment|com-|contact|foot|footer|'
+    'footnote|masthead|media|meta|outbrain|promo|related|scroll|shoutbox|'
+    'sidebar|sponsor|shopping|tags|tool|widget'), re.I)
 
 
 def check_node_attr(node, attr, checkset):
-    attr = node.get(attr) or ""
-    check = set(attr.lower().split(' '))
-    if check.intersection(checkset):
+    value = node.get(attr) or ""
+    check = checkset.search(value)
+    if check:
         return True
     else:
         return False
@@ -88,13 +85,15 @@ def score_candidates(nodes):
         content_score = 0
         parent = node.getparent()
         grand = parent.getparent() if parent is not None else None
-        innertext = node.text
+        innertext = node.text_content()
 
         if parent is None or grand is None:
+            LOG.debug("Skipping candidate because parent/grand are none")
             continue
 
         # If this paragraph is less than 25 characters, don't even count it.
         if innertext and len(innertext) < MIN_HIT_LENTH:
+            LOG.debug("Skipping candidate because not enough content.")
             continue
 
         # Initialize readability data for the parent.
@@ -116,11 +115,10 @@ def score_candidates(nodes):
         length_points = len(innertext) % 100 if innertext else 0
         content_score = length_points if length_points > 3 else 3
 
-        # Add the score to the parent. The grandparent gets half. */
-        if parent is not None:
-            candidates[parent].content_score += content_score
-        if grand is not None:
-            candidates[grand].content_score += content_score
+        # Add the score to the parent.
+        candidates[parent].content_score += content_score
+        # The grandparent gets half.
+        candidates[grand].content_score += content_score / 2.0
 
         for candidate in candidates.values():
             candidate.content_score = candidate.content_score * (1 -
