@@ -18,7 +18,12 @@ This is a pretty straight port of the JS here:
 
 Installation
 -------------
-Currently it's git only until I get everything ready for a submission to PyPi.
+This does depend on lxml so you'll need some C headers in order to install
+things from pip so that it can compile.
+
+::
+
+    pip install breadability
 
 
 Usage
