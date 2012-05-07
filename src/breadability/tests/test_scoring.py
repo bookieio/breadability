@@ -1,3 +1,5 @@
+import re
+
 from lxml.html import fragment_fromstring
 from unittest import TestCase
 
@@ -13,30 +15,30 @@ class TestCheckNodeAttr(TestCase):
     """
     def test_has_class(self):
         """Verify that a node has a class in our set."""
-        test_set = set(['test1', 'test2'])
+        test_re = re.compile('test1|test2', re.I)
         test_node = fragment_fromstring('<div/>')
         test_node.set('class', 'test2 comment')
 
-        self.assertTrue(check_node_attr(test_node, 'class', test_set))
+        self.assertTrue(check_node_attr(test_node, 'class', test_re))
 
     def test_has_id(self):
         """Verify that a node has an id in our set."""
-        test_set = set(['test1', 'test2'])
+        test_re = re.compile('test1|test2', re.I)
         test_node = fragment_fromstring('<div/>')
         test_node.set('id', 'test2')
 
-        self.assertTrue(check_node_attr(test_node, 'id', test_set))
+        self.assertTrue(check_node_attr(test_node, 'id', test_re))
 
     def test_lacks_class(self):
         """Verify that a node does not have a class in our set."""
-        test_set = set(['test1', 'test2'])
+        test_re = re.compile('test1|test2', re.I)
         test_node = fragment_fromstring('<div/>')
         test_node.set('class', 'test4 comment')
-        self.assertFalse(check_node_attr(test_node, 'class', test_set))
+        self.assertFalse(check_node_attr(test_node, 'class', test_re))
 
     def test_lacks_id(self):
         """Verify that a node does not have an id in our set."""
-        test_set = set(['test1', 'test2'])
+        test_re = re.compile('test1|test2', re.I)
         test_node = fragment_fromstring('<div/>')
         test_node.set('id', 'test4')
-        self.assertFalse(check_node_attr(test_node, 'id', test_set))
+        self.assertFalse(check_node_attr(test_node, 'id', test_re))

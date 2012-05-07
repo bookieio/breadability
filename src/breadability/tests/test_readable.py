@@ -185,7 +185,7 @@ class TestScoringNodes(TestCase):
 
         # this might change as we tweak our algorithm, but if it does change,
         # it signifies we need to look at what we changed.
-        self.assertEqual(len(candidates.keys()), 8)
+        self.assertEqual(len(candidates.keys()), 6)
 
         # one of these should have a decent score
         scores = sorted([c.content_score for c in candidates.values()])
