@@ -36,13 +36,15 @@ cmd line
 
     $ breadability http://wiki.python.org/moin/BeginnersGuide
 
-Add the `-v` flag to get some details on how we actually parsed this thing. I
-want to grow that debugging info into enough to try to track good/bad things
-we did in processing.
+Options
+``````````
 
-::
-
-    $ breadability -v http://wiki.python.org/moin/BeginnersGuide
+  - b will write out the parsed content to a temp file and open it in a
+    browser for viewing.
+  - f will override the default behaviour of getting an html fragment (<div>)
+    and give you back a full <html> document.
+  - v will output in verbose debug mode and help let you know why it parsed
+    how it did.
 
 
 Using from Python
