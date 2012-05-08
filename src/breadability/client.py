@@ -1,5 +1,11 @@
 import argparse
+import codecs
+import os
 import sys
+import urllib
+import webbrowser
+
+from tempfile import mkstemp
 
 from breadability import VERSION
 from breadability.logconfig import LOG
@@ -20,10 +26,20 @@ def parse_args():
         default=False,
         help='Increase logging verbosity to DEBUG.')
 
-    parser.add_argument('-m', '--metadata',
+    parser.add_argument('-f', '--fragment',
+        action='store_false',
+        default=True,
+        help='Output html fragment by default.')
+
+#     parser.add_argument('-m', '--metadata',
+#         action='store_true',
+#         default=False,
+#         help='print all metadata as well as content for the content')
+
+    parser.add_argument('-b', '--browser',
         action='store_true',
         default=False,
-        help='print all metadata as well as content for the content')
+        help='open the parsed content in your web browser')
 
     parser.add_argument('path', metavar='P', type=str, nargs=1,
         help="The url or file path to process in readable form.")
@@ -49,26 +65,22 @@ def main():
         url = None
 
     if is_url:
-        import urllib
-        target = urllib.urlopen(target)
+        req = urllib.urlopen(target)
+        ucontent = req.read().encode('utf-8')
     else:
-        target = open(target, 'rt')
+        ucontent = codecs.open(target, "r", "utf-8").read()
 
     enc = sys.__stdout__.encoding or 'utf-8'
 
-    try:
-        doc = Article(target.read(), url=url)
-        # if args.metadata:
-        #     m = doc.summary_with_metadata()
-        #     print m.title()
-        #     print m.short_title()
-        #     print m.confidence
-        #     print m.html.encode(enc, 'replace')
-        # else:
-        #     print doc.summary().encode(enc, 'replace')
-        print doc
-    finally:
-        target.close()
+    doc = Article(ucontent, url=url, fragment=args.fragment)
+    if args.browser:
+        fg, pathname = mkstemp(suffix='.html')
+        out = codecs.open(pathname, 'w', 'utf-8')
+        out.write(doc.readable)
+        out.close()
+        webbrowser.open(pathname)
+    else:
+        sys.stdout(doc.readable.encode(enc, 'replace'))
 
 
 if __name__ == '__main__':

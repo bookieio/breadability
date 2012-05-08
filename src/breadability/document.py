@@ -1,7 +1,6 @@
 """Generate a clean nice starting html document to process for an article."""
 
 import chardet
-import logging
 import re
 from lxml.etree import tostring
 from lxml.etree import tounicode

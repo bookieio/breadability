@@ -3,6 +3,7 @@ from operator import attrgetter
 from lxml.etree import tounicode
 from lxml.etree import tostring
 from lxml.html.clean import Cleaner
+from lxml.html import document_fromstring
 from lxml.html import fragment_fromstring
 from lxml.html import fromstring
 from pprint import PrettyPrinter
@@ -24,6 +25,17 @@ html_cleaner = Cleaner(scripts=True, javascript=True, comments=True,
                   remove_unknown_tags=False, safe_attrs_only=False)
 
 
+BASE_DOC = """
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    </head>
+    <body>
+    </body>
+</html>
+"""
+
+
 def drop_tag(doc, *tags):
     """Helper to just remove any nodes that match this html tag passed in
 
@@ -38,20 +50,23 @@ def drop_tag(doc, *tags):
     return doc
 
 
+
 def ok_embedded_video(node):
     """Check if this embed/video is an ok one to count."""
     keep_keywords = ['youtube', 'blip.tv', 'vimeo']
     node_str = tounicode(n)
     for key in keep_keywords:
-        if not allow and key in node_str:
+        if key in node_str:
             return True
     return False
 
 
-def build_base_document(html):
+def build_base_document(html, fragment=True):
     """Return a base document with the body as root.
 
     :param html: Parsed Element object
+    :param fragment: Should we return a <div> doc fragment or a full <html>
+    doc.
 
     """
     if html.tag == 'body':
@@ -61,15 +76,29 @@ def build_base_document(html):
         found_body = html.find('.//body')
 
     if found_body is None:
-        fragment = fragment_fromstring('<div/>')
-        fragment.set('id', 'readabilityBody')
-        fragment.append(html)
-        return fragment
+        frag = fragment_fromstring('<div/>')
+        frag.set('id', 'readabilityBody')
+        frag.append(html)
+
+        if not fragment:
+            output = fromstring(BASE_DOC)
+            insert_point = output.find('.//body')
+            insert_point.append(frag)
+        else:
+            output = frag
     else:
+
         found_body.tag = 'div'
         found_body.set('id', 'readabilityBody')
 
-    return found_body
+        if not fragment:
+            output = fromstring(BASE_DOC)
+            insert_point = output.find('.//body')
+            insert_point.append(found_body)
+        else:
+            output = found_body
+
+    return output
 
 
 def transform_misused_divs_into_paragraphs(doc):
@@ -136,7 +165,7 @@ def check_siblings(candidate_node, candidate_list):
             content_length = len(content)
 
             if content_length > 80 and link_density < 0.25:
-                append = true
+                append = True
             elif content_length < 80 and link_density == 0:
                 if ". " in content:
                     append = True
@@ -328,18 +357,31 @@ def find_candidates(doc):
 class Article(object):
     """Parsed readable object"""
 
-    def __init__(self, html, url=None):
+    def __init__(self, html, url=None, fragment=True):
+        """Create the Article we're going to use.
+
+        :param html: The string of html we're going to parse.
+        :param url: The url so we can adjust the links to still work.
+        :param fragment: Should we return a <div> fragment or a full <html>
+        doc.
+
+        """
         LOG.debug('Url: ' + str(url))
         self.orig = OriginalDocument(html, url=url)
+        self.fragment = fragment
 
     def __str__(self):
-        return tostring(self.readable)
+        return tostring(self._readable)
 
     def __unicode__(self):
-        return tounicode(self.readable)
+        return tounicode(self._readable)
 
     @cached_property(ttl=600)
     def readable(self):
+        return tounicode(self._readable)
+
+    @cached_property(ttl=600)
+    def _readable(self):
         """The readable parsed article"""
         doc = self.orig.html
         # cleaning doesn't return, just wipes in place
@@ -364,7 +406,7 @@ class Article(object):
             updated_winner = check_siblings(winner, candidates)
             LOG.debug('Begin final prep of article')
             updated_winner.node = prep_article(updated_winner.node)
-            doc = build_base_document(updated_winner.node)
+            doc = build_base_document(updated_winner.node, self.fragment)
         else:
             LOG.warning('No candidates found: using document.')
             LOG.debug('Begin final prep of article')
@@ -372,6 +414,6 @@ class Article(object):
             # cleanup by removing the should_drop we spotted.
             [n.drop_tree() for n in should_drop]
             doc = prep_article(doc)
-            doc = build_base_document(doc)
+            doc = build_base_document(doc, self.fragment)
 
         return doc
