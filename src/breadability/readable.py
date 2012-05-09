@@ -393,11 +393,11 @@ class Article(object):
         if candidates:
             LOG.debug('Candidates found:')
             pp = PrettyPrinter(indent=2)
-            LOG.debug(pp.pformat(candidates))
 
             # right now we return the highest scoring candidate content
             by_score = sorted([c for c in candidates.values()],
                 key=attrgetter('content_score'), reverse=True)
+            LOG.debug(pp.pformat(by_score))
 
             # since we have several candidates, check the winner's siblings
             # for extra content
