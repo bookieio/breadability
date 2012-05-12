@@ -6,6 +6,15 @@
 News
 ====
 
+0.1.1
+------
+
+*Release date: May 11th 2012*
+
+* Fix bugs in scoring to help in getting right content
+* Add concept of -d which shows scoring/decisions on nodes
+* Update command line client to be able to pipe output to other tools
+
 
 0.1.0
 ---
