@@ -23,6 +23,7 @@ things from pip so that it can compile.
 
 ::
 
+    sudo apt-get install libxml2-dev libxslt-dev
     pip install breadability
 
 
@@ -98,4 +99,23 @@ urls, etc.
 You can ping me on irc, I'm always in the `#bookie` channel in freenode.
 
 
+Important Links
+----------------
+
+  - `Builds`_ are done on `TravisCI`_
+
+
+Inspiration
+~~~~~~~~~~~~
+
+  - `python-readability`_
+  - `decruft`_
+  - `readability`_
+
+
+
 .. _readability: http://code.google.com/p/arc90labs-readability/
+.. _Builds: http://travis-ci.org/#!/mitechie/breadability
+.. _TravisCI: http://travis-ci.org/
+.. _decruft: https://github.com/dcramer/decruft
+.. _python-readability: https://github.com/buriy/python-readability
