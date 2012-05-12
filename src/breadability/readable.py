@@ -276,7 +276,7 @@ def prep_article(doc):
         content_score = 0
 
         if (weight + content_score < 0):
-            LNODE(node, 2, 'Dropping conditional node')
+            LNODE.log(node, 2, 'Dropping conditional node')
             return True
 
         if node.text_content().count(',') < 10:
