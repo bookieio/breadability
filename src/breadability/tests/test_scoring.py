@@ -205,3 +205,17 @@ class TestScoredNode(TestCase):
         node = fragment_fromstring(test_div)
         snode = ScoredNode(node)
         self.assertEqual(snode.content_score, -3)
+
+
+class TestScoreCandidates(TestCase):
+    """The grand daddy of tests to make sure our scoring works
+
+    Now scoring details will change over time, so the most imporant thing is
+    to make sure candidates come out in the right order, not necessarily how
+    they scored. Make sure to keep this in mind while getting tests going.
+
+    """
+
+    def test_simple_candidate_set(self):
+        """Tests a simple case of two candidate nodes"""
+        # TBD
