@@ -1,0 +1,6 @@
+chardet
+lxml
+coverage
+nose
+pep8
+pylint
