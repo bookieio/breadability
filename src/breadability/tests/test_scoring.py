@@ -6,7 +6,9 @@ from unittest import TestCase
 from breadability.readable import Article
 from breadability.scoring import check_node_attr
 from breadability.scoring import get_class_weight
+from breadability.scoring import ScoredNode
 from breadability.readable import get_link_density
+from breadability.readable import is_unlikely_node
 from breadability.tests import load_snippet
 
 
@@ -121,3 +123,85 @@ class TestClassWeight(TestCase):
         self.assertEqual(get_class_weight(node), 25)
 
 
+class TestUnlikelyNode(TestCase):
+    """is_unlikely_node should help verify our node is good/bad."""
+
+    def test_body_is_always_likely(self):
+        """The body tag is always a likely node."""
+        test_div = '<body class="comment"><div>Content</div></body>'
+        node = fragment_fromstring(test_div)
+        self.assertFalse(is_unlikely_node(node))
+
+    def test_is_unlikely(self):
+        "Keywords in the class/id will make us believe this is unlikely."
+        test_div = '<div class="something comments">Content</div>'
+        node = fragment_fromstring(test_div)
+        self.assertTrue(is_unlikely_node(node))
+
+        test_div = '<div id="comments">Content</div>'
+        node = fragment_fromstring(test_div)
+        self.assertTrue(is_unlikely_node(node))
+
+    def test_not_unlikely(self):
+        """Suck it double negatives."""
+        test_div = '<div id="post">Content</div>'
+        node = fragment_fromstring(test_div)
+        self.assertFalse(is_unlikely_node(node))
+
+        test_div = '<div class="something post">Content</div>'
+        node = fragment_fromstring(test_div)
+        self.assertFalse(is_unlikely_node(node))
+
+    def test_maybe_hits(self):
+        """We've got some maybes that will overrule an unlikely node."""
+        test_div = '<div id="comments" class="article">Content</div>'
+        node = fragment_fromstring(test_div)
+        self.assertFalse(is_unlikely_node(node))
+
+
+class TestScoredNode(TestCase):
+    """ScoredNodes constructed have initial content_scores, etc."""
+
+    def test_hash_id(self):
+        """ScoredNodes have a hash_id based on their content
+
+        Since this is based on the html there are chances for collisions, but
+        it helps us follow and identify nodes through the scoring process. Two
+        identical nodes would score the same, so meh all good.
+
+        """
+        test_div = '<div id="comments" class="article">Content</div>'
+        node = fragment_fromstring(test_div)
+        snode = ScoredNode(node)
+        self.assertEqual(snode.hash_id, 'ffa4c519')
+
+    def test_div_content_score(self):
+        """A div starts out with a score of 5 and modifies from there"""
+        test_div = '<div id="" class="">Content</div>'
+        node = fragment_fromstring(test_div)
+        snode = ScoredNode(node)
+        self.assertEqual(snode.content_score, 5)
+
+        test_div = '<div id="article" class="">Content</div>'
+        node = fragment_fromstring(test_div)
+        snode = ScoredNode(node)
+        self.assertEqual(snode.content_score, 30)
+
+        test_div = '<div id="comments" class="">Content</div>'
+        node = fragment_fromstring(test_div)
+        snode = ScoredNode(node)
+        self.assertEqual(snode.content_score, -20)
+
+    def test_headings_score(self):
+        """Heading tags aren't likely candidates, hurt their scores."""
+        test_div = '<h2>Heading</h2>'
+        node = fragment_fromstring(test_div)
+        snode = ScoredNode(node)
+        self.assertEqual(snode.content_score, -5)
+
+    def test_list_items(self):
+        """Heading tags aren't likely candidates, hurt their scores."""
+        test_div = '<li>list item</li>'
+        node = fragment_fromstring(test_div)
+        snode = ScoredNode(node)
+        self.assertEqual(snode.content_score, -3)

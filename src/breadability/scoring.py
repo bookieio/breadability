@@ -167,7 +167,7 @@ class ScoredNode(object):
         """Given node, set an initial score and weigh based on css and id"""
         self.node = node
         content_score = 0
-        if node.tag == 'div':
+        if node.tag in ['div', 'article']:
             content_score = 5
 
         if node.tag in ['pre', 'td', 'blockquote']:
@@ -178,6 +178,7 @@ class ScoredNode(object):
             content_score = -3
         if node.tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'th']:
             content_score = -5
+
         content_score += get_class_weight(node)
         self.content_score = content_score
 
