@@ -102,15 +102,15 @@ You can ping me on irc, I'm always in the `#bookie` channel in freenode.
 Important Links
 ----------------
 
-  - `Builds`_ are done on `TravisCI`_
+- `Builds`_ are done on `TravisCI`_
 
 
 Inspiration
 ~~~~~~~~~~~~
 
-  - `python-readability`_
-  - `decruft`_
-  - `readability`_
+- `python-readability`_
+- `decruft`_
+- `readability`_
 
 
 
