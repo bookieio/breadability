@@ -9,6 +9,8 @@ import logging
 import sys
 import time
 from collections import namedtuple
+from hashlib import md5
+from lxml.etree import tounicode
 
 
 # For pretty log messages, if available
@@ -18,6 +20,9 @@ except ImportError:
     curses = None
 
 LOGLEVEL = "WARNING"
+
+
+
 
 # Logging bits stolen and adapted from:
 # http://www.tornadoweb.org/documentation/_modules/tornado/options.html
@@ -36,6 +41,7 @@ options = LogOptions(
     log_file_num_backups=5,
     log_to_stderr=True,
 )
+
 
 
 def set_logging_level(level):
@@ -75,6 +81,54 @@ def enable_pretty_logging():
         channel = logging.StreamHandler()
         channel.setFormatter(_LogFormatter(color=color))
         root_logger.addHandler(channel)
+
+
+class LogHelper(object):
+    """Helper to allow us to log as we want for debugging"""
+    scoring = 1
+    removing = 2
+    _active = False
+
+    _actions = None
+
+    def __init__(self, log, actions=None, content=False):
+        if actions is None:
+            self._actions = tuple()
+        else:
+            self._actions = actions
+
+        self._log = log
+        self.content = content
+
+    @property
+    def actions(self):
+        """Return a tuple of the actions we want to log"""
+        return self._actions
+
+    def activate(self):
+        """Turn on this logger."""
+        self._active = True
+
+    def log(self, node, action, description):
+        """Write out our log info based on the node and event specified.
+
+        We only log this information if we're are DEBUG loglevel
+
+        """
+        if self._active:
+            content = tounicode(node)
+            hashed = md5()
+            try:
+                hashed.update(content.encode('utf-8', errors="replace"))
+            except Exception, e:
+                LOG.error("Cannot hash the current node.")
+            hash_id = hashed.hexdigest()[0:8]
+            # if hash_id in ['9c880b27', '8393b7d7', '69bfebdd']:
+            print(u"{0} :: {1}\n{2}".format(
+                hash_id,
+                description,
+                content.replace(u"\n", u"")[0:202],
+            ))
 
 
 class _LogFormatter(logging.Formatter):
@@ -129,3 +183,7 @@ class _LogFormatter(logging.Formatter):
 logging.getLogger('breadable').setLevel(getattr(logging, LOGLEVEL))
 enable_pretty_logging()
 LOG = logging.getLogger('breadable')
+LNODE = LogHelper(LOG,
+    actions=(LogHelper.scoring, LogHelper.removing),
+    content=True
+)

@@ -1,6 +1,9 @@
 """Handle dealing with scoring nodes and content for our parsing."""
 import re
+from hashlib import md5
+from lxml.etree import tounicode
 
+from breadability.logconfig import LNODE
 from breadability.logconfig import LOG
 
 # A series of sets of attributes we check to help in determining if a node is
@@ -25,15 +28,20 @@ def check_node_attr(node, attr, checkset):
         return False
 
 
-def get_link_density(node):
+def get_link_density(node, node_text=None):
     """Generate a value for the number of links in the node.
 
     :param node: pared elementree node
+    :param node_text: if we already have the text_content() make this easier
+    on us.
     :returns float:
 
     """
     link_length = sum([len(a.text_content()) or 0 for a in node.findall(".//a")])
-    text_length = len(node.text_content())
+    if node_text:
+        text_length = len(node_text)
+    else:
+        text_length = len(node.text_content())
     return float(link_length) / max(text_length, 1)
 
 
@@ -82,18 +90,20 @@ def score_candidates(nodes):
     candidates = {}
 
     for node in nodes:
+        LNODE.log(node, 1, "Scoring Node")
+
         content_score = 0
         parent = node.getparent()
         grand = parent.getparent() if parent is not None else None
         innertext = node.text_content()
 
         if parent is None or grand is None:
-            LOG.debug("Skipping candidate because parent/grand are none")
+            LNODE.log(node, 1, "Skipping candidate because parent/grand are none")
             continue
 
         # If this paragraph is less than 25 characters, don't even count it.
         if innertext and len(innertext) < MIN_HIT_LENTH:
-            LOG.debug("Skipping candidate because not enough content.")
+            LNODE.log(node, 1, "Skipping candidate because not enough content.")
             continue
 
         # Initialize readability data for the parent.
@@ -109,20 +119,30 @@ def score_candidates(nodes):
 
         # Add points for any commas within this paragraph
         content_score += innertext.count(',') if innertext else 0
+        LNODE.log(node, 1, "Bonus points for ,: " + str(innertext.count(',')))
 
         # For every 100 characters in this paragraph, add another point. Up to
         # 3 points.
         length_points = len(innertext) % 100 if innertext else 0
-        content_score = length_points if length_points > 3 else 3
+        if length_points > 3:
+            content_score += 3
+        else:
+            content_score += length_points
+        LNODE.log(node, 1, "Length/content points: {0} : {1}".format(length_points, content_score))
 
         # Add the score to the parent.
+        LNODE.log(node, 1, "From this current node.")
         candidates[parent].content_score += content_score
+        LNODE.log(candidates[parent].node, 1, "Giving parent bonus points: " + str(candidates[parent].content_score))
         # The grandparent gets half.
-        candidates[grand].content_score += content_score / 2.0
+        LNODE.log(candidates[grand].node, 1, "Giving grand bonus points")
+        candidates[grand].content_score += (content_score / 2.0)
+        LNODE.log(candidates[parent].node, 1, "Giving grand bonus points: " + str(candidates[grand].content_score))
 
-        for candidate in candidates.values():
-            candidate.content_score = candidate.content_score * (1 -
-                    get_link_density(candidate.node))
+    for candidate in candidates.values():
+        LNODE.log(candidate.node, 1, "Getting link density adjustment: {0} * {1} ".format(
+            candidate.content_score, (1 - get_link_density(candidate.node))))
+        candidate.content_score = candidate.content_score * (1 - get_link_density(candidate.node))
 
     return candidates
 
@@ -138,7 +158,10 @@ class ScoredNode(object):
 
     def __repr__(self):
         """Helpful representation of our Scored Node"""
-        return "{0:0.1F}\t{1}".format(self.content_score, self.node)
+        return "{0}: {1:0.1F}\t{2}".format(
+            self.hash_id,
+            self.content_score,
+            self.node)
 
     def __init__(self, node):
         """Given node, set an initial score and weigh based on css and id"""
@@ -157,3 +180,14 @@ class ScoredNode(object):
             content_score = -5
         content_score += get_class_weight(node)
         self.content_score = content_score
+
+    @property
+    def hash_id(self):
+        content = tounicode(self.node)
+        hashed = md5()
+        try:
+            hashed.update(content.encode('utf-8', errors="replace"))
+        except Exception, e:
+            LOG.error("BOOM! " + str(e))
+
+        return hashed.hexdigest()[0:8]

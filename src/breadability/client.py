@@ -1,6 +1,6 @@
 import argparse
 import codecs
-import os
+import locale
 import sys
 import urllib
 import webbrowser
@@ -9,6 +9,7 @@ from tempfile import mkstemp
 
 from breadability import VERSION
 from breadability.logconfig import LOG
+from breadability.logconfig import LNODE
 from breadability.logconfig import set_logging_level
 from breadability.readable import Article
 
@@ -41,6 +42,11 @@ def parse_args():
         default=False,
         help='open the parsed content in your web browser')
 
+    parser.add_argument('-d', '--debug',
+        action='store_true',
+        default=False,
+        help='Output the detailed scoring information for debugging parsing')
+
     parser.add_argument('path', metavar='P', type=str, nargs=1,
         help="The url or file path to process in readable form.")
 
@@ -54,6 +60,9 @@ def main():
     if args.verbose:
         set_logging_level('DEBUG')
 
+    if args.debug:
+        LNODE.activate()
+
     target = args.path[0]
     LOG.debug("Target: " + target)
 
@@ -66,11 +75,10 @@ def main():
 
     if is_url:
         req = urllib.urlopen(target)
-        ucontent = req.read().encode('utf-8')
+        content = req.read()
+        ucontent = unicode(content, 'utf-8')
     else:
         ucontent = codecs.open(target, "r", "utf-8").read()
-
-    enc = sys.__stdout__.encoding or 'utf-8'
 
     doc = Article(ucontent, url=url, fragment=args.fragment)
     if args.browser:
@@ -80,7 +88,9 @@ def main():
         out.close()
         webbrowser.open(pathname)
     else:
-        sys.stdout(doc.readable.encode(enc, 'replace'))
+        # Wrap sys.stdout into a StreamWriter to allow writing unicode.
+        sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout)
+        sys.stdout.write(doc.readable)
 
 
 if __name__ == '__main__':

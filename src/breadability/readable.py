@@ -3,13 +3,13 @@ from operator import attrgetter
 from lxml.etree import tounicode
 from lxml.etree import tostring
 from lxml.html.clean import Cleaner
-from lxml.html import document_fromstring
 from lxml.html import fragment_fromstring
 from lxml.html import fromstring
 from pprint import PrettyPrinter
 
 from breadability.document import OriginalDocument
 from breadability.logconfig import LOG
+from breadability.logconfig import LNODE
 from breadability.scoring import score_candidates
 from breadability.scoring import get_link_density
 from breadability.scoring import get_class_weight
@@ -34,6 +34,7 @@ BASE_DOC = """
     </body>
 </html>
 """
+SCORABLE_TAGS = ['div', 'p', 'td', 'pre', 'article']
 
 
 def drop_tag(doc, *tags):
@@ -45,7 +46,7 @@ def drop_tag(doc, *tags):
     for tag in tags:
         found = doc.iterfind(".//" + tag)
         for n in found:
-            LOG.debug("Dropping tag: " + str(n))
+            LNODE.log(n, 1, "Dropping tag")
             n.drop_tree()
     return doc
 
@@ -98,6 +99,7 @@ def build_base_document(html, fragment=True):
         else:
             output = found_body
 
+    output.doctype = "<!DOCTYPE html>"
     return output
 
 
@@ -120,7 +122,7 @@ def transform_misused_divs_into_paragraphs(doc):
             # We need to create a <p> and put all it's contents in there
             # We'll just stringify it, then regex replace the first/last
             # div bits to turn them into <p> vs <div>.
-            LOG.debug('Turning leaf <div> into <p>')
+            LNODE.log(elem, 1, 'Turning leaf <div> into <p>')
             orig = tounicode(elem).strip()
             started = re.sub(r'^<\s*div', '<p', orig)
             ended = re.sub(r'div>$', 'p>', started)
@@ -145,6 +147,7 @@ def check_siblings(candidate_node, candidate_list):
         content_bonus = 0
 
         if sibling is candidate_node.node:
+            LNODE.log(sibling, 1, 'Sibling is the node so append')
             append = True
 
         # Give a bonus if sibling nodes and top candidates have the example
@@ -171,7 +174,7 @@ def check_siblings(candidate_node, candidate_list):
                     append = True
 
         if append:
-            LOG.debug('Sibling being appended' + str(sibling))
+            LNODE.log(sibling, 1, 'Sibling being appended')
             if sibling.tag not in ['div', 'p']:
                 # We have a node that isn't a common block level element, like
                 # a form or td tag. Turn it into a div so it doesn't get
@@ -223,7 +226,7 @@ def prep_article(doc):
                         allow = True
 
                 if not allow:
-                    LOG.debug('Dropping node: ' + str(n))
+                    LNODE.log(n, 2, "Dropping Node")
                     n.drop_tree()
                     # go on with next loop, this guy is gone
                     continue
@@ -235,8 +238,7 @@ def prep_article(doc):
                 if get_class_weight(n) < 0 or get_link_density(n) > .33:
                     # for some reason we get nodes here without a parent
                     if n.getparent() is not None:
-                        LOG.debug(
-                            "Dropping <hX>, it's insignificant: " + str(n))
+                        LNODE.log(n, 2, "Dropping <hX>, it's insignificant")
                         n.drop_tree()
                         # go on with next loop, this guy is gone
                         continue
@@ -246,7 +248,7 @@ def prep_article(doc):
                 # if the p has no children and has no content...well then down
                 # with it.
                 if not n.getchildren() and len(n.text_content()) < 5:
-                    LOG.debug('Dropping extra <p>: ' + str(n))
+                    LNODE.log(n, 2, 'Dropping extra <p>')
                     n.drop_tree()
                     # go on with next loop, this guy is gone
                     continue
@@ -274,7 +276,7 @@ def prep_article(doc):
         content_score = 0
 
         if (weight + content_score < 0):
-            LOG.debug('Dropping conditional node: ' + str(node))
+            LNODE(node, 2, 'Dropping conditional node')
             return True
 
         if node.text_content().count(',') < 10:
@@ -304,25 +306,25 @@ def prep_article(doc):
                 # images to try to do some scoring of good v. bad images.
                 # failing example:
                 # arstechnica.com/science/news/2012/05/1859s-great-auroral-stormthe-week-the-sun-touched-the-earth.ars
-                LOG.debug('Conditional drop: img > p')
+                LNODE.log(node, 2, 'Conditional drop: img > p')
                 remove_node = True
             elif li > p and node.tag != 'ul' and node.tag != 'ol':
-                LOG.debug('Conditional drop: li > p and not ul/ol')
+                LNODE.log(node, 2, 'Conditional drop: li > p and not ul/ol')
                 remove_node = True
             elif inputs > p / 3.0:
-                LOG.debug('Conditional drop: inputs > p/3.0')
+                LNODE.log(node, 2, 'Conditional drop: inputs > p/3.0')
                 remove_node = True
             elif content_length < 25 and (img == 0 or img > 2):
-                LOG.debug('Conditional drop: len < 25 and 0/>2 images')
+                LNODE.log(node, 2, 'Conditional drop: len < 25 and 0/>2 images')
                 remove_node = True
             elif weight < 25 and link_density > 0.2:
-                LOG.debug('Conditional drop: weight small and link is dense')
+                LNODE.log(node, 2, 'Conditional drop: weight small and link is dense')
                 remove_node = True
             elif weight >= 25 and link_density > 0.5:
-                LOG.debug('Conditional drop: weight big but link heavy')
+                LNODE.log(node, 2, 'Conditional drop: weight big but link heavy')
                 remove_node = True
             elif (embed == 1 and content_length < 75) or embed > 1:
-                LOG.debug('Conditional drop: embed without much content or many embed')
+                LNODE.log(node, 2, 'Conditional drop: embed without much content or many embed')
                 remove_node = True
             return remove_node
 
@@ -340,7 +342,7 @@ def find_candidates(doc):
     clean up and return the final best match.
 
     """
-    scorable_node_tags = ['div', 'p', 'td', 'pre']
+    scorable_node_tags = SCORABLE_TAGS
     nodes_to_score = []
     should_remove = []
 
@@ -349,7 +351,7 @@ def find_candidates(doc):
             LOG.debug('We should drop unlikely: ' + str(node))
             should_remove.append(node)
             continue
-        if node.tag in scorable_node_tags:
+        if node.tag in scorable_node_tags and node not in nodes_to_score:
             nodes_to_score.append(node)
     return score_candidates(nodes_to_score), should_remove
 
@@ -386,7 +388,7 @@ class Article(object):
         doc = self.orig.html
         # cleaning doesn't return, just wipes in place
         html_cleaner(doc)
-        doc = drop_tag(doc, 'noscript')
+        doc = drop_tag(doc, 'noscript', 'iframe')
         doc = transform_misused_divs_into_paragraphs(doc)
         candidates, should_drop = find_candidates(doc)
 

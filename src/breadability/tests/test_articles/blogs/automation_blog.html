@@ -1,0 +1,2974 @@
+<!DOCTYPE html>
+<html b:version='2' class='v2' dir='ltr'>
+<head>
+<meta content='IE=EmulateIE7' http-equiv='X-UA-Compatible'/>
+<meta content='width=1100' name='viewport'/>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+<script type="text/javascript">(function() { var a=window;function c(b){this.t={};this.tick=function(b,i,d){d=void 0!=d?d:(new Date).getTime();this.t[b]=[d,i]};this.tick("start",null,b)}var f=new c;a.jstiming={Timer:c,load:f};try{var g=null;a.chrome&&a.chrome.csi&&(g=Math.floor(a.chrome.csi().pageT));null==g&&a.gtbExternal&&(g=a.gtbExternal.pageT());null==g&&a.external&&(g=a.external.pageT);g&&(a.jstiming.pt=g)}catch(h){};a.tickAboveFold=function(b){var e=0;if(b.offsetParent){do e+=b.offsetTop;while(b=b.offsetParent)}b=e;750>=b&&a.jstiming.load.tick("aft")};var j=!1;function k(){j||(j=!0,a.jstiming.load.tick("firstScrollTime"))}a.addEventListener?a.addEventListener("scroll",k,!1):a.attachEvent("onscroll",k);
+ })();</script>
+<meta content='true' name='MSSmartTagsPreventParsing'/>
+<meta content='blogger' name='generator'/>
+<link href='http://shrinik.blogspot.com/favicon.ico' rel='icon' type='image/x-icon'/>
+<link href='http://shrinik.blogspot.com/2012/05/brief-introduction-of-test-automation.html' rel='canonical'/>
+<link rel="alternate" type="application/atom+xml" title="Thinking Tester - Atom" href="http://shrinik.blogspot.com/feeds/posts/default" />
+<link rel="alternate" type="application/rss+xml" title="Thinking Tester - RSS" href="http://shrinik.blogspot.com/feeds/posts/default?alt=rss" />
+<link rel="service.post" type="application/atom+xml" title="Thinking Tester - Atom" href="http://www.blogger.com/feeds/7722108/posts/default" />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.blogger.com/rsd.g?blogID=7722108" />
+<link rel="alternate" type="application/atom+xml" title="Thinking Tester - Atom" href="http://shrinik.blogspot.com/feeds/5031641658160091766/comments/default" />
+<!--[if IE]><script type="text/javascript" src="http://www.blogger.com/static/v1/jsbin/3548834718-ieretrofit.js"></script>
+<![endif]-->
+<link rel="image_src" href="http://2.bp.blogspot.com/-jcWeU5X-Vv4/T6a-9haM-hI/AAAAAAAAAOg/4iMjxJLYFIE/s72-c/wtloss.png" />
+<!--[if IE]> <script> (function() { var html5 = ("abbr,article,aside,audio,canvas,datalist,details," + "figure,footer,header,hgroup,mark,menu,meter,nav,output," + "progress,section,time,video").split(','); for (var i = 0; i < html5.length; i++) { document.createElement(html5[i]); } try { document.execCommand('BackgroundImageCache', false, true); } catch(e) {} })(); </script> <![endif]-->
+<title>Thinking Tester: A brief introduction of Test Automation...</title>
+<link type='text/css' rel='stylesheet' href='http://www.blogger.com/static/v1/widgets/2482811679-widget_css_2_bundle.css' />
+<link type="text/css" rel="stylesheet" href="http://www.blogger.com/dyn-css/authorization.css?targetBlogID=7722108&zx=49d081a6-6e5c-4ac1-afde-5c20ef0d53c8"/>
+<style type="text/css">
+#navbar-iframe { display:block }
+#b-navbar{white-space:nowrap;color:#444;height:29px;border-bottom:1px solid #888;background:transparent;font-size:13px;font-family:Arial,Sans-serif}#b-navbar #b-navbar-bg{position:absolute;left:0;top:0;width:100%;height:30px;z-index:-1;background-color:#fff;opacity:0.4;filter:alpha(opacity=40)}#b-navbar-fg{padding:4px 1em 3px 0}#b-navbar-controls{margin-left:.2em}#b-navbar #b-navbar-logo{display:block;margin-right:8px;margin-left:8px;width:20px;height:20px;background:url('http://img1.blogblog.com/img/navbar/icons_peach.png') no-repeat -26px 0;cursor:pointer;cursor:hand}#b-navbar #b-query-box{background-color:#fff;margin:0 .5em 0 0;border:1px solid #aaa;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;padding:0 .3em}#b-navbar #b-query-icon{display:block;width:13px;height:13px;cursor:pointer;cursor:hand;background:url('http://img1.blogblog.com/img/navbar/icons_peach.png') no-repeat 0 0}#b-navbar #b-query-icon:hover{background:url('http://img1.blogblog.com/img/navbar/icons_peach.png') no-repeat -13px 0}#b-navbar #b-query{font-size:13px;color:#000;background-color:transparent;border:none;width:10em;margin:0}#b-navbar .b-link,#b-navbar #b-user{font-size:13px;vertical-align:middle;padding:0 .4em}#b-navbar .b-link{color:#333;text-decoration:none;white-space:nowrap;cursor:pointer;cursor:hand}#b-navbar .b-link:hover{color:#55e;text-decoration:underline}#bt-unflag-body{display:none}#flagi,#unflagi{display:none;top:3px;color:#000;background-color:#ff9;border:1px solid #333;z-index:300;padding:4px;font-size:.7em;line-height:.8em}#flagi a,#unflagi a{color:#3366cc;text-decoration:underline}.b-mobile{display:none}#b-sms{margin:0 0 0 100px;padding:4px 7px;line-height:1em;font-size:100%;text-align:left}#b-sms a{margin-right:.5em;line-height:1em}#b-sms a:hover{text-decoration:underline}@media handheld{body .b-mobile{display:block}body #b-navbar-fg,body #flagi,body #unflagi{display:none}}</style>
+<style id='page-skin-1' type='text/css'><!--
+/*-----------------------------------------------
+Blogger Template Style
+Name:     Picture Window
+Designer: Josh Peterson
+URL:      www.noaesthetic.com
+----------------------------------------------- */
+/* Variable definitions
+====================
+<Variable name="keycolor" description="Main Color" type="color" default="#1a222a"/>
+<Variable name="body.background" description="Body Background" type="background"
+color="#336699" default="#111111 url(http://themes.googleusercontent.com/image?id=1OACCYOE0-eoTRTfsBuX1NMN9nz599ufI1Jh0CggPFA_sK80AGkIr8pLtYRpNUKPmwtEa) repeat-x fixed top center"/>
+<Group description="Page Text" selector="body">
+<Variable name="body.font" description="Font" type="font"
+default="normal normal 15px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+<Variable name="body.text.color" description="Text Color" type="color" default="#333333"/>
+</Group>
+<Group description="Backgrounds" selector=".body-fauxcolumns-outer">
+<Variable name="body.background.color" description="Outer Background" type="color" default="#296695"/>
+<Variable name="header.background.color" description="Header Background" type="color" default="transparent"/>
+<Variable name="post.background.color" description="Post Background" type="color" default="#ffffff"/>
+</Group>
+<Group description="Links" selector=".main-outer">
+<Variable name="link.color" description="Link Color" type="color" default="#336699"/>
+<Variable name="link.visited.color" description="Visited Color" type="color" default="#6699cc"/>
+<Variable name="link.hover.color" description="Hover Color" type="color" default="#33aaff"/>
+</Group>
+<Group description="Blog Title" selector=".header h1">
+<Variable name="header.font" description="Title Font" type="font"
+default="normal normal 36px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+<Variable name="header.text.color" description="Text Color" type="color" default="#ffffff" />
+</Group>
+<Group description="Tabs Text" selector=".tabs-inner .widget li a">
+<Variable name="tabs.font" description="Font" type="font"
+default="normal normal 15px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+<Variable name="tabs.text.color" description="Text Color" type="color" default="#ffffff"/>
+<Variable name="tabs.selected.text.color" description="Selected Color" type="color" default="#ff9900"/>
+</Group>
+<Group description="Tabs Background" selector=".tabs-outer .PageList">
+<Variable name="tabs.background.color" description="Background Color" type="color" default="transparent"/>
+<Variable name="tabs.selected.background.color" description="Selected Color" type="color" default="transparent"/>
+<Variable name="tabs.separator.color" description="Separator Color" type="color" default="transparent"/>
+</Group>
+<Group description="Post Title" selector="h3.post-title, .comments h4">
+<Variable name="post.title.font" description="Title Font" type="font"
+default="normal normal 18px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+</Group>
+<Group description="Date Header" selector=".date-header">
+<Variable name="date.header.color" description="Text Color" type="color" default="#cccccc"/>
+</Group>
+<Group description="Post" selector=".post">
+<Variable name="post.footer.text.color" description="Footer Text Color" type="color" default="#999999"/>
+<Variable name="post.border.color" description="Border Color" type="color" default="#dddddd"/>
+</Group>
+<Group description="Gadgets" selector="h2">
+<Variable name="widget.title.font" description="Title Font" type="font"
+default="bold normal 13px Arial, Tahoma, Helvetica, FreeSans, sans-serif"/>
+<Variable name="widget.title.text.color" description="Title Color" type="color" default="#888888"/>
+</Group>
+<Group description="Footer" selector=".footer-outer">
+<Variable name="footer.text.color" description="Text Color" type="color" default="#cccccc"/>
+<Variable name="footer.widget.title.text.color" description="Gadget Title Color" type="color" default="#aaaaaa"/>
+</Group>
+<Group description="Footer Links" selector=".footer-outer">
+<Variable name="footer.link.color" description="Link Color" type="color" default="#99ccee"/>
+<Variable name="footer.link.visited.color" description="Visited Color" type="color" default="#77aaee"/>
+<Variable name="footer.link.hover.color" description="Hover Color" type="color" default="#33aaff"/>
+</Group>
+<Variable name="content.margin" description="Content Margin Top" type="length" default="20px"/>
+<Variable name="content.padding" description="Content Padding" type="length" default="0"/>
+<Variable name="content.background" description="Content Background" type="background"
+default="transparent none repeat scroll top left"/>
+<Variable name="content.border.radius" description="Content Border Radius" type="length" default="0"/>
+<Variable name="content.shadow.spread" description="Content Shadow Spread" type="length" default="0"/>
+<Variable name="header.padding" description="Header Padding" type="length" default="0"/>
+<Variable name="header.background.gradient" description="Header Gradient" type="url"
+default="none"/>
+<Variable name="header.border.radius" description="Header Border Radius" type="length" default="0"/>
+<Variable name="main.border.radius.top" description="Main Border Radius" type="length" default="20px"/>
+<Variable name="footer.border.radius.top" description="Footer Border Radius Top" type="length" default="0"/>
+<Variable name="footer.border.radius.bottom" description="Footer Border Radius Bottom" type="length" default="20px"/>
+<Variable name="region.shadow.spread" description="Main and Footer Shadow Spread" type="length" default="3px"/>
+<Variable name="region.shadow.offset" description="Main and Footer Shadow Offset" type="length" default="1px"/>
+<Variable name="tabs.background.gradient" description="Tab Background Gradient" type="url" default="none"/>
+<Variable name="tab.selected.background.gradient" description="Selected Tab Background" type="url"
+default="url(http://www.blogblog.com/1kt/transparent/white80.png)"/>
+<Variable name="tab.background" description="Tab Background" type="background"
+default="transparent url(http://www.blogblog.com/1kt/transparent/black50.png) repeat scroll top left"/>
+<Variable name="tab.border.radius" description="Tab Border Radius" type="length" default="10px" />
+<Variable name="tab.first.border.radius" description="First Tab Border Radius" type="length" default="10px" />
+<Variable name="tabs.border.radius" description="Tabs Border Radius" type="length" default="0" />
+<Variable name="tabs.spacing" description="Tab Spacing" type="length" default=".25em"/>
+<Variable name="tabs.margin.bottom" description="Tab Margin Bottom" type="length" default="0"/>
+<Variable name="tabs.margin.sides" description="Tab Margin Sides" type="length" default="20px"/>
+<Variable name="main.background" description="Main Background" type="background"
+default="transparent url(http://www.blogblog.com/1kt/transparent/white80.png) repeat scroll top left"/>
+<Variable name="main.padding.sides" description="Main Padding Sides" type="length" default="20px"/>
+<Variable name="footer.background" description="Footer Background" type="background"
+default="transparent url(http://www.blogblog.com/1kt/transparent/black50.png) repeat scroll top left"/>
+<Variable name="post.margin.sides" description="Post Margin Sides" type="length" default="-20px"/>
+<Variable name="post.border.radius" description="Post Border Radius" type="length" default="5px"/>
+<Variable name="widget.title.text.transform" description="Widget Title Text Transform" type="string" default="uppercase"/>
+<Variable name="mobile.background.overlay" description="Mobile Background Overlay" type="string"
+default="transparent none repeat scroll top left"/>
+<Variable name="startSide" description="Side where text starts in blog language" type="automatic" default="left"/>
+<Variable name="endSide" description="Side where text ends in blog language" type="automatic" default="right"/>
+*/
+/* Content
+----------------------------------------------- */
+body {
+font: normal normal 15px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+color: #cccccc;
+background: #fafafa url(http://themes.googleusercontent.com/image?id=1iJBX-a-hBX2tKaDdERpElPUmvb4r5MDX9lEx06AA-UtZIQCYziZg3PFbmOyt-g2sH8Jo) repeat-x fixed top center;
+}
+html body .region-inner {
+min-width: 0;
+max-width: 100%;
+width: auto;
+}
+.content-outer {
+font-size: 90%;
+}
+a:link {
+text-decoration:none;
+color: #ff9900;
+}
+a:visited {
+text-decoration:none;
+color: #dd7700;
+}
+a:hover {
+text-decoration:underline;
+color: #ffaa00;
+}
+.content-outer {
+background: transparent url(http://www.blogblog.com/1kt/transparent/black50.png) repeat scroll top left;
+-moz-border-radius: 0;
+-webkit-border-radius: 0;
+-goog-ms-border-radius: 0;
+border-radius: 0;
+-moz-box-shadow: 0 0 3px rgba(0, 0, 0, .15);
+-webkit-box-shadow: 0 0 3px rgba(0, 0, 0, .15);
+-goog-ms-box-shadow: 0 0 3px rgba(0, 0, 0, .15);
+box-shadow: 0 0 3px rgba(0, 0, 0, .15);
+margin: 0 auto;
+}
+.content-inner {
+padding: 10px;
+}
+/* Header
+----------------------------------------------- */
+.header-outer {
+background: transparent none repeat-x scroll top left;
+_background-image: none;
+color: #ffffff;
+-moz-border-radius: 0;
+-webkit-border-radius: 0;
+-goog-ms-border-radius: 0;
+border-radius: 0;
+}
+.Header img, .Header #header-inner {
+-moz-border-radius: 0;
+-webkit-border-radius: 0;
+-goog-ms-border-radius: 0;
+border-radius: 0;
+}
+.header-inner .Header .titlewrapper,
+.header-inner .Header .descriptionwrapper {
+padding-left: 30px;
+padding-right: 30px;
+}
+.Header h1 {
+font: normal normal 48px Georgia, Utopia, 'Palatino Linotype', Palatino, serif;
+text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+.Header h1 a {
+color: #ffffff;
+}
+.Header .description {
+font-size: 130%;
+}
+/* Tabs
+----------------------------------------------- */
+.tabs-inner {
+margin: .5em 15px 1em;
+padding: 0;
+}
+.tabs-inner .section {
+margin: 0;
+}
+.tabs-inner .widget ul {
+padding: 0;
+background: #1c1c1c none repeat scroll bottom;
+-moz-border-radius: 0;
+-webkit-border-radius: 0;
+-goog-ms-border-radius: 0;
+border-radius: 0;
+}
+.tabs-inner .widget li {
+border: none;
+}
+.tabs-inner .widget li a {
+display: inline-block;
+padding: .5em 1em;
+margin-right: 0;
+color: #ff9900;
+font: normal normal 15px Georgia, Utopia, 'Palatino Linotype', Palatino, serif;
+-moz-border-radius: 0 0 0 0;
+-webkit-border-top-left-radius: 0;
+-webkit-border-top-right-radius: 0;
+-goog-ms-border-radius: 0 0 0 0;
+border-radius: 0 0 0 0;
+background: transparent none no-repeat scroll top left;
+border-right: 1px solid #000000;
+}
+.tabs-inner .widget li:first-child a {
+padding-left: 1.25em;
+-moz-border-radius-topleft: 0;
+-moz-border-radius-bottomleft: 0;
+-webkit-border-top-left-radius: 0;
+-webkit-border-bottom-left-radius: 0;
+-goog-ms-border-top-left-radius: 0;
+-goog-ms-border-bottom-left-radius: 0;
+border-top-left-radius: 0;
+border-bottom-left-radius: 0;
+}
+.tabs-inner .widget li.selected a,
+.tabs-inner .widget li a:hover {
+position: relative;
+z-index: 1;
+background: #dd7700 none repeat scroll bottom;
+color: #ffffff;
+-moz-box-shadow: 0 0 0 rgba(0, 0, 0, .15);
+-webkit-box-shadow: 0 0 0 rgba(0, 0, 0, .15);
+-goog-ms-box-shadow: 0 0 0 rgba(0, 0, 0, .15);
+box-shadow: 0 0 0 rgba(0, 0, 0, .15);
+}
+/* Headings
+----------------------------------------------- */
+h2 {
+font: normal normal 18px Georgia, Utopia, 'Palatino Linotype', Palatino, serif;
+text-transform: none;
+color: #ffffff;
+margin: .5em 0;
+}
+/* Main
+----------------------------------------------- */
+.main-outer {
+background: transparent none repeat scroll top center;
+-moz-border-radius: 0 0 0 0;
+-webkit-border-top-left-radius: 0;
+-webkit-border-top-right-radius: 0;
+-webkit-border-bottom-left-radius: 0;
+-webkit-border-bottom-right-radius: 0;
+-goog-ms-border-radius: 0 0 0 0;
+border-radius: 0 0 0 0;
+-moz-box-shadow: 0 0 0 rgba(0, 0, 0, .15);
+-webkit-box-shadow: 0 0 0 rgba(0, 0, 0, .15);
+-goog-ms-box-shadow: 0 0 0 rgba(0, 0, 0, .15);
+box-shadow: 0 0 0 rgba(0, 0, 0, .15);
+}
+.main-inner {
+padding: 15px 20px 20px;
+}
+.main-inner .column-center-inner {
+padding: 0 0;
+}
+.main-inner .column-left-inner {
+padding-left: 0;
+}
+.main-inner .column-right-inner {
+padding-right: 0;
+}
+/* Posts
+----------------------------------------------- */
+h3.post-title {
+margin: 0;
+font: normal normal 18px Georgia, Utopia, 'Palatino Linotype', Palatino, serif;
+}
+.comments h4 {
+margin: 1em 0 0;
+font: normal normal 18px Georgia, Utopia, 'Palatino Linotype', Palatino, serif;
+}
+.date-header span {
+color: #cccccc;
+}
+.post-outer {
+background-color: #1c1c1c;
+border: solid 1px transparent;
+-moz-border-radius: 0;
+-webkit-border-radius: 0;
+border-radius: 0;
+-goog-ms-border-radius: 0;
+padding: 15px 20px;
+margin: 0 -20px 20px;
+}
+.post-body {
+line-height: 1.4;
+font-size: 110%;
+position: relative;
+}
+.post-header {
+margin: 0 0 1.5em;
+color: #999999;
+line-height: 1.6;
+}
+.post-footer {
+margin: .5em 0 0;
+color: #999999;
+line-height: 1.6;
+}
+#blog-pager {
+font-size: 140%
+}
+#comments .comment-author {
+padding-top: 1.5em;
+border-top: dashed 1px #ccc;
+border-top: dashed 1px rgba(128, 128, 128, .5);
+background-position: 0 1.5em;
+}
+#comments .comment-author:first-child {
+padding-top: 0;
+border-top: none;
+}
+.avatar-image-container {
+margin: .2em 0 0;
+}
+/* Comments
+----------------------------------------------- */
+.comments .comments-content .icon.blog-author {
+background-repeat: no-repeat;
+background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9sLFwMeCjjhcOMAAAD+SURBVDjLtZSvTgNBEIe/WRRnm3U8RC1neQdsm1zSBIU9VVF1FkUguQQsD9ITmD7ECZIJSE4OZo9stoVjC/zc7ky+zH9hXwVwDpTAWWLrgS3QAe8AZgaAJI5zYAmc8r0G4AHYHQKVwII8PZrZFsBFkeRCABYiMh9BRUhnSkPTNCtVXYXURi1FpBDgArj8QU1eVXUzfnjv7yP7kwu1mYrkWlU33vs1QNu2qU8pwN0UpKoqokjWwCztrMuBhEhmh8bD5UDqur75asbcX0BGUB9/HAMB+r32hznJgXy2v0sGLBcyAJ1EK3LFcbo1s91JeLwAbwGYu7TP/3ZGfnXYPgAVNngtqatUNgAAAABJRU5ErkJggg==);
+}
+.comments .comments-content .loadmore a {
+border-top: 1px solid #ffaa00;
+border-bottom: 1px solid #ffaa00;
+}
+.comments .continue {
+border-top: 2px solid #ffaa00;
+}
+/* Widgets
+----------------------------------------------- */
+.widget ul, .widget #ArchiveList ul.flat {
+padding: 0;
+list-style: none;
+}
+.widget ul li, .widget #ArchiveList ul.flat li {
+border-top: dashed 1px #ccc;
+border-top: dashed 1px rgba(128, 128, 128, .5);
+}
+.widget ul li:first-child, .widget #ArchiveList ul.flat li:first-child {
+border-top: none;
+}
+.widget .post-body ul {
+list-style: disc;
+}
+.widget .post-body ul li {
+border: none;
+}
+/* Footer
+----------------------------------------------- */
+.footer-outer {
+color:#cccccc;
+background: transparent none repeat scroll top center;
+-moz-border-radius: 0 0 0 0;
+-webkit-border-top-left-radius: 0;
+-webkit-border-top-right-radius: 0;
+-webkit-border-bottom-left-radius: 0;
+-webkit-border-bottom-right-radius: 0;
+-goog-ms-border-radius: 0 0 0 0;
+border-radius: 0 0 0 0;
+-moz-box-shadow: 0 0 0 rgba(0, 0, 0, .15);
+-webkit-box-shadow: 0 0 0 rgba(0, 0, 0, .15);
+-goog-ms-box-shadow: 0 0 0 rgba(0, 0, 0, .15);
+box-shadow: 0 0 0 rgba(0, 0, 0, .15);
+}
+.footer-inner {
+padding: 10px 20px 20px;
+}
+.footer-outer a {
+color: #ff9900;
+}
+.footer-outer a:visited {
+color: #dd7700;
+}
+.footer-outer a:hover {
+color: #ffaa00;
+}
+.footer-outer .widget h2 {
+color: #ffffff;
+}
+/* Mobile
+----------------------------------------------- */
+html body.mobile {
+height: auto;
+}
+html body.mobile {
+min-height: 480px;
+background-size: 100% auto;
+}
+.mobile .body-fauxcolumn-outer {
+background: transparent none repeat scroll top left;
+}
+html .mobile .mobile-date-outer, html .mobile .blog-pager {
+border-bottom: none;
+background: transparent none repeat scroll top center;
+margin-bottom: 10px;
+}
+.mobile .date-outer {
+background: transparent none repeat scroll top center;
+}
+.mobile .header-outer, .mobile .main-outer,
+.mobile .post-outer, .mobile .footer-outer {
+-moz-border-radius: 0;
+-webkit-border-radius: 0;
+-goog-ms-border-radius: 0;
+border-radius: 0;
+}
+.mobile .content-outer,
+.mobile .main-outer,
+.mobile .post-outer {
+background: inherit;
+border: none;
+}
+.mobile .content-outer {
+font-size: 100%;
+}
+.mobile-link-button {
+background-color: #ff9900;
+}
+.mobile-link-button a:link, .mobile-link-button a:visited {
+color: #1c1c1c;
+}
+.mobile-index-contents {
+color: #cccccc;
+}
+.mobile .tabs-inner .PageList .widget-content {
+background: #dd7700 none repeat scroll bottom;
+color: #ffffff;
+}
+.mobile .tabs-inner .PageList .widget-content .pagelist-arrow {
+border-left: 1px solid #000000;
+}
+
+--></style>
+<style id='template-skin-1' type='text/css'><!--
+body {
+min-width: 960px;
+}
+.content-outer, .content-fauxcolumn-outer, .region-inner {
+min-width: 960px;
+max-width: 960px;
+_width: 960px;
+}
+.main-inner .columns {
+padding-left: 0;
+padding-right: 310px;
+}
+.main-inner .fauxcolumn-center-outer {
+left: 0;
+right: 310px;
+/* IE6 does not respect left and right together */
+_width: expression(this.parentNode.offsetWidth -
+parseInt("0") -
+parseInt("310px") + 'px');
+}
+.main-inner .fauxcolumn-left-outer {
+width: 0;
+}
+.main-inner .fauxcolumn-right-outer {
+width: 310px;
+}
+.main-inner .column-left-outer {
+width: 0;
+right: 100%;
+margin-left: -0;
+}
+.main-inner .column-right-outer {
+width: 310px;
+margin-right: -310px;
+}
+#layout {
+min-width: 0;
+}
+#layout .content-outer {
+min-width: 0;
+width: 800px;
+}
+#layout .region-inner {
+min-width: 0;
+width: auto;
+}
+--></style>
+<script type="text/javascript">(function(){var a;var b=navigator.userAgent;a=-1!=b.indexOf("Mobile")&&-1!=b.indexOf("WebKit")&&-1==b.indexOf("iPad")?!0:-1!=b.indexOf("Opera Mini")?!0:!1;if(a){var c;a:{var d=window.location.href,e=d.split("?");switch(e.length){case 1:c=d+"?m=1";break a;case 2:c=0<=e[1].search("(^|&)m=")?null:d+"&m=1";break a;default:c=null}}c&&window.location.replace(c)};})();
+</script><script type="text/javascript">
+if (window.jstiming) window.jstiming.load.tick('headEnd');
+</script></head>
+<body class='loading'>
+<div class='navbar section' id='navbar'><div class='widget Navbar' id='Navbar1'><script type="text/javascript">
+    function setAttributeOnload(object, attribute, val) {
+      if(window.addEventListener) {
+        window.addEventListener('load',
+          function(){ object[attribute] = val; }, false);
+      } else {
+        window.attachEvent('onload', function(){ object[attribute] = val; });
+      }
+    }
+  </script>
+<iframe src="http://www.blogger.com/navbar.g?targetBlogID=7722108&amp;blogName=Thinking+Tester&amp;publishMode=PUBLISH_MODE_BLOGSPOT&amp;navbarType=LIGHT&amp;layoutType=LAYOUTS&amp;searchRoot=http://shrinik.blogspot.com/search&amp;blogLocale=en_US&amp;homepageUrl=http://shrinik.blogspot.com/&amp;targetPostID=5031641658160091766&amp;vt=8422335057588048058" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" height="30px" width="100%" id="navbar-iframe" allowtransparency="true" title="Blogger Navigation and Search"></iframe>
+<div></div><script type="text/javascript">
+(function() {
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.src = '//pagead2.googlesyndication.com/pagead/js/google_top.js';
+var head = document.getElementsByTagName('head')[0];
+if (head) {
+head.appendChild(script);
+}})();
+</script>
+</div></div>
+<div class='body-fauxcolumns'>
+<div class='fauxcolumn-outer body-fauxcolumn-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</div>
+<div class='content'>
+<div class='content-fauxcolumns'>
+<div class='fauxcolumn-outer content-fauxcolumn-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</div>
+<div class='content-outer'>
+<div class='content-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left content-fauxborder-left'>
+<div class='fauxborder-right content-fauxborder-right'></div>
+<div class='content-inner'>
+<header>
+<div class='header-outer'>
+<div class='header-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left header-fauxborder-left'>
+<div class='fauxborder-right header-fauxborder-right'></div>
+<div class='region-inner header-inner'>
+<div class='header section' id='header'><div class='widget Header' id='Header1'>
+<div id='header-inner'>
+<div class='titlewrapper'>
+<h1 class='title'>
+<a href='http://shrinik.blogspot.com/'>Thinking Tester</a>
+</h1>
+</div>
+<div class='descriptionwrapper'>
+<p class='description'><span><b>A Tester driven by curiosity and relentless question "what if"</b><p>
+
+"My vote for the World&#8217;s Most Inquisitive Tester is Shrini Kulkarni" - James Bach
+<p>
+<b>My LinkedIn Profile :  http://www.linkedin.com/in/shrinik 
+</b></p>
+<p>
+For views, feedback - do mail me at <b><i>shrinik@gmail.com</i></b></p></p></span></p>
+</div>
+</div>
+</div></div>
+</div>
+</div>
+<div class='header-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</header>
+<div class='tabs-outer'>
+<div class='tabs-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left tabs-fauxborder-left'>
+<div class='fauxborder-right tabs-fauxborder-right'></div>
+<div class='region-inner tabs-inner'>
+<div class='tabs section' id='crosscol'></div>
+<div class='tabs section' id='crosscol-overflow'></div>
+</div>
+</div>
+<div class='tabs-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<div class='main-outer'>
+<div class='main-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left main-fauxborder-left'>
+<div class='fauxborder-right main-fauxborder-right'></div>
+<div class='region-inner main-inner'>
+<div class='columns fauxcolumns'>
+<div class='fauxcolumn-outer fauxcolumn-center-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<div class='fauxcolumn-outer fauxcolumn-left-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<div class='fauxcolumn-outer fauxcolumn-right-outer'>
+<div class='cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left'>
+<div class='fauxborder-right'></div>
+<div class='fauxcolumn-inner'>
+</div>
+</div>
+<div class='cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<!-- corrects IE6 width calculation -->
+<div class='columns-inner'>
+<div class='column-center-outer'>
+<div class='column-center-inner'>
+<div class='main section' id='main'><div class='widget Blog' id='Blog1'>
+<div class='blog-posts hfeed'>
+<!-- google_ad_section_start(name=default) -->
+
+          <div class="date-outer">
+        
+<h2 class='date-header'><span>Sunday, May 06, 2012</span></h2>
+
+          <div class="date-posts">
+        
+<div class='post-outer'>
+<div class='post hentry' itemscope='itemscope' itemtype='http://schema.org/BlogPosting'>
+<a name='5031641658160091766'></a>
+<h3 class='post-title entry-title' itemprop='name'>
+A brief introduction of Test Automation...
+</h3>
+<div class='post-header'>
+<div class='post-header-line-1'></div>
+</div>
+<div class='post-body entry-content' id='post-body-5031641658160091766' itemprop='articleBody'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+<span style="font-family: Arial, Helvetica, sans-serif;">I was asked by a blog reader to give a quick introduction of how automation helps in testing. Here is how I replied. I thought this might kick off some interesting off shoots...</span><br />
+<span style="font-family: Arial, Helvetica, sans-serif;"><br /></span><br />
+<blockquote class="tr_bq">
+<span style="background-color: #444444; font-family: Arial, Helvetica, sans-serif;">"<span style="text-align: -webkit-auto;">Certain portions of testing such data validation etc can be efficiently verified by automation programs than humans in repeated way (humans make mistakes and often are terrible at repeated executions). By carefully identifying portions of application under test that could be "safely" checked (validated) by automation - you can speed up testing (you can run many test cases in parallel, in the night etc) through automation.&nbsp;</span></span></blockquote>
+<blockquote class="tr_bq">
+<span style="background-color: #444444;"><span style="text-align: -webkit-auto;"><span style="font-family: Arial, Helvetica, sans-serif;"><br /></span></span><span style="text-align: -webkit-auto;"><span style="font-family: Arial, Helvetica, sans-serif;">But beware - automation is a dumb and (humble?) servant - will do exactly what you ask it to do million times without cribbing - it does not have intelligence. A good tester can&nbsp;recognize&nbsp;something that is not in test script and looks like a problem. Automation cannot do this."</span></span></span></blockquote>
+<span style="background-color: rgba(255, 255, 255, 0.917969); text-align: -webkit-auto;"><span style="font-family: Arial, Helvetica, sans-serif;"><br /></span></span><br />
+<div style="text-align: -webkit-auto;">
+<span style="font-family: Arial, Helvetica, sans-serif;">Do you like it?</span></div>
+<div style="text-align: -webkit-auto;">
+<span style="font-family: Arial, Helvetica, sans-serif;"><br /></span></div>
+<div style="text-align: -webkit-auto;">
+<span style="font-family: Arial, Helvetica, sans-serif;">One offshoot I am reminded of when wrote this piece - Automation is like people trying to losing weight. It requires patience,&nbsp;discipline&nbsp;and dedication. There are many quacks that operate in both automation and "weight loss" industry that promise "over-night" benefits.</span></div>
+<div style="text-align: -webkit-auto;">
+<span style="font-family: Arial, Helvetica, sans-serif;"><br /></span></div>
+<div style="text-align: -webkit-auto;">
+<span style="font-family: Arial, Helvetica, sans-serif;">If you are aware of how weight loss works or does not work - you can safely extend the analogy to benefits of automation.</span></div>
+<div style="text-align: -webkit-auto;">
+<span style="font-family: Arial, Helvetica, sans-serif;"><br /></span></div>
+<div style="text-align: -webkit-auto;">
+<span style="font-family: Arial, Helvetica, sans-serif;">Do not expect your testing or your application to become slim and trim with automation - overnight and most importantly - do not expect it remain so with no investment on ongoing basis. The later part - neither automation consultants (especially those who sell tools) nor those folks that run weight-loss industry - will tell you.</span></div>
+<div style="text-align: -webkit-auto;">
+<span style="font-family: Arial, Helvetica, sans-serif;"><br /></span></div>
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://2.bp.blogspot.com/-jcWeU5X-Vv4/T6a-9haM-hI/AAAAAAAAAOg/4iMjxJLYFIE/s1600/wtloss.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="317" src="http://2.bp.blogspot.com/-jcWeU5X-Vv4/T6a-9haM-hI/AAAAAAAAAOg/4iMjxJLYFIE/s320/wtloss.png" width="320" /></a></div>
+<div class="separator" style="clear: both; text-align: center;">
+<br /></div>
+<div style="text-align: -webkit-auto;">
+<span style="font-family: Arial, Helvetica, sans-serif;"><br /></span></div>
+<div style="text-align: -webkit-auto;">
+<span style="font-family: Arial, Helvetica, sans-serif;"><br /></span></div>
+<div style="text-align: -webkit-auto;">
+<span style="font-family: Arial, Helvetica, sans-serif;">Shrini</span></div>
+</div>
+<div style='clear: both;'></div>
+</div>
+<div class='post-footer'>
+<div class='post-footer-line post-footer-line-1'><span class='post-author vcard'>
+Posted by
+<span class='fn'>
+<a href='http://www.blogger.com/profile/10782753752478547381' itemprop='author' rel='author' title='author profile'>
+Shrini Kulkarni
+</a>
+</span>
+</span>
+<span class='post-timestamp'>
+at
+<a class='timestamp-link' href='http://shrinik.blogspot.com/2012/05/brief-introduction-of-test-automation.html' itemprop='url' rel='bookmark' title='permanent link'><abbr class='published' itemprop='datePublished' title='2012-05-06T23:49:00+05:30'>11:49 PM</abbr></a>
+</span>
+<span class='post-comment-link'>
+</span>
+<span class='post-icons'>
+<span class='item-action'>
+<a href='http://www.blogger.com/email-post.g?blogID=7722108&postID=5031641658160091766' title='Email Post'>
+<img alt='' class='icon-action' height='13' src='http://img1.blogblog.com/img/icon18_email.gif' width='18'/>
+</a>
+</span>
+<span class='item-control blog-admin pid-1537878548'>
+<a href='http://www.blogger.com/post-edit.g?blogID=7722108&postID=5031641658160091766&from=pencil' title='Edit Post'>
+<img alt='' class='icon-action' height='18' src='http://img2.blogblog.com/img/icon18_edit_allbkg.gif' width='18'/>
+</a>
+</span>
+</span>
+<span class='post-backlinks post-comment-link'>
+</span>
+</div>
+<div class='post-footer-line post-footer-line-2'><span class='post-labels'>
+</span>
+</div>
+<div class='post-footer-line post-footer-line-3'><span class='post-location'>
+</span>
+</div>
+</div>
+</div>
+<div class='comments' id='comments'>
+<a name='comments'></a>
+<h4>
+3
+comments:
+        
+</h4>
+<div id='Blog1_comments-block-wrapper'>
+<dl class='avatar-comment-indent' id='comments-block'>
+<dt class='comment-author ' id='c3108542082749517581'>
+<a name='c3108542082749517581'></a>
+<div class="avatar-image-container vcard"><span dir="ltr"><a href="http://www.blogger.com/profile/11392748105802885663" rel="nofollow" onclick="" class="avatar-hovercard" id="av-0-11392748105802885663"><img src="http://img1.blogblog.com/img/blank.gif" width="35" height="35" alt="" class="delayLoad" style="display: none;" longdesc="//lh5.googleusercontent.com/-wK_pdPuHKGk/AAAAAAAAAAI/AAAAAAAAChY/8rE-Tga8Ncc/s512-c/photo.jpg" title="Tarun Kumar">
+
+<noscript><img src="//lh5.googleusercontent.com/-wK_pdPuHKGk/AAAAAAAAAAI/AAAAAAAAChY/8rE-Tga8Ncc/s512-c/photo.jpg" width="35" height="35" class="photo" alt=""></noscript></a></span></div>
+<a href='http://www.blogger.com/profile/11392748105802885663' rel='nofollow'>Tarun Kumar</a>
+said...
+</dt>
+<dd class='comment-body' id='Blog1_cmt-3108542082749517581'>
+<p>
+On a lighter note, who is that guy in pic?
+</p>
+</dd>
+<dd class='comment-footer'>
+<span class='comment-timestamp'>
+<a href='http://shrinik.blogspot.com/2012/05/brief-introduction-of-test-automation.html?showComment=1336330979524#c3108542082749517581' title='comment permalink'>
+12:32 AM, May 07, 2012
+</a>
+<span class='item-control blog-admin pid-381008594'>
+<a class='comment-delete' href='http://www.blogger.com/delete-comment.g?blogID=7722108&postID=3108542082749517581' title='Delete Comment'>
+<img src='//www.blogger.com/img/icon_delete13.gif'/>
+</a>
+</span>
+</span>
+</dd>
+<dt class='comment-author ' id='c5813116991084119507'>
+<a name='c5813116991084119507'></a>
+<div class="avatar-image-container vcard"><span dir="ltr"><a href="http://www.blogger.com/profile/06219872951977664560" rel="nofollow" onclick="" class="avatar-hovercard" id="av-1-06219872951977664560"><img src="http://img1.blogblog.com/img/blank.gif" width="35" height="35" alt="" class="delayLoad" style="display: none;" longdesc="//lh3.googleusercontent.com/-DOqwYjr7mfc/AAAAAAAAAAI/AAAAAAAABVE/aagrJ8T_F6A/s512-c/photo.jpg" title="Corey Goldberg">
+
+<noscript><img src="//lh3.googleusercontent.com/-DOqwYjr7mfc/AAAAAAAAAAI/AAAAAAAABVE/aagrJ8T_F6A/s512-c/photo.jpg" width="35" height="35" class="photo" alt=""></noscript></a></span></div>
+<a href='http://www.blogger.com/profile/06219872951977664560' rel='nofollow'>Corey Goldberg</a>
+said...
+</dt>
+<dd class='comment-body' id='Blog1_cmt-5813116991084119507'>
+<p>
+&gt; Do you like it?<br /><br />You seem to begrudgingly concede that automation can help in certain areas, yet fails in others.  Was that your intent?<br /><br />as to the &quot;do not expect it remain so with no investment on ongoing basis.&quot; jab. I am curious who has told you that before?  Automation and test infrastructure need to keep up with systems under test... there is always maintenance if the systems are changing.  I&#39;ve never heard someone suggest otherwise really.  Have you?<br /><br />btw, the dark gray background you placed behind your quoted text makes it unreadable when syndicated via your xml feed.
+</p>
+</dd>
+<dd class='comment-footer'>
+<span class='comment-timestamp'>
+<a href='http://shrinik.blogspot.com/2012/05/brief-introduction-of-test-automation.html?showComment=1336332025390#c5813116991084119507' title='comment permalink'>
+12:50 AM, May 07, 2012
+</a>
+<span class='item-control blog-admin pid-1005491762'>
+<a class='comment-delete' href='http://www.blogger.com/delete-comment.g?blogID=7722108&postID=5813116991084119507' title='Delete Comment'>
+<img src='//www.blogger.com/img/icon_delete13.gif'/>
+</a>
+</span>
+</span>
+</dd>
+<dt class='comment-author ' id='c5286671853201739703'>
+<a name='c5286671853201739703'></a>
+<div class="avatar-image-container avatar-stock"><span dir="ltr"><a href="http://www.blogger.com/profile/14278143481367031063" rel="nofollow" onclick="" class="avatar-hovercard" id="av-2-14278143481367031063"><img src="http://img2.blogblog.com/img/b16-rounded.gif" width="16" height="16" alt="" title="Calkelpdiver">
+
+</a></span></div>
+<a href='http://www.blogger.com/profile/14278143481367031063' rel='nofollow'>Calkelpdiver</a>
+said...
+</dt>
+<dd class='comment-body' id='Blog1_cmt-5286671853201739703'>
+<p>
+Shrini,<br /><br />Okay, I can buy-in to what you are saying.  Very valid points regarding automation and some of what it is good at, and good for using.  Interesting analogy with weight loss, but an appropriate one in the respect of it takes time and you have to continually work at it to maintain it properly.  The key thing is by building it correctly you can reduce the amount of maintenance, but you can never eliminate it.<br /><br />As an automation guy I make sure to let my clients know what all is involved in doing this type of work and what they can gain from it.  I&#39;ve always made sure I give them the whole and real picture.  I&#39;m the first one to call B.S. on other consultants and tool salespeople who do the Snake Oil sales job.  <br /><br />Anyway, nice post.  <br /><br />Jim Hazen
+</p>
+</dd>
+<dd class='comment-footer'>
+<span class='comment-timestamp'>
+<a href='http://shrinik.blogspot.com/2012/05/brief-introduction-of-test-automation.html?showComment=1336339222477#c5286671853201739703' title='comment permalink'>
+2:50 AM, May 07, 2012
+</a>
+<span class='item-control blog-admin pid-1871624280'>
+<a class='comment-delete' href='http://www.blogger.com/delete-comment.g?blogID=7722108&postID=5286671853201739703' title='Delete Comment'>
+<img src='//www.blogger.com/img/icon_delete13.gif'/>
+</a>
+</span>
+</span>
+</dd>
+</dl>
+</div>
+<p class='comment-footer'>
+<a href='http://www.blogger.com/comment.g?blogID=7722108&amp;postID=5031641658160091766' onclick=''>Post a Comment</a>
+</p>
+<div id='backlinks-container'>
+<div id='Blog1_backlinks-container'>
+<a name='links'></a><h4>
+</h4>
+<p class='comment-footer'>
+<a class='comment-link' href='' id='Blog1_backlinks-create-link' target='_blank'>
+</a>
+</p>
+</div>
+</div>
+</div>
+</div>
+
+        </div></div>
+      
+<!-- google_ad_section_end -->
+</div>
+<div class='blog-pager' id='blog-pager'>
+<span id='blog-pager-older-link'>
+<a class='blog-pager-older-link' href='http://shrinik.blogspot.com/2012/04/testing-is-dead-in-which-world.html' id='Blog1_blog-pager-older-link' title='Older Post'>Older Post</a>
+</span>
+<a class='home-link' href='http://shrinik.blogspot.com/'>Home</a>
+</div>
+<div class='clear'></div>
+<div class='post-feeds'>
+<div class='feed-links'>
+Subscribe to:
+<a class='feed-link' href='http://shrinik.blogspot.com/feeds/5031641658160091766/comments/default' target='_blank' type='application/atom+xml'>Post Comments (Atom)</a>
+</div>
+</div>
+</div></div>
+</div>
+</div>
+<div class='column-left-outer'>
+<div class='column-left-inner'>
+<aside>
+</aside>
+</div>
+</div>
+<div class='column-right-outer'>
+<div class='column-right-inner'>
+<aside>
+<div class='sidebar section' id='sidebar-right-1'><div class='widget Profile' id='Profile1'>
+<h2>About Me</h2>
+<div class='widget-content'>
+<dl class='profile-datablock'>
+<dt class='profile-data'>
+<a class='profile-name-link' href='http://www.blogger.com/profile/10782753752478547381' rel='author'>
+Shrini Kulkarni
+</a>
+</dt>
+</dl>
+<a class='profile-link' href='http://www.blogger.com/profile/10782753752478547381' rel='author'>View my complete profile</a>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=7722108&widgetType=Profile&widgetId=Profile1&action=editWidget&sectionId=sidebar-right-1' onclick='return _WidgetManager._PopupConfig(document.getElementById("Profile1"));' target='configProfile1' title='Edit'>
+<img alt='' height='18' src='http://img1.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div>
+</div><div class='widget Image' id='Image1'>
+<div class='widget-content'>
+<img alt='' height='258' id='Image1_img' src='http://2.bp.blogspot.com/_1cnM-k2f6Wo/SdHiByLvzdI/AAAAAAAAADg/6dZ7qW_VulY/S259/Shrini.JPG' width='213'/>
+<br/>
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=7722108&widgetType=Image&widgetId=Image1&action=editWidget&sectionId=sidebar-right-1' onclick='return _WidgetManager._PopupConfig(document.getElementById("Image1"));' target='configImage1' title='Edit'>
+<img alt='' height='18' src='http://img1.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div><div class='widget HTML' id='HTML3'>
+<h2 class='title'>Twitter Updates</h2>
+<div class='widget-content'>
+<div id="twitter_div">
+<h2 style="display:none;" class="sidebar-title">Twitter Updates</h2>
+<ul id="twitter_update_list"></ul>
+<a id="twitter-link" style="display:block;text-align:right;" href="http://twitter.com/shrinik">follow me on Twitter</a>
+</div>
+<script src="http://twitter.com/javascripts/blogger.js" type="text/javascript"></script>
+<script src="http://twitter.com/statuses/user_timeline/shrinik.json?callback=twitterCallback2&amp;count=10" type="text/javascript"></script>
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=7722108&widgetType=HTML&widgetId=HTML3&action=editWidget&sectionId=sidebar-right-1' onclick='return _WidgetManager._PopupConfig(document.getElementById("HTML3"));' target='configHTML3' title='Edit'>
+<img alt='' height='18' src='http://img1.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div><div class='widget Image' id='Image2'>
+<div class='widget-content'>
+<a href='http://www.linkedin.com/in/shrinik'>
+<img alt='' height='33' id='Image2_img' src='http://3.bp.blogspot.com/_1cnM-k2f6Wo/SauZMH5xAnI/AAAAAAAAADQ/gQhjTb7W3ak/S259/LinkedIn_Image.gif' width='160'/>
+</a>
+<br/>
+<span class='caption'>LinkedIn Profile</span>
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=7722108&widgetType=Image&widgetId=Image2&action=editWidget&sectionId=sidebar-right-1' onclick='return _WidgetManager._PopupConfig(document.getElementById("Image2"));' target='configImage2' title='Edit'>
+<img alt='' height='18' src='http://img1.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div><div class='widget HTML' id='HTML2'>
+<h2 class='title'>Google Page Rank</h2>
+<div class='widget-content'>
+<a href="http://www.mypagerank.net" target="_blank"><img border="0" alt="Powered by  MyPagerank.Net" src="http://www.mypagerank.net/services/pagerankbutton/pagerankbutton.php?aut=da4e0c5fa1e67fda008df19c42351a161f460539b920e948740e6d"/></a>
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=7722108&widgetType=HTML&widgetId=HTML2&action=editWidget&sectionId=sidebar-right-1' onclick='return _WidgetManager._PopupConfig(document.getElementById("HTML2"));' target='configHTML2' title='Edit'>
+<img alt='' height='18' src='http://img1.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div><div class='widget Text' id='Text1'>
+<h2 class='title'>Popular Posts</h2>
+<div class='widget-content'>
+1. <a href="http://shrinik.blogspot.com/2005/10/advice-for-budding-software-test.html">Advise for budding software Tester</a><br/>2. <a href="http://shrinik.blogspot.com/2005/11/todays-resume-tip.html">Resume Tip</a><br/>3. <a href="http://shrinik.blogspot.com/2007/12/exploratory-testing-challenged-part-i.html">Exploratory Testing Challenged Part I</a><br/>4. <a href="http://shrinik.blogspot.com/2007/07/insanity-is-doing-same-thing-over-and.html">Regression Testing and Insanity</a><br/>5. <a href="http://shrinik.blogspot.com/2007/07/mystery-called-automated-testing.html">A mystery called Automated Testing</a><br/>6. <a href="http://shrinik.blogspot.com/2007/06/testers-quiz-what-is-equivalence.html">What is Equivalence Class Partitioning</a><br/>7. <a href="http://shrinik.blogspot.com/2007/04/ten-software-testing-myths.html">10 Software Testing Myths</a><br/>8. <a href="http://shrinik.blogspot.com/2006/12/why-counting-is-bad-idea.html">Why Counting is a bad idea</a><br/>9. <a href="http://shrinik.blogspot.com/2007/03/boundary-value-exploration-bve.html">Boundary Value Exploration</a><br/>10. <a href="http://shrinik.blogspot.com/2005/08/definitions-of-software-testing.html">Definitions of Software Testing - Tracing the history</a><br/>
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=7722108&widgetType=Text&widgetId=Text1&action=editWidget&sectionId=sidebar-right-1' onclick='return _WidgetManager._PopupConfig(document.getElementById("Text1"));' target='configText1' title='Edit'>
+<img alt='' height='18' src='http://img1.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div><div class='widget LinkList' id='LinkList1'>
+<h2>Blogs I read</h2>
+<div class='widget-content'>
+<ul>
+<li><a href='http://www.satisfice.com/blog'>James Bach</a></li>
+<li><a href='http://www.satisfice.com/kaner'>Dr Cem Kaner</a></li>
+<li><a href='http://www.developsense.com/'>Michael Bolton</a></li>
+<li><a href='http://testingjeff.wordpress.com/'>Jeff Fry</a></li>
+<li><a href='http://kohl.ca/blog'>Jonathan Kohl</a></li>
+<li><a href='http://blogs.msdn.com/micahel'>Michael Hunter</a></li>
+<li><a href='http://qualityfrog.blogspot.com/'>Ben Simo</a></li>
+<li><a href='http://sirius-sqa.com/Blog/?cat=5'>David Gilbert</a></li>
+<li><a href='http://testobsessed.com/wordpress/'>Elisabeth Hendrickson</a></li>
+<li><a href='http://xndev.blogspot.com/'>Mathew Heusser</a></li>
+<li><a href='http://www.testingreflections.com/blog/55'>Mike Kelly</a></li>
+<li><a href='http://googletesting.blogspot.com/'>Google Testing Blog</a></li>
+</ul>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=7722108&widgetType=LinkList&widgetId=LinkList1&action=editWidget&sectionId=sidebar-right-1' onclick='return _WidgetManager._PopupConfig(document.getElementById("LinkList1"));' target='configLinkList1' title='Edit'>
+<img alt='' height='18' src='http://img1.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div>
+</div></div>
+<table border='0' cellpadding='0' cellspacing='0' class='section-columns columns-2'>
+<tbody>
+<tr>
+<td class='first columns-cell'>
+<div class='sidebar section' id='sidebar-right-2-1'><div class='widget HTML' id='HTML1'>
+<h2 class='title'>My Blog Statistics</h2>
+<div class='widget-content'>
+<!-- Site Meter XHTML Strict 1.0 -->
+<script src="http://s20.sitemeter.com/js/counter.js?site=s2019968" type="text/javascript">
+</script>
+<!-- Copyright (c)2006 Site Meter -->
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=7722108&widgetType=HTML&widgetId=HTML1&action=editWidget&sectionId=sidebar-right-2-1' onclick='return _WidgetManager._PopupConfig(document.getElementById("HTML1"));' target='configHTML1' title='Edit'>
+<img alt='' height='18' src='http://img1.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div></div>
+</td>
+<td class='columns-cell'>
+<div class='sidebar section' id='sidebar-right-2-2'><div class='widget BlogArchive' id='BlogArchive1'>
+<h2>Blog Archive</h2>
+<div class='widget-content'>
+<div id='ArchiveList'>
+<div id='BlogArchive1_ArchiveList'>
+<ul class='hierarchy'>
+<li class='archivedate expanded'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy toggle-open'>&#9660;&#160;</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/search?updated-min=2012-01-01T00:00:00%2B05:30&amp;updated-max=2013-01-01T00:00:00%2B05:30&amp;max-results=5'>2012</a>
+<span class='post-count' dir='ltr'>(5)</span>
+<ul class='hierarchy'>
+<li class='archivedate expanded'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy toggle-open'>&#9660;&#160;</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2012_05_06_archive.html'>05/06 - 05/13</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2012/05/brief-introduction-of-test-automation.html'>A brief introduction of Test Automation...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2012_04_01_archive.html'>04/01 - 04/08</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2012/04/testing-is-dead-in-which-world.html'>Testing is Dead - in which world?</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2012_03_18_archive.html'>03/18 - 03/25</a>
+<span class='post-count' dir='ltr'>(2)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2012/03/learning-from-tenali-ramans-crows.html'>Learning from Tenali Raman&#39;s crows ...</a></li>
+<li><a href='http://shrinik.blogspot.com/2012/03/my-views-on-testing-certification-2012.html'>My Views on Testing certification : 2012</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2012_02_26_archive.html'>02/26 - 03/04</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2012/03/patterns-in-weakness-in-approaches.html'>Patterns in weakness in approaches about testing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/search?updated-min=2011-01-01T00:00:00%2B05:30&amp;updated-max=2012-01-01T00:00:00%2B05:30&amp;max-results=13'>2011</a>
+<span class='post-count' dir='ltr'>(13)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2011_11_06_archive.html'>11/06 - 11/13</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2011/11/cause-and-effect-non-linear-systems.html'>Cause and Effect - Non Linear Systems</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2011_08_07_archive.html'>08/07 - 08/14</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2011/08/do-statistics-lie.html'>Do statistics lie?</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2011_06_26_archive.html'>06/26 - 07/03</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2011/06/when-testing-fails.html'>When Testing Fails ...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2011_06_05_archive.html'>06/05 - 06/12</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2011/06/sure-ways-to-reduce-test-cycle-time.html'>Sure Ways to Reduce Test Cycle Time through Automa...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2011_05_22_archive.html'>05/22 - 05/29</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2011/05/all-wannabe-software-testers-out-there.html'>All wannabe software testers out there &#8230;</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2011_04_10_archive.html'>04/10 - 04/17</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2011/04/how-it-deals-with-test-automation.html'>How IT deals with Test Automation ...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2011_03_13_archive.html'>03/13 - 03/20</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2011/03/programmers-make-excellent-testers.html'>Programmers make Excellent Testers - Arguments and...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2011_03_06_archive.html'>03/06 - 03/13</a>
+<span class='post-count' dir='ltr'>(2)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2011/03/book-review-selenium-10-testing-tools.html'>Book Review: Selenium 1.0 Testing Tools - Part 1</a></li>
+<li><a href='http://shrinik.blogspot.com/2011/03/paradox-of-reification-tool-or-fallacy.html'>A Paradox of Reification &#8211; A Tool or a Fallacy?</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2011_02_20_archive.html'>02/20 - 02/27</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2011/02/in-pursuit-of-quality-lets-call-quality.html'>In Pursuit of Quality, let&#8217;s Call Quality as somet...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2011_01_30_archive.html'>01/30 - 02/06</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2011/01/two-versions-of-being-practical.html'>Two versions of being practical...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2011_01_09_archive.html'>01/09 - 01/16</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2011/01/what-type-of-tester-are-you.html'>What type of tester are you?</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2011_01_02_archive.html'>01/02 - 01/09</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2011/01/what-does-that-mean.html'>What does that mean?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/search?updated-min=2010-01-01T00:00:00%2B05:30&amp;updated-max=2011-01-01T00:00:00%2B05:30&amp;max-results=6'>2010</a>
+<span class='post-count' dir='ltr'>(6)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2010_09_12_archive.html'>09/12 - 09/19</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2010/09/fish-baking-story.html'>Fish baking story ...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2010_08_01_archive.html'>08/01 - 08/08</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2010/08/how-can-mathematics-be-language-of.html'>How can Mathematics be the Language of Nature?</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2010_07_04_archive.html'>07/04 - 07/11</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2010/07/nature-of-problems-we-testers-should.html'>Nature of Problem(s), we testers (should) investig...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2010_03_07_archive.html'>03/07 - 03/14</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2010/03/movement-called-weekend-testing-what-it.html'>A movement called weekend testing &#8211; What it can do...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2010_02_21_archive.html'>02/21 - 02/28</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2010/02/man-and-machine.html'>Man and the machine ....</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2010_02_14_archive.html'>02/14 - 02/21</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2010/02/im-blocked-but-why.html'>I&#8217;m blocked&#8230; but why?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/search?updated-min=2009-01-01T00:00:00%2B05:30&amp;updated-max=2010-01-01T00:00:00%2B05:30&amp;max-results=15'>2009</a>
+<span class='post-count' dir='ltr'>(15)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2009_12_20_archive.html'>12/20 - 12/27</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2009/12/why-gui-test-automation-is-popular-and.html'>Why GUI Test Automation is Popular and Tempting? P...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2009_12_06_archive.html'>12/06 - 12/13</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2009/12/eurostar-2009-trip-report.html'>Eurostar 2009 &#8211; A Trip Report</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2009_10_11_archive.html'>10/11 - 10/18</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2009/10/defining-problem-how-business-works.html'>Defining the problem : How business works</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2009_10_04_archive.html'>10/04 - 10/11</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2009/10/necessary-tester-skills.html'>Necessary Tester skills ....</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2009_09_06_archive.html'>09/06 - 09/13</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2009/09/who-decides-what-is-bug-and-what-should.html'>Who decides what is a  bug and what should be fixe...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2009_08_16_archive.html'>08/16 - 08/23</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2009/08/your-user-acceptance-testing-is-fixed.html'>Your user acceptance testing is fixed &#8211; Is that a ...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2009_07_26_archive.html'>07/26 - 08/02</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2009/07/tom-demarcos-confession.html'>Tom DeMarco&#8217;s confession</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2009_06_14_archive.html'>06/14 - 06/21</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2009/06/to-tweet-or-to-blog.html'>To tweet or to blog ...?</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2009_05_10_archive.html'>05/10 - 05/17</a>
+<span class='post-count' dir='ltr'>(2)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2009/05/10-ways-to-make-automation-difficult-or.html'>10 ways to make automation difficult or ineffectiv...</a></li>
+<li><a href='http://shrinik.blogspot.com/2009/05/is-this-bug.html'>Is this a bug?</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2009_04_19_archive.html'>04/19 - 04/26</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2009/04/10-ways-to-reduce-cost-of-software.html'>10 ways to reduce cost of software testing</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2009_03_15_archive.html'>03/15 - 03/22</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2009/03/when-process-stops-working-for-you.html'>When &quot;Process&quot; stops working for you ....</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2009_03_01_archive.html'>03/01 - 03/08</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2009/03/c-dliceing-in-software-testing.html'>C-DLICE&#8217;ing in software Testing</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2009_01_04_archive.html'>01/04 - 01/11</a>
+<span class='post-count' dir='ltr'>(2)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2009/01/context-driven-testing-gets-boost-to.html'>Context Driven Testing gets a boost &#8211; to grow stro...</a></li>
+<li><a href='http://shrinik.blogspot.com/2009/01/ms-outlook-as-alarm-clock-is-this-bug.html'>MS outlook as Alarm Clock: Is this a bug?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/search?updated-min=2008-01-01T00:00:00%2B05:30&amp;updated-max=2009-01-01T00:00:00%2B05:30&amp;max-results=35'>2008</a>
+<span class='post-count' dir='ltr'>(35)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_12_28_archive.html'>12/28 - 01/04</a>
+<span class='post-count' dir='ltr'>(2)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2008/12/metrics-or-liquid-in-container.html'>Metrics or a liquid in a container?</a></li>
+<li><a href='http://shrinik.blogspot.com/2008/12/quantum-theory-and-software-testing-any.html'>Quantum Theory and Software Testing - Any connecti...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_11_16_archive.html'>11/16 - 11/23</a>
+<span class='post-count' dir='ltr'>(3)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2008/11/can-software-ever-get-it-right.html'>Can Software ever get IT right?</a></li>
+<li><a href='http://shrinik.blogspot.com/2008/11/perils-of-quantification-what-harm.html'>Perils of Quantification &#8211; what harm metrics can d...</a></li>
+<li><a href='http://shrinik.blogspot.com/2008/11/conversation-on-automation-roi-part-1.html'>A conversation on Automation ROI Part 1 &#8230;</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_11_09_archive.html'>11/09 - 11/16</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2008/11/2-notorious-es-of-testing.html'>2 Notorious &#8220;E&#8221;&#8217;s of Testing</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_10_26_archive.html'>10/26 - 11/02</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2008/10/exploratory-testing-state-of-art.html'>Exploratory Testing - the state of the art, Evenin...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_10_12_archive.html'>10/12 - 10/19</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2008/10/questioning-software-bizzare.html'>Questioning Software - Bizzare?</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_09_14_archive.html'>09/14 - 09/21</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2008/09/soft-part-of-software-requirements.html'>Soft Part of Software Requirements ...</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_09_07_archive.html'>09/07 - 09/14</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2008/09/10-commandments-for-automation.html'>10 Commandments for Test Automation Outsourcing</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_08_24_archive.html'>08/24 - 08/31</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='posts'>
+<li><a href='http://shrinik.blogspot.com/2008/08/automation-reduces-cycle-time-part-iii.html'>Automation reduces cycle time Part III</a></li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_07_27_archive.html'>07/27 - 08/03</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_07_20_archive.html'>07/20 - 07/27</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_06_22_archive.html'>06/22 - 06/29</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_06_08_archive.html'>06/08 - 06/15</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_06_01_archive.html'>06/01 - 06/08</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_05_25_archive.html'>05/25 - 06/01</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_05_11_archive.html'>05/11 - 05/18</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_04_20_archive.html'>04/20 - 04/27</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_03_16_archive.html'>03/16 - 03/23</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_02_10_archive.html'>02/10 - 02/17</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_01_13_archive.html'>01/13 - 01/20</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2008_01_06_archive.html'>01/06 - 01/13</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/search?updated-min=2007-01-01T00:00:00%2B05:30&amp;updated-max=2008-01-01T00:00:00%2B05:30&amp;max-results=31'>2007</a>
+<span class='post-count' dir='ltr'>(31)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_12_30_archive.html'>12/30 - 01/06</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_12_23_archive.html'>12/23 - 12/30</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_12_09_archive.html'>12/09 - 12/16</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_11_18_archive.html'>11/18 - 11/25</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_11_11_archive.html'>11/11 - 11/18</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_11_04_archive.html'>11/04 - 11/11</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_10_21_archive.html'>10/21 - 10/28</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_10_07_archive.html'>10/07 - 10/14</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_09_30_archive.html'>09/30 - 10/07</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_09_23_archive.html'>09/23 - 09/30</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_09_09_archive.html'>09/09 - 09/16</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_08_26_archive.html'>08/26 - 09/02</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_07_22_archive.html'>07/22 - 07/29</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_07_08_archive.html'>07/08 - 07/15</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_06_03_archive.html'>06/03 - 06/10</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_05_27_archive.html'>05/27 - 06/03</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_05_13_archive.html'>05/13 - 05/20</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_05_06_archive.html'>05/06 - 05/13</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_04_29_archive.html'>04/29 - 05/06</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_04_22_archive.html'>04/22 - 04/29</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_04_15_archive.html'>04/15 - 04/22</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_04_08_archive.html'>04/08 - 04/15</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2007_03_04_archive.html'>03/04 - 03/11</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/search?updated-min=2006-01-01T00:00:00%2B05:30&amp;updated-max=2007-01-01T00:00:00%2B05:30&amp;max-results=30'>2006</a>
+<span class='post-count' dir='ltr'>(30)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_12_10_archive.html'>12/10 - 12/17</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_12_03_archive.html'>12/03 - 12/10</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_11_26_archive.html'>11/26 - 12/03</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_11_05_archive.html'>11/05 - 11/12</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_09_24_archive.html'>09/24 - 10/01</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_09_17_archive.html'>09/17 - 09/24</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_09_10_archive.html'>09/10 - 09/17</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_09_03_archive.html'>09/03 - 09/10</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_08_06_archive.html'>08/06 - 08/13</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_07_23_archive.html'>07/23 - 07/30</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_07_09_archive.html'>07/09 - 07/16</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_06_04_archive.html'>06/04 - 06/11</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_05_14_archive.html'>05/14 - 05/21</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_04_23_archive.html'>04/23 - 04/30</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_03_05_archive.html'>03/05 - 03/12</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_02_26_archive.html'>02/26 - 03/05</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_02_19_archive.html'>02/19 - 02/26</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_02_12_archive.html'>02/12 - 02/19</a>
+<span class='post-count' dir='ltr'>(5)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2006_01_22_archive.html'>01/22 - 01/29</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/search?updated-min=2005-01-01T00:00:00%2B05:30&amp;updated-max=2006-01-01T00:00:00%2B05:30&amp;max-results=34'>2005</a>
+<span class='post-count' dir='ltr'>(34)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2005_12_25_archive.html'>12/25 - 01/01</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2005_12_18_archive.html'>12/18 - 12/25</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2005_12_11_archive.html'>12/11 - 12/18</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2005_12_04_archive.html'>12/04 - 12/11</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2005_11_27_archive.html'>11/27 - 12/04</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2005_11_20_archive.html'>11/20 - 11/27</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2005_11_13_archive.html'>11/13 - 11/20</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2005_10_23_archive.html'>10/23 - 10/30</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2005_10_16_archive.html'>10/16 - 10/23</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2005_10_09_archive.html'>10/09 - 10/16</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2005_08_07_archive.html'>08/07 - 08/14</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2005_07_17_archive.html'>07/17 - 07/24</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2005_06_12_archive.html'>06/12 - 06/19</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2005_05_01_archive.html'>05/01 - 05/08</a>
+<span class='post-count' dir='ltr'>(3)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2005_04_24_archive.html'>04/24 - 05/01</a>
+<span class='post-count' dir='ltr'>(4)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2005_04_17_archive.html'>04/17 - 04/24</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2005_04_10_archive.html'>04/10 - 04/17</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2005_02_13_archive.html'>02/13 - 02/20</a>
+<span class='post-count' dir='ltr'>(2)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/search?updated-min=2004-01-01T00:00:00%2B05:30&amp;updated-max=2005-01-01T00:00:00%2B05:30&amp;max-results=1'>2004</a>
+<span class='post-count' dir='ltr'>(1)</span>
+<ul class='hierarchy'>
+<li class='archivedate collapsed'>
+<a class='toggle' href='javascript:void(0)'>
+<span class='zippy'>
+
+          &#9658;&#160;
+        
+</span>
+</a>
+<a class='post-count-link' href='http://shrinik.blogspot.com/2004_07_18_archive.html'>07/18 - 07/25</a>
+<span class='post-count' dir='ltr'>(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=7722108&widgetType=BlogArchive&widgetId=BlogArchive1&action=editWidget&sectionId=sidebar-right-2-2' onclick='return _WidgetManager._PopupConfig(document.getElementById("BlogArchive1"));' target='configBlogArchive1' title='Edit'>
+<img alt='' height='18' src='http://img1.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div>
+</div></div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class='sidebar section' id='sidebar-right-3'><div class='widget TextList' id='TextList1'>
+<h2>Indian/Asian Testing Blogs</h2>
+<div class='widget-content'>
+<ul>
+<li><A href="http://testertested.blogspot.com/" target=_new>Pradeep Soundararajan</A></li>
+<li><A href="http://rapidtester.blogspot.com/" target=_new>Rapid Tester - Sajjadul Hakim</A></li>
+<li><A href="http://anujmagazine.blogspot.com/" target=_new>Anuj Magazine</A></li>
+<li><A href="http://madhukarj.blogspot.com/" target=_new>Madhukar Jain</A></li>
+<li><A href="http://testingperspective.blogspot.com/" target=_new>Rahul Verma</A></li>
+<li><A href="http://software-testing-zone.blogspot.com/" target=_new>Debasis Pradhan</A></li>
+</ul>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=7722108&widgetType=TextList&widgetId=TextList1&action=editWidget&sectionId=sidebar-right-3' onclick='return _WidgetManager._PopupConfig(document.getElementById("TextList1"));' target='configTextList1' title='Edit'>
+<img alt='' height='18' src='http://img1.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div>
+</div></div>
+</aside>
+</div>
+</div>
+</div>
+<div style='clear: both'></div>
+<!-- columns -->
+</div>
+<!-- main -->
+</div>
+</div>
+<div class='main-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+<footer>
+<div class='footer-outer'>
+<div class='footer-cap-top cap-top'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+<div class='fauxborder-left footer-fauxborder-left'>
+<div class='fauxborder-right footer-fauxborder-right'></div>
+<div class='region-inner footer-inner'>
+<div class='foot section' id='footer-1'></div>
+<table border='0' cellpadding='0' cellspacing='0' class='section-columns columns-2'>
+<tbody>
+<tr>
+<td class='first columns-cell'>
+<div class='foot section' id='footer-2-1'></div>
+</td>
+<td class='columns-cell'>
+<div class='foot section' id='footer-2-2'></div>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- outside of the include in order to lock Attribution widget -->
+<div class='foot section' id='footer-3'><div class='widget Attribution' id='Attribution1'>
+<div class='widget-content' style='text-align: center;'>
+Picture Window template. Powered by <a href='http://www.blogger.com' target='_blank'>Blogger</a>.
+</div>
+<div class='clear'></div>
+<span class='widget-item-control'>
+<span class='item-control blog-admin'>
+<a class='quickedit' href='http://www.blogger.com/rearrange?blogID=7722108&widgetType=Attribution&widgetId=Attribution1&action=editWidget&sectionId=footer-3' onclick='return _WidgetManager._PopupConfig(document.getElementById("Attribution1"));' target='configAttribution1' title='Edit'>
+<img alt='' height='18' src='http://img1.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+</a>
+</span>
+</span>
+<div class='clear'></div>
+</div></div>
+</div>
+</div>
+<div class='footer-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</footer>
+<!-- content -->
+</div>
+</div>
+<div class='content-cap-bottom cap-bottom'>
+<div class='cap-left'></div>
+<div class='cap-right'></div>
+</div>
+</div>
+</div>
+<script type='text/javascript'>
+    window.setTimeout(function() {
+        document.body.className = document.body.className.replace('loading', '');
+      }, 10);
+  </script>
+<script type="text/javascript">
+if (window.jstiming) window.jstiming.load.tick('widgetJsBefore');
+</script><script type="text/javascript" src="http://www.blogger.com/static/v1/widgets/3681494515-widgets.js"></script>
+<script type='text/javascript'>
+if (typeof(BLOG_attachCsiOnload) != 'undefined' && BLOG_attachCsiOnload != null) { window['blogger_templates_experiment_id'] = "templatesV2";window['blogger_blog_id'] = '7722108';BLOG_attachCsiOnload('item_'); }_WidgetManager._Init('http://www.blogger.com/rearrange?blogID\x3d7722108','http://shrinik.blogspot.com/2012/05/brief-introduction-of-test-automation.html','7722108');
+_WidgetManager._SetPageActionUrl('http://www.blogger.com/display?blogID\x3d7722108','APq4FmAgJ_EvxCVEehjDP0kxIZYUWLRASNYHAUzhRVEjJm07uAEEGFvY6u0oZQqMwiVRAlY209NdBVNCEr49AT1ZmhsaFXmxRQ\x3d\x3d','AOuZoY7m_gMZnDro4rP4KFiGX-nwOlR6CQ:1336564721117');
+_WidgetManager._SetDataContext([{'name': 'blog', 'data': {'bloggerUrl': 'http://www.blogger.com', 'title': 'Thinking Tester', 'pageType': 'item', 'url': 'http://shrinik.blogspot.com/2012/05/brief-introduction-of-test-automation.html', 'canonicalUrl': 'http://shrinik.blogspot.com/2012/05/brief-introduction-of-test-automation.html', 'canonicalHomepageUrl': 'http://shrinik.blogspot.com/', 'homepageUrl': 'http://shrinik.blogspot.com/', 'blogspotFaviconUrl': 'http://shrinik.blogspot.com/favicon.ico', 'enabledCommentProfileImages': true, 'adultContent': false, 'searchLabel': '', 'searchQuery': '', 'pageName': 'A brief introduction of Test Automation...', 'pageTitle': 'Thinking Tester: A brief introduction of Test Automation...', 'encoding': 'UTF-8', 'locale': 'en-US', 'isPrivate': false, 'isMobile': false, 'mobileClass': '', 'isPrivateBlog': false, 'languageDirection': 'ltr', 'feedLinks': '\74link rel\75\42alternate\42 type\75\42application/atom+xml\42 title\75\42Thinking Tester - Atom\42 href\75\42http://shrinik.blogspot.com/feeds/posts/default\42 /\76\n\74link rel\75\42alternate\42 type\75\42application/rss+xml\42 title\75\42Thinking Tester - RSS\42 href\75\42http://shrinik.blogspot.com/feeds/posts/default?alt\75rss\42 /\76\n\74link rel\75\42service.post\42 type\75\42application/atom+xml\42 title\75\42Thinking Tester - Atom\42 href\75\42http://www.blogger.com/feeds/7722108/posts/default\42 /\76\n\74link rel\75\42EditURI\42 type\75\42application/rsd+xml\42 title\75\42RSD\42 href\75\42http://www.blogger.com/rsd.g?blogID\0757722108\42 /\76\n\74link rel\75\42alternate\42 type\75\42application/atom+xml\42 title\75\42Thinking Tester - Atom\42 href\75\42http://shrinik.blogspot.com/feeds/5031641658160091766/comments/default\42 /\76\n', 'meTag': '', 'openIdOpTag': '', 'postImageThumbnailUrl': 'http://2.bp.blogspot.com/-jcWeU5X-Vv4/T6a-9haM-hI/AAAAAAAAAOg/4iMjxJLYFIE/s72-c/wtloss.png', 'imageSrcTag': '\74link rel\75\42image_src\42 href\75\42http://2.bp.blogspot.com/-jcWeU5X-Vv4/T6a-9haM-hI/AAAAAAAAAOg/4iMjxJLYFIE/s72-c/wtloss.png\42 /\76\n', 'latencyHeadScript': '\74script type\75\42text/javascript\42\76(function() { var a\75window;function c(b){this.t\75{};this.tick\75function(b,i,d){d\75void 0!\75d?d:(new Date).getTime();this.t[b]\75[d,i]};this.tick(\42start\42,null,b)}var f\75new c;a.jstiming\75{Timer:c,load:f};try{var g\75null;a.chrome\46\46a.chrome.csi\46\46(g\75Math.floor(a.chrome.csi().pageT));null\75\75g\46\46a.gtbExternal\46\46(g\75a.gtbExternal.pageT());null\75\75g\46\46a.external\46\46(g\75a.external.pageT);g\46\46(a.jstiming.pt\75g)}catch(h){};a.tickAboveFold\75function(b){var e\0750;if(b.offsetParent){do e+\75b.offsetTop;while(b\75b.offsetParent)}b\75e;750\76\75b\46\46a.jstiming.load.tick(\42aft\42)};var j\75!1;function k(){j||(j\75!0,a.jstiming.load.tick(\42firstScrollTime\42))}a.addEventListener?a.addEventListener(\42scroll\42,k,!1):a.attachEvent(\42onscroll\42,k);\n })();\74/script\076', 'mobileHeadScript': '', 'analyticsAccountNumber': '', 'ieCssRetrofitLinks': '\74!--[if IE]\76\74script type\75\42text/javascript\42 src\75\42http://www.blogger.com/static/v1/jsbin/3548834718-ieretrofit.js\42\76\74/script\76\n\74![endif]--\076', 'view': '', 'dynamicViewsCommentsSrc': '//www.blogblog.com/dynamicviews/f75e48f708466c7f/js/comments.js', 'dynamicViewsScriptSrc': '//www.blogblog.com/dynamicviews/b8f4953a48a6764f'}}, {'name': 'skin', 'data': {'vars': {'content_padding': '10px', 'tabs_selected_background_color': '#dd7700', 'region_shadow_spread': '0', 'header_padding': '30px', 'tab_selected_background_gradient': 'none', 'link_visited_color': '#dd7700', 'tabs_margin_sides': '15px', 'post_title_font': 'normal normal 18px Georgia, Utopia, \47Palatino Linotype\47, Palatino, serif', 'tabs_separator_color': '#000000', 'tabs_text_color': '#ff9900', 'header_background_gradient': 'none', 'widget_title_font': 'normal normal 18px Georgia, Utopia, \47Palatino Linotype\47, Palatino, serif', 'body_background': '#fafafa url(http://themes.googleusercontent.com/image?id\0751iJBX-a-hBX2tKaDdERpElPUmvb4r5MDX9lEx06AA-UtZIQCYziZg3PFbmOyt-g2sH8Jo) repeat-x fixed top center', 'tab_first_border_radius': '0', 'tabs_border_radius': '0', 'keycolor': '#ff9900', 'content_shadow_spread': '3px', 'main_background': 'transparent none repeat scroll top center', 'header_font': 'normal normal 48px Georgia, Utopia, \47Palatino Linotype\47, Palatino, serif', 'footer_background': 'transparent none repeat scroll top center', 'header_background_color': 'transparent', 'widget_title_text_transform': 'none', 'footer_link_visited_color': '#dd7700', 'footer_link_hover_color': '#ffaa00', 'footer_border_radius_bottom': '0', 'tabs_background_gradient': 'none', 'tab_background': 'transparent none no-repeat scroll top left', 'mobile_background_overlay': 'transparent none repeat scroll top left', 'tabs_background_color': '#1c1c1c', 'header_border_radius': '0', 'post_margin_sides': '-20px', 'link_hover_color': '#ffaa00', 'footer_link_color': '#ff9900', 'content_background': 'transparent url(http://www.blogblog.com/1kt/transparent/black50.png) repeat scroll top left', 'tabs_margin_bottom': '1em', 'body_text_color': '#cccccc', 'main_padding_sides': '20px', 'post_border_color': 'transparent', 'footer_text_color': '#cccccc', 'footer_border_radius_top': '0', 'post_background_color': '#1c1c1c', 'content_border_radius': '0', 'endSide': 'right', 'post_footer_text_color': '#999999', 'startSide': 'left', 'date_header_color': '#cccccc', 'tabs_font': 'normal normal 15px Georgia, Utopia, \47Palatino Linotype\47, Palatino, serif', 'body_font': 'normal normal 15px Arial, Tahoma, Helvetica, FreeSans, sans-serif', 'post_border_radius': '0', 'widget_title_text_color': '#ffffff', 'content_margin': '0', 'link_color': '#ff9900', 'footer_widget_title_text_color': '#ffffff', 'header_text_color': '#ffffff', 'main_border_radius_top': '0', 'region_shadow_offset': '0', 'tab_border_radius': '0', 'tabs_selected_text_color': '#ffffff', 'body_background_color': '#336699', 'tabs_spacing': '0'}, 'override': ''}}, {'name': 'view', 'data': {'classic': {'name': 'classic', 'url': '/?view\75classic'}, 'flipcard': {'name': 'flipcard', 'url': '/?view\75flipcard'}, 'magazine': {'name': 'magazine', 'url': '/?view\75magazine'}, 'mosaic': {'name': 'mosaic', 'url': '/?view\75mosaic'}, 'sidebar': {'name': 'sidebar', 'url': '/?view\75sidebar'}, 'snapshot': {'name': 'snapshot', 'url': '/?view\75snapshot'}, 'timeslide': {'name': 'timeslide', 'url': '/?view\75timeslide'}}}]);
+_WidgetManager._RegisterWidget('_TextListView', new _WidgetInfo('TextList1', 'sidebar-right-3', null, document.getElementById('TextList1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HeaderView', new _WidgetInfo('Header1', 'header'));
+_WidgetManager._RegisterWidget('_AttributionView', new _WidgetInfo('Attribution1', 'footer-3', null, document.getElementById('Attribution1'), {'attribution': 'Picture Window template. Powered by \74a href\75\47http://www.blogger.com\47 target\75\47_blank\47\76Blogger\74/a\76.'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogView', new _WidgetInfo('Blog1', 'main', null, document.getElementById('Blog1'), {'cmtInteractionsEnabled': false, 'showBacklinks': true, 'postId': '5031641658160091766', 'lightboxEnabled': true, 'lightboxModuleUrl': 'http://www.blogger.com/static/v1/jsbin/3555719829-lbx.js', 'lightboxCssUrl': 'http://www.blogger.com/static/v1/v-css/228702327-lightbox_bundle.css'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_ProfileView', new _WidgetInfo('Profile1', 'sidebar-right-1', null, document.getElementById('Profile1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_ImageView', new _WidgetInfo('Image1', 'sidebar-right-1', null, document.getElementById('Image1'), {'resize': true}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML3', 'sidebar-right-1', null, document.getElementById('HTML3'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_ImageView', new _WidgetInfo('Image2', 'sidebar-right-1', null, document.getElementById('Image2'), {'resize': true}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML2', 'sidebar-right-1', null, document.getElementById('HTML2'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_TextView', new _WidgetInfo('Text1', 'sidebar-right-1', null, document.getElementById('Text1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_LinkListView', new _WidgetInfo('LinkList1', 'sidebar-right-1', null, document.getElementById('LinkList1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogArchiveView', new _WidgetInfo('BlogArchive1', 'sidebar-right-2-2', null, document.getElementById('BlogArchive1'), {'languageDirection': 'ltr'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML1', 'sidebar-right-2-1', null, document.getElementById('HTML1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_NavbarView', new _WidgetInfo('Navbar1', 'navbar'));
+</script>
+</body>
+</html>
