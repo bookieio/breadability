@@ -51,11 +51,10 @@ def drop_tag(doc, *tags):
     return doc
 
 
-
 def ok_embedded_video(node):
     """Check if this embed/video is an ok one to count."""
     keep_keywords = ['youtube', 'blip.tv', 'vimeo']
-    node_str = tounicode(n)
+    node_str = tounicode(node)
     for key in keep_keywords:
         if key in node_str:
             return True
@@ -305,7 +304,8 @@ def prep_article(doc):
                 # we could get around this by checking for caption info in the
                 # images to try to do some scoring of good v. bad images.
                 # failing example:
-                # arstechnica.com/science/news/2012/05/1859s-great-auroral-stormthe-week-the-sun-touched-the-earth.ars
+                # arstechnica.com/science/news/2012/05/1859s
+                # -great-auroral-stormthe-week-the-sun-touched-the-earth.ars
                 LNODE.log(node, 2, 'Conditional drop: img > p')
                 remove_node = True
             elif li > p and node.tag != 'ul' and node.tag != 'ol':
@@ -315,16 +315,20 @@ def prep_article(doc):
                 LNODE.log(node, 2, 'Conditional drop: inputs > p/3.0')
                 remove_node = True
             elif content_length < 25 and (img == 0 or img > 2):
-                LNODE.log(node, 2, 'Conditional drop: len < 25 and 0/>2 images')
+                LNODE.log(node, 2,
+                    'Conditional drop: len < 25 and 0/>2 images')
                 remove_node = True
             elif weight < 25 and link_density > 0.2:
-                LNODE.log(node, 2, 'Conditional drop: weight small and link is dense')
+                LNODE.log(node, 2,
+                    'Conditional drop: weight small and link is dense')
                 remove_node = True
             elif weight >= 25 and link_density > 0.5:
-                LNODE.log(node, 2, 'Conditional drop: weight big but link heavy')
+                LNODE.log(node, 2,
+                    'Conditional drop: weight big but link heavy')
                 remove_node = True
             elif (embed == 1 and content_length < 75) or embed > 1:
-                LNODE.log(node, 2, 'Conditional drop: embed without much content or many embed')
+                LNODE.log(node, 2,
+                    'Conditional drop: embed w/o much content or many embed')
                 remove_node = True
             return remove_node
 

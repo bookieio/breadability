@@ -22,8 +22,6 @@ except ImportError:
 LOGLEVEL = "WARNING"
 
 
-
-
 # Logging bits stolen and adapted from:
 # http://www.tornadoweb.org/documentation/_modules/tornado/options.html
 LogOptions = namedtuple('LogOptions', [
@@ -41,7 +39,6 @@ options = LogOptions(
     log_file_num_backups=5,
     log_to_stderr=True,
 )
-
 
 
 def set_logging_level(level):
@@ -120,8 +117,8 @@ class LogHelper(object):
             hashed = md5()
             try:
                 hashed.update(content.encode('utf-8', errors="replace"))
-            except Exception, e:
-                LOG.error("Cannot hash the current node.")
+            except Exception, exc:
+                LOG.error("Cannot hash the current node." + str(exc))
             hash_id = hashed.hexdigest()[0:8]
             # if hash_id in ['9c880b27', '8393b7d7', '69bfebdd']:
             print(u"{0} :: {1}\n{2}".format(

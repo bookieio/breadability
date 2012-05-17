@@ -37,7 +37,8 @@ def get_link_density(node, node_text=None):
     :returns float:
 
     """
-    link_length = sum([len(a.text_content()) or 0 for a in node.findall(".//a")])
+    link_length = sum([len(a.text_content()) or 0
+        for a in node.findall(".//a")])
     if node_text:
         text_length = len(node_text)
     else:
@@ -98,12 +99,16 @@ def score_candidates(nodes):
         innertext = node.text_content()
 
         if parent is None or grand is None:
-            LNODE.log(node, 1, "Skipping candidate because parent/grand are none")
+            LNODE.log(
+                node, 1,
+                "Skipping candidate because parent/grand are none")
             continue
 
         # If this paragraph is less than 25 characters, don't even count it.
         if innertext and len(innertext) < MIN_HIT_LENTH:
-            LNODE.log(node, 1, "Skipping candidate because not enough content.")
+            LNODE.log(
+                node, 1,
+                "Skipping candidate because not enough content.")
             continue
 
         # Initialize readability data for the parent.
@@ -128,21 +133,36 @@ def score_candidates(nodes):
             content_score += 3
         else:
             content_score += length_points
-        LNODE.log(node, 1, "Length/content points: {0} : {1}".format(length_points, content_score))
+        LNODE.log(
+            node, 1,
+            "Length/content points: {0} : {1}".format(length_points,
+                                                      content_score))
 
         # Add the score to the parent.
         LNODE.log(node, 1, "From this current node.")
         candidates[parent].content_score += content_score
-        LNODE.log(candidates[parent].node, 1, "Giving parent bonus points: " + str(candidates[parent].content_score))
+        LNODE.log(
+            candidates[parent].node,
+            1,
+            "Giving parent bonus points: " + str(
+                candidates[parent].content_score))
         # The grandparent gets half.
         LNODE.log(candidates[grand].node, 1, "Giving grand bonus points")
         candidates[grand].content_score += (content_score / 2.0)
-        LNODE.log(candidates[parent].node, 1, "Giving grand bonus points: " + str(candidates[grand].content_score))
+        LNODE.log(
+            candidates[parent].node,
+            1,
+            "Giving grand bonus points: " + str(
+                candidates[grand].content_score))
 
     for candidate in candidates.values():
-        LNODE.log(candidate.node, 1, "Getting link density adjustment: {0} * {1} ".format(
-            candidate.content_score, (1 - get_link_density(candidate.node))))
-        candidate.content_score = candidate.content_score * (1 - get_link_density(candidate.node))
+        adjustment = 1 - get_link_density(candidate.node)
+        LNODE.log(
+            candidate.node,
+            1,
+            "Getting link density adjustment: {0} * {1} ".format(
+                candidate.content_score, adjustment))
+        candidate.content_score = candidate.content_score * (adjustment)
 
     return candidates
 

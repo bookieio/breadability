@@ -1,12 +1,11 @@
 import time
 
-
-
 #
 # ? 2011 Christopher Arndt, MIT License
 #
 class cached_property(object):
-    '''Decorator for read-only properties evaluated only once within TTL period.
+    '''Decorator for read-only properties evaluated only once within TTL
+    period.
 
     It can be used to created a cached property like this::
 
@@ -15,8 +14,7 @@ class cached_property(object):
         # the class containing the property must be a new-style class
         class MyClass(object):
             # create property whose value is cached for ten minutes
-            @cached_property(ttl=600)
-            def randint(self):
+            @cached_property(ttl=600) def randint(self):
                 # will only be evaluated every 10 min. at maximum.
                 return random.randint(0, 100)
 
@@ -32,7 +30,7 @@ class cached_property(object):
     zero for the cached value to never expire.
 
     To expire a cached property value manually just do::
-    
+
         del instance._cache[<property name>]
 
     '''
