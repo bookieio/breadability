@@ -57,7 +57,6 @@ class TestReadableDocument(TestCase):
 
         """
         doc = Article(load_snippet('document_only_content.html'))
-        
         self.assertEqual(doc._readable.tag, 'div')
         self.assertEqual(doc._readable.get('id'), 'readabilityBody')
 
@@ -111,13 +110,15 @@ class TestCleaning(TestCase):
             u"<html><body><p>simple</p></body></html>"
         )
 
-        test_html2 = '<html><body><div>simple<a href="">link</a></div></body></html>'
+        test_html2 = ('<html><body><div>simple<a href="">link</a>'
+                      '</div></body></html>')
         test_doc2 = document_fromstring(test_html2)
         self.assertEqual(
             tounicode(
                 transform_misused_divs_into_paragraphs(test_doc2)),
                 u'<html><body><p>simple<a href="">link</a></p></body></html>'
         )
+
 
 class TestCandidateNodes(TestCase):
     """Candidate nodes are scoring containers we use."""
@@ -191,6 +192,7 @@ class TestScoringNodes(TestCase):
         # one of these should have a decent score
         scores = sorted([c.content_score for c in candidates.values()])
         self.assertTrue(scores[-1] > 100)
+
 
 class TestLinkDensityScoring(TestCase):
     """Link density will adjust out candidate scoresself."""
