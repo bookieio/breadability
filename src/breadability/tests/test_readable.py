@@ -147,6 +147,12 @@ class TestCandidateNodes(TestCase):
             self.assertEqual(ScoredNode(doc).content_score, -5)
 
 
+    def test_article_enables_candidate_access(self):
+        """Candidates are accessible after document processing."""
+        doc = Article(load_article('ars/ars.001.html'))
+        self.assertTrue(hasattr(doc, 'candidates'))
+
+
 class TestClassWeights(TestCase):
     """Certain ids and classes get us bonus points."""
 

@@ -383,25 +383,36 @@ class Article(object):
         return tounicode(self._readable)
 
     @cached_property(ttl=600)
+    def doc(self):
+        """The doc is the parsed xml tree of the given html."""
+        doc = self.orig.html
+        # cleaning doesn't return, just wipes in place
+        html_cleaner(doc)
+        doc = drop_tag(doc, 'noscript', 'iframe')
+        doc = transform_misused_divs_into_paragraphs(doc)
+        return doc
+
+    @cached_property(ttl=600)
+    def candidates(self):
+        """Generate the list of candidates from the doc."""
+        doc = self.doc
+        candidates, should_drop = find_candidates(doc)
+        self._should_drop = should_drop
+        return candidates
+
+    @cached_property(ttl=600)
     def readable(self):
         return tounicode(self._readable)
 
     @cached_property(ttl=600)
     def _readable(self):
         """The readable parsed article"""
-        doc = self.orig.html
-        # cleaning doesn't return, just wipes in place
-        html_cleaner(doc)
-        doc = drop_tag(doc, 'noscript', 'iframe')
-        doc = transform_misused_divs_into_paragraphs(doc)
-        candidates, should_drop = find_candidates(doc)
-
-        if candidates:
+        if self.candidates:
             LOG.debug('Candidates found:')
             pp = PrettyPrinter(indent=2)
 
             # right now we return the highest scoring candidate content
-            by_score = sorted([c for c in candidates.values()],
+            by_score = sorted([c for c in self.candidates.values()],
                 key=attrgetter('content_score'), reverse=True)
             LOG.debug(pp.pformat(by_score))
 
@@ -409,7 +420,7 @@ class Article(object):
             # for extra content
             winner = by_score[0]
             LOG.debug('Selected winning node: ' + str(winner))
-            updated_winner = check_siblings(winner, candidates)
+            updated_winner = check_siblings(winner, self.candidates)
             LOG.debug('Begin final prep of article')
             updated_winner.node = prep_article(updated_winner.node)
             doc = build_base_document(updated_winner.node, self.fragment)
@@ -418,8 +429,8 @@ class Article(object):
             LOG.debug('Begin final prep of article')
             # since we've not found a good candidate we're should help this
             # cleanup by removing the should_drop we spotted.
-            [n.drop_tree() for n in should_drop]
-            doc = prep_article(doc)
+            [n.drop_tree() for n in self._should_drop]
+            doc = prep_article(self.doc)
             doc = build_base_document(doc, self.fragment)
 
         return doc
