@@ -192,6 +192,29 @@ class TestScoringNodes(TestCase):
         scores = sorted([c.content_score for c in candidates.values()])
         self.assertTrue(scores[-1] > 100)
 
+    def test_bonus_score_per_100_chars_in_p(self):
+        """Was an error porting Readability algorithm for every 100 chars in paragraph.  Author was modding instead of dividing by 100, so (300 % 100) would be 0 instead of giving a content score of 3."""
+        test_div = '<div id="content" class=""><p>' + ('c' * 300) + '</p></div>'
+        doc = document_fromstring('<html><body>' + test_div + '</body></html>')
+        test_nodes = []
+        for node in doc.getiterator():
+            if node.tag in ['p', 'td', 'pre']:
+                test_nodes.append(node)
+
+        candidates = score_candidates(test_nodes)
+        pscore_300 = max([c.content_score for c in candidates.values()])
+
+        empty_doc = document_fromstring('<html><body><div id="content"><p>' + ('c' * 50) + '</p></div></body></html>')
+        test_nodes = []
+        for node in empty_doc.getiterator():
+            if node.tag in ['p', 'td', 'pre']:
+                test_nodes.append(node)
+
+        candidates = score_candidates(test_nodes)
+        pscore_50 = max([c.content_score for c in candidates.values()])
+
+        self.assertEqual(pscore_300, pscore_50 + 3)
+
 class TestLinkDensityScoring(TestCase):
     """Link density will adjust out candidate scoresself."""
 
