@@ -57,7 +57,7 @@ class TestReadableDocument(TestCase):
 
         """
         doc = Article(load_snippet('document_only_content.html'))
-        
+
         self.assertEqual(doc._readable.tag, 'div')
         self.assertEqual(doc._readable.get('id'), 'readabilityBody')
 
@@ -118,6 +118,7 @@ class TestCleaning(TestCase):
                 transform_misused_divs_into_paragraphs(test_doc2)),
                 u'<html><body><p>simple<a href="">link</a></p></body></html>'
         )
+
 
 class TestCandidateNodes(TestCase):
     """Candidate nodes are scoring containers we use."""
@@ -191,6 +192,35 @@ class TestScoringNodes(TestCase):
         # one of these should have a decent score
         scores = sorted([c.content_score for c in candidates.values()])
         self.assertTrue(scores[-1] > 100)
+
+    def test_bonus_score_per_100_chars_in_p(self):
+        """Nodes get 1pt per 100 characters up to 3 max points"""
+        def build_doc(length):
+            div = '<div id="content" class=""><p>{0}</p></div>'
+            content = 'c' * length
+            test_div = div.format(content)
+            doc = document_fromstring('<html><body>' + test_div + '</body></html>')
+            test_nodes = []
+            for node in doc.getiterator():
+                if node.tag == 'p':
+                    test_nodes.append(node)
+            return test_nodes
+
+        test_nodes = build_doc(400)
+        candidates = score_candidates(test_nodes)
+        pscore_400 = max([c.content_score for c in candidates.values()])
+
+        test_nodes = build_doc(100)
+        candidates = score_candidates(test_nodes)
+        pscore_100 = max([c.content_score for c in candidates.values()])
+
+        test_nodes = build_doc(50)
+        candidates = score_candidates(test_nodes)
+        pscore_50 = max([c.content_score for c in candidates.values()])
+
+        self.assertEqual(pscore_100, pscore_50 + 1)
+        self.assertEqual(pscore_400, pscore_50 + 3)
+
 
 class TestLinkDensityScoring(TestCase):
     """Link density will adjust out candidate scoresself."""

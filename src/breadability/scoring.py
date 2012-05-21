@@ -123,7 +123,7 @@ def score_candidates(nodes):
 
         # For every 100 characters in this paragraph, add another point. Up to
         # 3 points.
-        length_points = len(innertext) % 100 if innertext else 0
+        length_points = len(innertext) / 100 if innertext else 0
         if length_points > 3:
             content_score += 3
         else:
