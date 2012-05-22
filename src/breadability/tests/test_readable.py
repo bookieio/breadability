@@ -192,6 +192,40 @@ class TestScoringNodes(TestCase):
         scores = sorted([c.content_score for c in candidates.values()])
         self.assertTrue(scores[-1] > 100)
 
+    def test_bonus_score_per_100_chars_in_p(self):
+        """Verify content_score increases correctly for having more than 100 characters (1 pt per 100 character, 3 max)."""
+        test_div = '<div id="content" class=""><p>' + ('c' * 400) + '</p></div>'
+        doc = document_fromstring('<html><body>' + test_div + '</body></html>')
+        test_nodes = []
+        for node in doc.getiterator():
+            if node.tag in ['p', 'td', 'pre']:
+                test_nodes.append(node)
+
+        candidates = score_candidates(test_nodes)
+        pscore_400 = max([c.content_score for c in candidates.values()])
+
+        test_div = '<div id="content" class=""><p>' + ('c' * 100) + '</p></div>'
+        doc = document_fromstring('<html><body>' + test_div + '</body></html>')
+        test_nodes = []
+        for node in doc.getiterator():
+            if node.tag in ['p', 'td', 'pre']:
+                test_nodes.append(node)
+
+        candidates = score_candidates(test_nodes)
+        pscore_100 = max([c.content_score for c in candidates.values()])
+
+        empty_doc = document_fromstring('<html><body><div id="content"><p>' + ('c' * 50) + '</p></div></body></html>')
+        test_nodes = []
+        for node in empty_doc.getiterator():
+            if node.tag in ['p', 'td', 'pre']:
+                test_nodes.append(node)
+
+        candidates = score_candidates(test_nodes)
+        pscore_50 = max([c.content_score for c in candidates.values()])
+
+        self.assertEqual(pscore_100, pscore_50 + 1)
+        self.assertEqual(pscore_400, pscore_50 + 3)
+
 class TestLinkDensityScoring(TestCase):
     """Link density will adjust out candidate scoresself."""
 
