@@ -146,7 +146,6 @@ class TestCandidateNodes(TestCase):
             doc = fragment_fromstring(n)
             self.assertEqual(ScoredNode(doc).content_score, -5)
 
-
     def test_article_enables_candidate_access(self):
         """Candidates are accessible after document processing."""
         doc = Article(load_article('ars/ars.001.html'))
@@ -198,6 +197,35 @@ class TestScoringNodes(TestCase):
         # one of these should have a decent score
         scores = sorted([c.content_score for c in candidates.values()])
         self.assertTrue(scores[-1] > 100)
+
+    def test_bonus_score_per_100_chars_in_p(self):
+        """Nodes get 1pt per 100 characters up to 3 max points"""
+        def build_doc(length):
+            div = '<div id="content" class=""><p>{0}</p></div>'
+            document_str = '<html><body>{0}</body></html>'
+            content = 'c' * length
+            test_div = div.format(content)
+            doc = document_fromstring(document_str.format(test_div))
+            test_nodes = []
+            for node in doc.getiterator():
+                if node.tag == 'p':
+                    test_nodes.append(node)
+            return test_nodes
+
+        test_nodes = build_doc(400)
+        candidates = score_candidates(test_nodes)
+        pscore_400 = max([c.content_score for c in candidates.values()])
+
+        test_nodes = build_doc(100)
+        candidates = score_candidates(test_nodes)
+        pscore_100 = max([c.content_score for c in candidates.values()])
+
+        test_nodes = build_doc(50)
+        candidates = score_candidates(test_nodes)
+        pscore_50 = max([c.content_score for c in candidates.values()])
+
+        self.assertEqual(pscore_100, pscore_50 + 1)
+        self.assertEqual(pscore_400, pscore_50 + 3)
 
 
 class TestLinkDensityScoring(TestCase):
