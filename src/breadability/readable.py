@@ -1,10 +1,10 @@
 import re
-from operator import attrgetter
 from lxml.etree import tounicode
 from lxml.etree import tostring
 from lxml.html.clean import Cleaner
 from lxml.html import fragment_fromstring
 from lxml.html import fromstring
+from operator import attrgetter
 from pprint import PrettyPrinter
 
 from breadability.document import OriginalDocument

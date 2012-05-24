@@ -94,6 +94,8 @@ def score_candidates(nodes):
         LNODE.log(node, 1, "Scoring Node")
 
         content_score = 0
+        # if the node has no parent it knows of, then it ends up creating a
+        # body and html tag to parent the html fragment.
         parent = node.getparent()
         grand = parent.getparent() if parent is not None else None
         innertext = node.text_content()

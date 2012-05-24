@@ -1,12 +1,14 @@
 import re
-
+from lxml.html import document_fromstring
 from lxml.html import fragment_fromstring
+from operator import attrgetter
 from unittest import TestCase
 
 from breadability.readable import Article
 from breadability.scoring import check_node_attr
 from breadability.scoring import get_class_weight
 from breadability.scoring import ScoredNode
+from breadability.scoring import score_candidates
 from breadability.readable import get_link_density
 from breadability.readable import is_unlikely_node
 from breadability.tests import load_snippet
@@ -210,7 +212,7 @@ class TestScoredNode(TestCase):
 class TestScoreCandidates(TestCase):
     """The grand daddy of tests to make sure our scoring works
 
-    Now scoring details will change over time, so the most imporant thing is
+    Now scoring details will change over time, so the most important thing is
     to make sure candidates come out in the right order, not necessarily how
     they scored. Make sure to keep this in mind while getting tests going.
 
@@ -218,4 +220,32 @@ class TestScoreCandidates(TestCase):
 
     def test_simple_candidate_set(self):
         """Tests a simple case of two candidate nodes"""
-        # TBD
+        doc = """
+            <html>
+            <body>
+                <div class="content">
+                    <p>This is a great amount of info</p>
+                    <p>And more content <a href="/index">Home</a>
+                </div>
+                <div class="footer">
+                    <p>This is a footer</p>
+                    <p>And more content <a href="/index">Home</a>
+                </div>
+            </body>
+            </html>
+        """
+        d_elem = document_fromstring(doc)
+        divs = d_elem.findall(".//div")
+        f_elem = divs[0]
+        s_elem = divs[1]
+
+        res = score_candidates([f_elem, s_elem])
+        ordered = sorted([c for c in res.values()],
+                          key=attrgetter('content_score'),
+                          reverse=True)
+
+        # the body element should have a higher score
+        self.assertTrue(ordered[0].node.tag == 'body')
+
+        # the html element is the outer should come in second
+        self.assertTrue(ordered[1].node.tag == 'html')
