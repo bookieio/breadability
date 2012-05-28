@@ -1,3 +1,1 @@
-VERSION = '0.1.0'
-
-import client
+VERSION = '0.1.2'

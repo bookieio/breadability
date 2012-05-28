@@ -6,7 +6,7 @@ README = open(os.path.join(here, 'README.rst')).read()
 NEWS = open(os.path.join(here, 'NEWS.txt')).read()
 
 
-version = '0.1.1'
+version = '0.1.2'
 install_requires = [
     # List your project dependencies here.
     # For more details, see:
@@ -35,7 +35,7 @@ setup(name='breadability',
     url='http://docs.bmark.us',
     license='BSD',
     packages=find_packages('src'),
-    package_dir = {'': 'src'},
+    package_dir={'': 'src'},
     include_package_data=True,
     zip_safe=False,
     install_requires=install_requires,
@@ -48,4 +48,3 @@ setup(name='breadability',
             ['breadability=breadability:client.main']
     }
 )
-
