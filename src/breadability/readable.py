@@ -1,4 +1,5 @@
 import re
+from lxml.etree import Element
 from lxml.etree import tounicode
 from lxml.etree import tostring
 from lxml.html.clean import Cleaner
@@ -11,6 +12,7 @@ from breadability.document import OriginalDocument
 from breadability.logconfig import LOG
 from breadability.logconfig import LNODE
 from breadability.scoring import score_candidates
+from breadability.scoring import generate_hash_id
 from breadability.scoring import get_link_density
 from breadability.scoring import get_class_weight
 from breadability.scoring import is_unlikely_node
@@ -206,7 +208,8 @@ def prep_article(doc):
             LOG.debug('Adding H2 to list of nodes to clean.')
             clean_list.append('h2')
 
-        for n in node.iter():
+        for n in node.iter(tag=Element):
+            LNODE.log(n, 2, "Cleaning iter node")
             # clean out any incline style properties
             if 'style' in n.attrib:
                 n.set('style', '')
@@ -264,6 +267,10 @@ def prep_article(doc):
     def clean_conditionally(node):
         """Remove the clean_el if it looks like bad content based on rules."""
         target_tags = ['form', 'table', 'ul', 'div', 'p']
+
+        LNODE.log(node, 2, 'Cleaning conditionally node.')
+        if generate_hash_id(node) == '6d63f9d5':
+            import ipdb;from pprint import pprint; ipdb.set_trace()
 
         if node.tag not in target_tags:
             # this is not the tag you're looking for
@@ -410,6 +417,9 @@ class Article(object):
         if self.candidates:
             LOG.debug('Candidates found:')
             pp = PrettyPrinter(indent=2)
+
+            # cleanup by removing the should_drop we spotted.
+            [n.drop_tree() for n in self._should_drop]
 
             # right now we return the highest scoring candidate content
             by_score = sorted([c for c in self.candidates.values()],

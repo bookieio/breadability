@@ -28,6 +28,22 @@ def check_node_attr(node, attr, checkset):
         return False
 
 
+def generate_hash_id(node):
+    """Generate a hash_id for the node in question.
+
+    :param node: lxml etree node
+
+    """
+    content = tounicode(node)
+    hashed = md5()
+    try:
+        hashed.update(content.encode('utf-8', errors="replace"))
+    except Exception, e:
+        LOG.error("BOOM! " + str(e))
+
+    return hashed.hexdigest()[0:8]
+
+
 def get_link_density(node, node_text=None):
     """Generate a value for the number of links in the node.
 
@@ -206,11 +222,4 @@ class ScoredNode(object):
 
     @property
     def hash_id(self):
-        content = tounicode(self.node)
-        hashed = md5()
-        try:
-            hashed.update(content.encode('utf-8', errors="replace"))
-        except Exception, e:
-            LOG.error("BOOM! " + str(e))
-
-        return hashed.hexdigest()[0:8]
+        return generate_hash_id(self.node)
