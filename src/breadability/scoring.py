@@ -15,7 +15,7 @@ CLS_MAYBE = re.compile('and|article|body|column|main|shadow', re.I)
 CLS_WEIGHT_POSITIVE = re.compile(('article|body|content|entry|hentry|main|'
     'page|pagination|post|text|blog|story'), re.I)
 CLS_WEIGHT_NEGATIVE = re.compile(('combx|comment|com-|contact|foot|footer|'
-    'footnote|masthead|media|meta|outbrain|promo|related|scroll|shoutbox|'
+    'footnote|head|masthead|media|meta|outbrain|promo|related|scroll|shoutbox|'
     'sidebar|sponsor|shopping|tags|tool|widget'), re.I)
 
 

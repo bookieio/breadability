@@ -16,6 +16,7 @@ from breadability.readable import Article
 
 LOGLEVEL = 'WARNING'
 
+
 def parse_args():
     desc = "A fast python port of arc90's readability tool"
     parser = argparse.ArgumentParser(description=desc)
@@ -89,7 +90,8 @@ def main():
         webbrowser.open(pathname)
     else:
         # Wrap sys.stdout into a StreamWriter to allow writing unicode.
-        sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout)
+        sys.stdout = codecs.getwriter(
+                        locale.getpreferredencoding())(sys.stdout)
         sys.stdout.write(doc.readable)
 
 
