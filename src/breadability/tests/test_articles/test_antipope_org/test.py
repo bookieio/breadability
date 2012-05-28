@@ -1,0 +1,28 @@
+import os
+from unittest import TestCase
+
+from breadability.readable import Article
+
+
+class TestAntipopeBlog(TestCase):
+    """Test the scoring and parsing of the Blog Post"""
+
+    def setUp(self):
+
+        """Load up the article for us"""
+        article_path = os.path.join(os.path.dirname(__file__), 'article.html')
+        self.article = open(article_path).read()
+
+    def tearDown(self):
+        """Drop the article"""
+        self.article = None
+
+    def test_parses(self):
+        """Verify we can parse the document."""
+        doc = Article(self.article)
+        self.assertTrue('id="readabilityBody"' in doc.readable)
+
+    def test_comments_cleaned(self):
+        """The div with the comments should be removed."""
+        doc = Article(self.article)
+        self.assertTrue('class="comments"' not in doc.readable)
