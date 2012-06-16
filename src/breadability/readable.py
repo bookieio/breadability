@@ -185,25 +185,6 @@ def check_siblings(candidate_node, candidate_list):
     return candidate_node
 
 
-def debug_article(doc):
-    """Process the article much as we do in prep_article
-
-    Only we're going to do some debugging output instead.
-
-    """
-    clean_list = ['object', 'h1']
-    LNODE.log(doc, 2, "Processing doc")
-
-    if len(doc.findall('.//h2')) == 1:
-        LOG.debug('Adding H2 to list of nodes to clean.')
-        clean_list.append('h2')
-
-    for n in doc.iter():
-        LNODE.log(n, 2, "Iterating over node")
-        LNODE.log(n, 2, "Link density: " + str(get_link_density(n)))
-        clean_conditionally(n)
-
-
 def clean_document(node):
     """Clean up the final document we return as the readable article"""
     LNODE.log(node, 2, "Processing doc")
