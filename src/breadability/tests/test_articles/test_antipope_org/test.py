@@ -26,3 +26,15 @@ class TestAntipopeBlog(TestCase):
         """The div with the comments should be removed."""
         doc = Article(self.article)
         self.assertTrue('class="comments"' not in doc.readable)
+
+    def test_beta_removed(self):
+        """The id=beta element should be removed
+
+        It's link heavy and causing a lot of garbage content. This should be
+        removed.
+
+        """
+        doc = Article(self.article)
+        self.assertTrue('id="beta"' not in doc.readable)
+
+

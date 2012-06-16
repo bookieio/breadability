@@ -7,12 +7,10 @@ from lxml.html import fromstring
 from operator import attrgetter
 from pprint import PrettyPrinter
 
-from breadability.document import build_doc
 from breadability.document import OriginalDocument
 from breadability.logconfig import LOG
 from breadability.logconfig import LNODE
 from breadability.scoring import score_candidates
-from breadability.scoring import generate_hash_id
 from breadability.scoring import get_link_density
 from breadability.scoring import get_class_weight
 from breadability.scoring import is_unlikely_node
@@ -187,6 +185,161 @@ def check_siblings(candidate_node, candidate_list):
     return candidate_node
 
 
+def debug_article(doc):
+    """Process the article much as we do in prep_article
+
+    Only we're going to do some debugging output instead.
+
+    """
+    clean_list = ['object', 'h1']
+    LNODE.log(doc, 2, "Processing doc")
+
+    if len(doc.findall('.//h2')) == 1:
+        LOG.debug('Adding H2 to list of nodes to clean.')
+        clean_list.append('h2')
+
+    for n in doc.iter():
+        LNODE.log(n, 2, "Iterating over node")
+        LNODE.log(n, 2, "Link density: " + str(get_link_density(n)))
+        clean_conditionally(n)
+
+
+def clean_document(node):
+    """Clean up the final document we return as the readable article"""
+    LNODE.log(node, 2, "Processing doc")
+    clean_list = ['object', 'h1']
+    to_drop = []
+
+    # If there is only one h2, they are probably using it as a header and
+    # not a subheader, so remove it since we already have a header.
+    if len(node.findall('.//h2')) == 1:
+        LOG.debug('Adding H2 to list of nodes to clean.')
+        clean_list.append('h2')
+
+    for n in node.iter():
+        LNODE.log(n, 2, "Cleaning iter node")
+        # clean out any in-line style properties
+        if 'style' in n.attrib:
+            n.set('style', '')
+
+        # remove all of the following tags
+        # Clean a node of all elements of type "tag".
+        # (Unless it's a youtube/vimeo video. People love movies.)
+        is_embed = True if n.tag in ['object', 'embed'] else False
+        if n.tag in clean_list:
+            allow = False
+
+            # Allow youtube and vimeo videos through as people usually
+            # want to see those.
+            if is_embed:
+                if ok_embedded_video(n):
+                    allow = True
+
+            if not allow:
+                LNODE.log(n, 2, "Dropping Node")
+                to_drop.append(n)
+
+        if n.tag in ['h1', 'h2', 'h3', 'h4']:
+            # clean headings
+            # if the heading has no css weight or a high link density,
+            # remove it
+            if get_class_weight(n) < 0 or get_link_density(n) > .33:
+                LNODE.log(n, 2, "Dropping <hX>, it's insignificant")
+                to_drop.append(n)
+
+        # clean out extra <p>
+        if n.tag == 'p':
+            # if the p has no children and has no content...well then down
+            # with it.
+            if not n.getchildren() and len(n.text_content()) < 5:
+                LNODE.log(n, 2, 'Dropping extra <p>')
+                to_drop.append(n)
+
+        # finally try out the conditional cleaning of the target node
+        if clean_conditionally(n):
+            to_drop.append(n)
+
+    [n.drop_tree() for n in to_drop if n.getparent() is not None]
+    return node
+
+
+def clean_conditionally(node):
+    """Remove the clean_el if it looks like bad content based on rules."""
+    target_tags = ['form', 'table', 'ul', 'div', 'p']
+
+    LNODE.log(node, 2, 'Cleaning conditionally node.')
+
+    if node.tag not in target_tags:
+        # this is not the tag you're looking for
+        return
+
+    weight = get_class_weight(node)
+    # content_score = LOOK up the content score for this node we found
+    # before else default to 0
+    content_score = 0
+
+    if (weight + content_score < 0):
+        LNODE.log(node, 2, 'Dropping conditional node')
+        return True
+
+    if node.text_content().count(',') < 10:
+        LOG.debug("There aren't 10 ,s so we're processing more")
+
+        # If there are not very many commas, and the number of
+        # non-paragraph elements is more than paragraphs or other ominous
+        # signs, remove the element.
+        p = len(node.findall('.//p'))
+        img = len(node.findall('.//img'))
+        li = len(node.findall('.//li')) - 100
+        inputs = len(node.findall('.//input'))
+
+        embed = 0
+        embeds = node.findall('.//embed')
+        for e in embeds:
+            if ok_embedded_video(e):
+                embed += 1
+        link_density = get_link_density(node)
+        content_length = len(node.text_content())
+
+        remove_node = False
+
+        if img > p:
+            # this one has shown to do some extra image removals.
+            # we could get around this by checking for caption info in the
+            # images to try to do some scoring of good v. bad images.
+            # failing example:
+            # arstechnica.com/science/news/2012/05/1859s
+            # -great-auroral-stormthe-week-the-sun-touched-the-earth.ars
+            LNODE.log(node, 2, 'Conditional drop: img > p')
+            remove_node = True
+        elif li > p and node.tag != 'ul' and node.tag != 'ol':
+            LNODE.log(node, 2, 'Conditional drop: li > p and not ul/ol')
+            remove_node = True
+        elif inputs > p / 3.0:
+            LNODE.log(node, 2, 'Conditional drop: inputs > p/3.0')
+            remove_node = True
+        elif content_length < 25 and (img == 0 or img > 2):
+            LNODE.log(node, 2,
+                'Conditional drop: len < 25 and 0/>2 images')
+            remove_node = True
+        elif weight < 25 and link_density > 0.2:
+            LNODE.log(node, 2,
+                'Conditional drop: weight small and link is dense')
+            remove_node = True
+        elif weight >= 25 and link_density > 0.5:
+            LNODE.log(node, 2,
+                'Conditional drop: weight big but link heavy')
+            remove_node = True
+        elif (embed == 1 and content_length < 75) or embed > 1:
+            LNODE.log(node, 2,
+                'Conditional drop: embed w/o much content or many embed')
+            remove_node = True
+        return remove_node
+
+    # nope, don't remove anything
+    return False
+
+
 def prep_article(doc):
     """Once we've found our target article we want to clean it up.
 
@@ -197,155 +350,6 @@ def prep_article(doc):
     - extra tags
 
     """
-    def clean_document(node):
-        """Clean up the final document we return as the readable article"""
-        LOG.debug('Cleaning document')
-        clean_list = ['object', 'h1']
-
-        # To start out, take our node and reload it so that our iterator is
-        # reset and we can process it completely.
-        re_node = build_doc(tounicode(node))
-
-        # If there is only one h2, they are probably using it as a header and
-        # not a subheader, so remove it since we already have a header.
-        if len(re_node.findall('.//h2')) == 1:
-            LOG.debug('Adding H2 to list of nodes to clean.')
-            clean_list.append('h2')
-
-        for n in re_node.iter():
-            LNODE.log(n, 2, "Cleaning iter node")
-            # clean out any incline style properties
-            if 'style' in n.attrib:
-                n.set('style', '')
-
-            # remove all of the following tags
-            # Clean a node of all elements of type "tag".
-            # (Unless it's a youtube/vimeo video. People love movies.)
-            is_embed = True if n.tag in ['object', 'embed'] else False
-            if n.tag in clean_list:
-                allow = False
-
-                # Allow youtube and vimeo videos through as people usually
-                # want to see those.
-                if is_embed:
-                    if ok_embedded_video(n):
-                        allow = True
-
-                if not allow:
-                    LNODE.log(n, 2, "Dropping Node")
-                    n.drop_tree()
-                    # go on with next loop, this guy is gone
-                    continue
-
-            if n.tag in ['h1', 'h2', 'h3', 'h4']:
-                # clean headings
-                # if the heading has no css weight or a high link density,
-                # remove it
-                if get_class_weight(n) < 0 or get_link_density(n) > .33:
-                    # for some reason we get nodes here without a parent
-                    if n.getparent() is not None:
-                        LNODE.log(n, 2, "Dropping <hX>, it's insignificant")
-                        n.drop_tree()
-                        # go on with next loop, this guy is gone
-                        continue
-
-            # clean out extra <p>
-            if n.tag == 'p':
-                # if the p has no children and has no content...well then down
-                # with it.
-                if not n.getchildren() and len(n.text_content()) < 5:
-                    LNODE.log(n, 2, 'Dropping extra <p>')
-                    n.drop_tree()
-                    # go on with next loop, this guy is gone
-                    continue
-
-            # finally try out the conditional cleaning of the target node
-            if clean_conditionally(n):
-                # For some reason the parent is none so we can't drop, we're
-                # not in a tree that can take dropping this node.
-                if n.getparent() is not None:
-                    n.drop_tree()
-
-        return re_node
-
-    def clean_conditionally(node):
-        """Remove the clean_el if it looks like bad content based on rules."""
-        target_tags = ['form', 'table', 'ul', 'div', 'p']
-
-        LNODE.log(node, 2, 'Cleaning conditionally node.')
-        if generate_hash_id(node) == '6d63f9d5':
-            import ipdb;from pprint import pprint; ipdb.set_trace()
-
-        if node.tag not in target_tags:
-            # this is not the tag you're looking for
-            return
-
-        weight = get_class_weight(node)
-        # content_score = LOOK up the content score for this node we found
-        # before else default to 0
-        content_score = 0
-
-        if (weight + content_score < 0):
-            LNODE.log(node, 2, 'Dropping conditional node')
-            return True
-
-        if node.text_content().count(',') < 10:
-            LOG.debug("There aren't 10 ,s so we're processing more")
-
-            # If there are not very many commas, and the number of
-            # non-paragraph elements is more than paragraphs or other ominous
-            # signs, remove the element.
-            p = len(node.findall('.//p'))
-            img = len(node.findall('.//img'))
-            li = len(node.findall('.//li')) - 100
-            inputs = len(node.findall('.//input'))
-
-            embed = 0
-            embeds = node.findall('.//embed')
-            for e in embeds:
-                if ok_embedded_video(e):
-                    embed += 1
-            link_density = get_link_density(node)
-            content_length = len(node.text_content())
-
-            remove_node = False
-
-            if img > p:
-                # this one has shown to do some extra image removals.
-                # we could get around this by checking for caption info in the
-                # images to try to do some scoring of good v. bad images.
-                # failing example:
-                # arstechnica.com/science/news/2012/05/1859s
-                # -great-auroral-stormthe-week-the-sun-touched-the-earth.ars
-                LNODE.log(node, 2, 'Conditional drop: img > p')
-                remove_node = True
-            elif li > p and node.tag != 'ul' and node.tag != 'ol':
-                LNODE.log(node, 2, 'Conditional drop: li > p and not ul/ol')
-                remove_node = True
-            elif inputs > p / 3.0:
-                LNODE.log(node, 2, 'Conditional drop: inputs > p/3.0')
-                remove_node = True
-            elif content_length < 25 and (img == 0 or img > 2):
-                LNODE.log(node, 2,
-                    'Conditional drop: len < 25 and 0/>2 images')
-                remove_node = True
-            elif weight < 25 and link_density > 0.2:
-                LNODE.log(node, 2,
-                    'Conditional drop: weight small and link is dense')
-                remove_node = True
-            elif weight >= 25 and link_density > 0.5:
-                LNODE.log(node, 2,
-                    'Conditional drop: weight big but link heavy')
-                remove_node = True
-            elif (embed == 1 and content_length < 75) or embed > 1:
-                LNODE.log(node, 2,
-                    'Conditional drop: embed w/o much content or many embed')
-                remove_node = True
-            return remove_node
-
-        # nope, don't remove anything
-        return False
-
     doc = clean_document(doc)
     return doc
 
