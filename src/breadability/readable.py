@@ -1,5 +1,4 @@
 import re
-from lxml.etree import Element
 from lxml.etree import tounicode
 from lxml.etree import tostring
 from lxml.html.clean import Cleaner
@@ -8,6 +7,7 @@ from lxml.html import fromstring
 from operator import attrgetter
 from pprint import PrettyPrinter
 
+from breadability.document import build_doc
 from breadability.document import OriginalDocument
 from breadability.logconfig import LOG
 from breadability.logconfig import LNODE
@@ -202,13 +202,17 @@ def prep_article(doc):
         LOG.debug('Cleaning document')
         clean_list = ['object', 'h1']
 
+        # To start out, take our node and reload it so that our iterator is
+        # reset and we can process it completely.
+        re_node = build_doc(tounicode(node))
+
         # If there is only one h2, they are probably using it as a header and
         # not a subheader, so remove it since we already have a header.
-        if len(node.findall('.//h2')) == 1:
+        if len(re_node.findall('.//h2')) == 1:
             LOG.debug('Adding H2 to list of nodes to clean.')
             clean_list.append('h2')
 
-        for n in node.iter(tag=Element):
+        for n in re_node.iter():
             LNODE.log(n, 2, "Cleaning iter node")
             # clean out any incline style properties
             if 'style' in n.attrib:
@@ -262,7 +266,7 @@ def prep_article(doc):
                 if n.getparent() is not None:
                     n.drop_tree()
 
-        return node
+        return re_node
 
     def clean_conditionally(node):
         """Remove the clean_el if it looks like bad content based on rules."""
