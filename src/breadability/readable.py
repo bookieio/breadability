@@ -11,6 +11,7 @@ from breadability.document import OriginalDocument
 from breadability.logconfig import LOG
 from breadability.logconfig import LNODE
 from breadability.scoring import score_candidates
+from breadability.scoring import generate_hash_id
 from breadability.scoring import get_link_density
 from breadability.scoring import get_class_weight
 from breadability.scoring import is_unlikely_node
@@ -252,6 +253,7 @@ def clean_conditionally(node):
 
     if node.tag not in target_tags:
         # this is not the tag you're looking for
+        LNODE.log(node, 2, 'Node cleared.')
         return
 
     weight = get_class_weight(node)
@@ -261,6 +263,7 @@ def clean_conditionally(node):
 
     if (weight + content_score < 0):
         LNODE.log(node, 2, 'Dropping conditional node')
+        LNODE.log(node, 2, 'Weight + score < 0')
         return True
 
     if node.text_content().count(',') < 10:
@@ -284,16 +287,7 @@ def clean_conditionally(node):
 
         remove_node = False
 
-        if img > p:
-            # this one has shown to do some extra image removals.
-            # we could get around this by checking for caption info in the
-            # images to try to do some scoring of good v. bad images.
-            # failing example:
-            # arstechnica.com/science/news/2012/05/1859s
-            # -great-auroral-stormthe-week-the-sun-touched-the-earth.ars
-            LNODE.log(node, 2, 'Conditional drop: img > p')
-            remove_node = True
-        elif li > p and node.tag != 'ul' and node.tag != 'ol':
+        if li > p and node.tag != 'ul' and node.tag != 'ol':
             LNODE.log(node, 2, 'Conditional drop: li > p and not ul/ol')
             remove_node = True
         elif inputs > p / 3.0:
@@ -315,9 +309,15 @@ def clean_conditionally(node):
             LNODE.log(node, 2,
                 'Conditional drop: embed w/o much content or many embed')
             remove_node = True
+
+        if remove_node:
+            LNODE.log(node, 2, 'Node will be removed')
+        else:
+            LNODE.log(node, 2, 'Node cleared')
         return remove_node
 
     # nope, don't remove anything
+    LNODE.log(node, 2, 'Node Cleared final.')
     return False
 
 

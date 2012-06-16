@@ -106,6 +106,10 @@ class LogHelper(object):
         """Turn on this logger."""
         self._active = True
 
+    def deactivate(self):
+        """Turn off the logger"""
+        self._active = False
+
     def log(self, node, action, description):
         """Write out our log info based on the node and event specified.
 

@@ -36,5 +36,3 @@ class TestAntipopeBlog(TestCase):
         """
         doc = Article(self.article)
         self.assertTrue('id="beta"' not in doc.readable)
-
-

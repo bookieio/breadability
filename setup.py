@@ -45,6 +45,8 @@ setup(name='breadability',
     },
     entry_points={
         'console_scripts':
-            ['breadability=breadability:client.main']
+            ['breadability=breadability:client.main',
+             'breadability_newtest=breadability:newtest.main',
+            ]
     }
 )
