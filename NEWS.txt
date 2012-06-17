@@ -6,6 +6,16 @@
 News
 ====
 
+0.1.4
+------
+
+* Release date: June 16th 2012*
+
+* Add a test generation helper breadability_newtest script.
+* Add tests and fixes for the scripting news parse failure.
+
+
+
 0.1.3
 ------
 
