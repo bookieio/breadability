@@ -6,6 +6,16 @@
 News
 ====
 
+0.1.5
+------
+
+* Release date: June 16th 2012*
+
+* Start to look at removing bad links from content in the conditional cleaning
+  state. This was really used for the scripting.com site's garbage.
+
+
+
 0.1.4
 ------
 
@@ -15,7 +25,6 @@ News
 * Add tests and fixes for the scripting news parse failure.
 
 
-
 0.1.3
 ------
 
@@ -23,6 +32,7 @@ News
 
 * Add actual testing of full articles for regression tests.
 * Update parser to properly clean after winner doc node is chosen.
+
 
 0.1.2
 ------
