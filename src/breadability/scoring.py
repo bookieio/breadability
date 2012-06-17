@@ -10,7 +10,7 @@ from breadability.logconfig import LOG
 # a potential candidate or not.
 CLS_UNLIKELY = re.compile(('combx|comment|community|disqus|extra|foot|header|'
     'menu|remark|rss|shoutbox|sidebar|sponsor|ad-break|agegate|pagination|'
-    'pager|popup|tweet|twitter'), re.I)
+    'pager|perma|popup|tweet|twitter'), re.I)
 CLS_MAYBE = re.compile('and|article|body|column|main|shadow', re.I)
 CLS_WEIGHT_POSITIVE = re.compile(('article|body|content|entry|hentry|main|'
     'page|pagination|post|text|blog|story'), re.I)

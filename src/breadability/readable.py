@@ -52,6 +52,27 @@ def drop_tag(doc, *tags):
     return doc
 
 
+def is_bad_link(a_node):
+    """Helper to determine if the link is something to clean out
+
+    We've hit articles with many multiple links that should be cleaned out
+    because they're just there to pollute the space. See tests for examples.
+
+    """
+    if a_node.tag == 'a':
+        name = a_node.get('name')
+        href = a_node.get('href')
+        if name and not href:
+            return True
+
+        if href:
+            url_bits = href.split('#')
+            if len(url_bits) == 2:
+                if len(url_bits[1]) > 25:
+                    return True
+    return False
+
+
 def ok_embedded_video(node):
     """Check if this embed/video is an ok one to count."""
     keep_keywords = ['youtube', 'blip.tv', 'vimeo']
@@ -251,16 +272,6 @@ def clean_conditionally(node):
 
     LNODE.log(node, 2, 'Cleaning conditionally node.')
 
-    # Clean out links with really large href anchor values.
-    if node.tag == 'a':
-        name = node.get('name')
-        href = node.get('href')
-        if name and not href:
-            return True
-
-        if href and href.startswith('#') and len(href) > 50:
-            return True
-
     if node.tag not in target_tags:
         # this is not the tag you're looking for
         LNODE.log(node, 2, 'Node cleared.')
@@ -359,6 +370,10 @@ def find_candidates(doc):
     for node in doc.iter():
         if is_unlikely_node(node):
             LOG.debug('We should drop unlikely: ' + str(node))
+            should_remove.append(node)
+            continue
+        if node.tag == 'a' and is_bad_link(node):
+            LOG.debug('We should drop bad link: ' + str(node))
             should_remove.append(node)
             continue
         if node.tag in scorable_node_tags and node not in nodes_to_score:

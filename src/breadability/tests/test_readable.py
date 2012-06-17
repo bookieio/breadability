@@ -6,6 +6,7 @@ from unittest import TestCase
 from breadability.readable import Article
 from breadability.readable import get_class_weight
 from breadability.readable import get_link_density
+from breadability.readable import is_bad_link
 from breadability.readable import score_candidates
 from breadability.readable import transform_misused_divs_into_paragraphs
 from breadability.scoring import ScoredNode
@@ -71,7 +72,7 @@ class TestCleaning(TestCase):
         must_not_appear = ['comment', 'community', 'disqus', 'extra', 'foot',
                 'header', 'menu', 'remark', 'rss', 'shoutbox', 'sidebar',
                 'sponsor', 'ad-break', 'agegate', 'pagination' '', 'pager',
-                'popup', 'tweet', 'twitter']
+                'popup', 'tweet', 'twitter', 'imgBlogpostPermalink']
 
         want_to_appear = ['and', 'article', 'body', 'column', 'main', 'shadow']
 
@@ -118,6 +119,18 @@ class TestCleaning(TestCase):
                 transform_misused_divs_into_paragraphs(test_doc2)),
                 u'<html><body><p>simple<a href="">link</a></p></body></html>'
         )
+
+    def test_bad_links(self):
+        """Some links should just not belong."""
+        bad_links = [
+            '<a name="amazonAndGoogleHaveMadeAnAudaciousGrabOfNamespaceOnTheInternetAsFarAsICanSeeTheresBeenNoMentionOfThisInTheTechPress">&nbsp;</a>',
+            '<a href="#amazonAndGoogleHaveMadeAnAudaciousGrabOfNamespaceOnTheInternetAsFarAsICanSeeTheresBeenNoMentionOfThisInTheTechPress"><img src="http://scripting.com/images/2001/09/20/sharpPermaLink3.gif" class="imgBlogpostPermalink" width="6" height="9" border="0" alt="permalink"></a>',
+            '<a href="http://scripting.com/stories/2012/06/15/theTechPressIsOutToLunch.html#anExampleGoogleDoesntIntendToShareBlogAndItWillOnlyBeUsedToPointToBloggerSitesIfYouHaveATumblrOrWordpressBlogYouCantHaveABlogDomainHereIsTheAHrefhttpgtldresulticannorgapplicationresultapplicationstatusapplicationdetails527publicListingaOfGooglesAHrefhttpdropboxscriptingcomdavemiscgoogleblogapplicationhtmlapplicationa"><img src="http://scripting.com/images/2001/09/20/sharpPermaLink3.gif" class="imgBlogpostPermalink" width="6" height="9" border="0" alt="permalink"></a>'
+        ]
+
+        for l in bad_links:
+            link = fragment_fromstring(l)
+            self.assertTrue(is_bad_link(link))
 
 
 class TestCandidateNodes(TestCase):
