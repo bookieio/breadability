@@ -251,6 +251,16 @@ def clean_conditionally(node):
 
     LNODE.log(node, 2, 'Cleaning conditionally node.')
 
+    # Clean out links with really large href anchor values.
+    if node.tag == 'a':
+        name = node.get('name')
+        href = node.get('href')
+        if name and not href:
+            return True
+
+        if href and href.startswith('#') and len(href) > 50:
+            return True
+
     if node.tag not in target_tags:
         # this is not the tag you're looking for
         LNODE.log(node, 2, 'Node cleared.')

@@ -29,11 +29,13 @@ class TestArticle(TestCase):
         doc = Article(self.article)
         self.assertTrue('Amazon and Google' in doc.readable)
         self.assertFalse('Linkblog updated' in doc.readable)
+        self.assertFalse(
+            '#anExampleGoogleDoesntIntendToShareBlogAndItWill' in doc.readable)
 
     def test_candidates(self):
         """Verify we have candidates."""
         doc = Article(self.article)
-        from lxml.etree import tounicode
+        # from lxml.etree import tounicode
         found = False
         wanted_hash = '04e46055'
         # from breadability.logconfig import LNODE
