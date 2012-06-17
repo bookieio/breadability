@@ -58,4 +58,4 @@ upload:
 
 .PHONY: version_update
 version_update:
-	$(EDITOR) setup.py src/breadability/__init__.py
+	$(EDITOR) setup.py src/breadability/__init__.py NEWS.txt

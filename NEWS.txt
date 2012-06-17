@@ -6,6 +6,15 @@
 News
 ====
 
+0.1.6
+------
+
+* Release date: June 17th 2012*
+
+* Fix the link removal, add tests and a place to process other bad links.
+
+
+
 0.1.5
 ------
 
