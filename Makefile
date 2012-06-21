@@ -9,7 +9,7 @@ NOSE := bin/nosetests
 # Tests rule!
 # ###########
 .PHONY: test
-test: venv $(NOSE)
+test: venv develop $(NOSE)
 	$(NOSE) --with-id -s src/breadability/tests
 
 $(NOSE):

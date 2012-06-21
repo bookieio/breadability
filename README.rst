@@ -42,6 +42,9 @@ Options
 
   - b will write out the parsed content to a temp file and open it in a
     browser for viewing.
+  - d will write out debug scoring statements to help track why a node was
+    chosen as the document and why some nodes were removed from the final
+    product.
   - f will override the default behaviour of getting an html fragment (<div>)
     and give you back a full <html> document.
   - v will output in verbose debug mode and help let you know why it parsed
@@ -54,8 +57,8 @@ Using from Python
 ::
 
     from breadability.readable import Article
-    readable_article = Article(html_text, url=url_came_from)
-    print readable_article
+    doc = Article(html_text, url=url_came_from)
+    print doc.readable
 
 
 Work to be done
@@ -86,7 +89,6 @@ Off the top of my heads todo list:
     should be skipped. We should have a set of regression tests for this so
     that if we implement a change that blows up performance we know it right
     away.
-  - Get up on pypi along with the rest of the ports
   - More docs for things, but sphinx docs and in code comments to help
     understand wtf we're doing and why. That's the biggest hurdle to some of
     this stuff.
