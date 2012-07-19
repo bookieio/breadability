@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>breadability by mitechie</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>breadability</h1>
+          <h2>Reworked Python Readability parsing library. </h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/mitechie/breadability/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/mitechie/breadability/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/mitechie/breadability" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>breadability - another readability Python port</h1>
+
+<p>I've tried to work with the various forks of some ancient codebase that ported
+<code>readability</code>_ to Python. The lack of tests, unused regex's, and commented out
+sections of code in other Python ports just drove me nuts.</p>
+
+<p>I put forth an effort to bring in several of the better forks into one
+codebase, but they've diverged so much that I just can't work with it.</p>
+
+<p>So what's any sane person to do? Re-port it with my own repo, add some tests,
+infrastructure, and try to make this port better. OSS FTW (and yea, NIH FML,
+but oh well I did try)</p>
+
+<p>This is a pretty straight port of the JS here:</p>
+
+<ul>
+<li><a href="http://code.google.com/p/arc90labs-readability/source/browse/trunk/js/readability.js#82">http://code.google.com/p/arc90labs-readability/source/browse/trunk/js/readability.js#82</a></li>
+</ul><h2>Installation</h2>
+
+<p>This does depend on lxml so you'll need some C headers in order to install
+things from pip so that it can compile.</p>
+
+<p>::</p>
+
+<pre><code>sudo apt-get install libxml2-dev libxslt-dev
+pip install breadability
+</code></pre>
+
+<h2>Usage</h2>
+
+<p>cmd line</p>
+
+<pre><code>
+::
+
+    $ breadability http://wiki.python.org/moin/BeginnersGuide
+
+Options
+</code></pre>
+
+<ul>
+<li>b will write out the parsed content to a temp file and open it in a
+browser for viewing.</li>
+<li>d will write out debug scoring statements to help track why a node was
+chosen as the document and why some nodes were removed from the final
+product.</li>
+<li>f will override the default behaviour of getting an html fragment ( )
+and give you back a full  document.
+<li>v will output in verbose debug mode and help let you know why it parsed
+how it did.</li>
+
+
+<p>Using from Python</p>
+
+<pre><code>
+::
+
+    from breadability.readable import Article
+    doc = Article(html_text, url=url_came_from)
+    print doc.readable
+
+
+Work to be done
+---------------
+Yep, I've got some catching up to do. I don't do pagination, I've got a lot of
+custom tweaks I need to get going, there are some articles that fail to parse.
+I also have more tests to write on a lot of the cleaning helpers, but
+hopefully things are setup in a way that those can/will be added.
+
+Fortunately, I need this library for my tools:
+
+- https://bmark.us
+- http://readable.bmark.us
+
+so I really need this to be an active and improving project.
+
+
+Off the top of my heads todo list:
+
+  - Support metadata from parsed article [url, confidence scores, all
+    candidates we thought about?]
+  - More tests, more thorough tests
+  - More sample articles we need to test against in the test_articles
+  - Tests that run through and check for regressions of the test_articles
+  - Tidy'ing the HTML that comes out, might help with regression tests ^^
+  - Multiple page articles
+  - Performance tuning, we do a lot of looping and re-drop some nodes that
+    should be skipped. We should have a set of regression tests for this so
+    that if we implement a change that blows up performance we know it right
+    away.
+  - More docs for things, but sphinx docs and in code comments to help
+    understand wtf we're doing and why. That's the biggest hurdle to some of
+    this stuff.
+
+Helping out
+------------
+If you want to help, shoot me a pull request, an issue report with broken
+urls, etc.
+
+You can ping me on irc, I'm always in the `#bookie` channel in freenode.
+
+
+Important Links
+----------------
+
+- `Builds`_ are done on `TravisCI`_
+
+
+Inspiration
+</code></pre>
+
+<ul>
+<li>
+<code>python-readability</code>_</li>
+<li>
+<code>decruft</code>_</li>
+<li>
+<code>readability</code>_</li>
+</ul>
+<p>.. _readability: <a href="http://code.google.com/p/arc90labs-readability/">http://code.google.com/p/arc90labs-readability/</a>
+.. _Builds: <a href="http://travis-ci.org/#!/mitechie/breadability">http://travis-ci.org/#!/mitechie/breadability</a>
+.. _TravisCI: <a href="http://travis-ci.org/">http://travis-ci.org/</a>
+.. _decruft: <a href="https://github.com/dcramer/decruft">https://github.com/dcramer/decruft</a>
+.. _python-readability: <a href="https://github.com/buriy/python-readability">https://github.com/buriy/python-readability</a></p> </li>
+</ul>
+        </section>
+
+        <footer>
+          breadability is maintained by <a href="https://github.com/mitechie">mitechie</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+                  <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-33507554-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+      </div>
+    </div>
+  </body>
+</html>
