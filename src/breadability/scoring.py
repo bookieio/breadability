@@ -37,7 +37,7 @@ def generate_hash_id(node):
     content = tounicode(node)
     hashed = md5()
     try:
-        hashed.update(content.encode('utf-8', errors="replace"))
+        hashed.update(content.encode('utf-8', "replace"))
     except Exception, e:
         LOG.error("BOOM! " + str(e))
 
