@@ -6,6 +6,16 @@
 News
 ====
 
+0.1.7
+------
+
+* Release date: July 21nd 2012*
+
+* Change the encode 'replace' kwarg into a normal arg for older python
+  version.
+
+
+
 0.1.6
 ------
 
