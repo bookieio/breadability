@@ -62,6 +62,14 @@ class TestReadableDocument(TestCase):
         self.assertEqual(doc._readable.get('id'), 'readabilityBody')
 
 
+    def test_no_content(self):
+        """Without content we supply an empty unparsed doc."""
+        doc = Article('')
+        self.assertEqual(doc._readable.tag, 'div')
+        self.assertEqual(doc._readable.get('id'), 'readabilityBody')
+        self.assertEqual(doc._readable.get('class'), 'parsing-error')
+
+
 class TestCleaning(TestCase):
     """Test out our cleaning processing we do."""
 

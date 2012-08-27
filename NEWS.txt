@@ -6,6 +6,16 @@
 News
 ====
 
+0.1.8
+------
+
+* Release date: Aug 27nd 2012*
+
+* Add code/tests for an empty document.
+* Fixes #9 to handle xml parsing issues.
+
+
+
 0.1.7
 ------
 

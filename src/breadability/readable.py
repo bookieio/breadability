@@ -11,7 +11,6 @@ from breadability.document import OriginalDocument
 from breadability.logconfig import LOG
 from breadability.logconfig import LNODE
 from breadability.scoring import score_candidates
-from breadability.scoring import generate_hash_id
 from breadability.scoring import get_link_density
 from breadability.scoring import get_class_weight
 from breadability.scoring import is_unlikely_node
@@ -124,6 +123,28 @@ def build_base_document(html, fragment=True):
     return output
 
 
+def build_error_document(html, fragment=True):
+    """Return an empty erorr document with the body as root.
+
+    :param fragment: Should we return a <div> doc fragment or a full <html>
+    doc.
+
+    """
+    frag = fragment_fromstring('<div/>')
+    frag.set('id', 'readabilityBody')
+    frag.set('class', 'parsing-error')
+
+    if not fragment:
+        output = fromstring(BASE_DOC)
+        insert_point = output.find('.//body')
+        insert_point.append(frag)
+    else:
+        output = frag
+
+    output.doctype = "<!DOCTYPE html>"
+    return output
+
+
 def transform_misused_divs_into_paragraphs(doc):
     """Turn all divs that don't have children block level elements into p's
 
@@ -209,6 +230,9 @@ def check_siblings(candidate_node, candidate_list):
 
 def clean_document(node):
     """Clean up the final document we return as the readable article"""
+    if node is None or len(node) == 0:
+        return
+
     LNODE.log(node, 2, "Processing doc")
     clean_list = ['object', 'h1']
     to_drop = []
@@ -383,6 +407,7 @@ def find_candidates(doc):
 
 class Article(object):
     """Parsed readable object"""
+    _should_drop = []
 
     def __init__(self, html, url=None, fragment=True):
         """Create the Article we're going to use.
@@ -406,20 +431,26 @@ class Article(object):
     @cached_property(ttl=600)
     def doc(self):
         """The doc is the parsed xml tree of the given html."""
-        doc = self.orig.html
-        # cleaning doesn't return, just wipes in place
-        html_cleaner(doc)
-        doc = drop_tag(doc, 'noscript', 'iframe')
-        doc = transform_misused_divs_into_paragraphs(doc)
-        return doc
+        try:
+            doc = self.orig.html
+            # cleaning doesn't return, just wipes in place
+            html_cleaner(doc)
+            doc = drop_tag(doc, 'noscript', 'iframe')
+            doc = transform_misused_divs_into_paragraphs(doc)
+            return doc
+        except ValueError:
+            return None
 
     @cached_property(ttl=600)
     def candidates(self):
         """Generate the list of candidates from the doc."""
         doc = self.doc
-        candidates, should_drop = find_candidates(doc)
-        self._should_drop = should_drop
-        return candidates
+        if doc is not None and len(doc):
+            candidates, should_drop = find_candidates(doc)
+            self._should_drop = should_drop
+            return candidates
+        else:
+            return None
 
     @cached_property(ttl=600)
     def readable(self):
@@ -433,7 +464,8 @@ class Article(object):
             pp = PrettyPrinter(indent=2)
 
             # cleanup by removing the should_drop we spotted.
-            [n.drop_tree() for n in self._should_drop]
+            [n.drop_tree() for n in self._should_drop
+                if n.getparent() is not None]
 
             # right now we return the highest scoring candidate content
             by_score = sorted([c for c in self.candidates.values()],
@@ -452,9 +484,13 @@ class Article(object):
             LOG.warning('No candidates found: using document.')
             LOG.debug('Begin final prep of article')
             # since we've not found a good candidate we're should help this
-            # cleanup by removing the should_drop we spotted.
-            [n.drop_tree() for n in self._should_drop]
-            doc = prep_article(self.doc)
-            doc = build_base_document(doc, self.fragment)
+            if self.doc is not None and len(self.doc):
+                # cleanup by removing the should_drop we spotted.
+                [n.drop_tree() for n in self._should_drop]
+                doc = prep_article(self.doc)
+                doc = build_base_document(doc, self.fragment)
+            else:
+                LOG.warning('No document to use.')
+                doc = build_error_document(self.fragment)
 
         return doc

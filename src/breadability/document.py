@@ -4,6 +4,7 @@ import chardet
 import re
 from lxml.etree import tostring
 from lxml.etree import tounicode
+from lxml.etree import XMLSyntaxError
 from lxml.html import document_fromstring
 from lxml.html import HTMLParser
 
@@ -54,10 +55,14 @@ def build_doc(page):
     else:
         enc = get_encoding(page)
         page_unicode = page.decode(enc, 'replace')
-    doc = document_fromstring(
-        page_unicode.encode('utf-8', 'replace'),
-        parser=utf8_parser)
-    return doc
+    try:
+        doc = document_fromstring(
+            page_unicode.encode('utf-8', 'replace'),
+            parser=utf8_parser)
+        return doc
+    except XMLSyntaxError, exc:
+        LOG.error('Failed to parse: ' + str(exc))
+        raise ValueError('Failed to parse document contents.')
 
 
 class OriginalDocument(object):
@@ -80,6 +85,7 @@ class OriginalDocument(object):
         """Generate an lxml document from our html."""
         html = replace_multi_br_to_paragraphs(html)
         doc = build_doc(html)
+
         # doc = html_cleaner.clean_html(doc)
         base_href = self.url
         if base_href:
