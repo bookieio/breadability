@@ -6,6 +6,15 @@
 News
 ====
 
+0.1.9
+------
+
+* Release date: Aug 27nd 2012*
+
+* In case of an issue dealing with candidates we need to act like we didn't
+  find any candidates for the article content. #10
+
+
 0.1.8
 ------
 

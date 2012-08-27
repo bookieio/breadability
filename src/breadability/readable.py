@@ -479,18 +479,29 @@ class Article(object):
             updated_winner = check_siblings(winner, self.candidates)
             LOG.debug('Begin final prep of article')
             updated_winner.node = prep_article(updated_winner.node)
-            doc = build_base_document(updated_winner.node, self.fragment)
+            if updated_winner.node is not None:
+                doc = build_base_document(updated_winner.node, self.fragment)
+            else:
+                LOG.warning('Had candidates but failed to find a cleaned winning doc.')
+                doc = self._handle_no_candidates()
         else:
             LOG.warning('No candidates found: using document.')
             LOG.debug('Begin final prep of article')
-            # since we've not found a good candidate we're should help this
-            if self.doc is not None and len(self.doc):
-                # cleanup by removing the should_drop we spotted.
-                [n.drop_tree() for n in self._should_drop]
-                doc = prep_article(self.doc)
-                doc = build_base_document(doc, self.fragment)
-            else:
-                LOG.warning('No document to use.')
-                doc = build_error_document(self.fragment)
+            doc = self._handle_no_candidates()
+
+        return doc
+
+    def _handle_no_candidates(self):
+        """If we fail to find a good candidate we need to find something else."""
+        # since we've not found a good candidate we're should help this
+        if self.doc is not None and len(self.doc):
+            # cleanup by removing the should_drop we spotted.
+            [n.drop_tree() for n in self._should_drop
+                if n.getparent() is not None]
+            doc = prep_article(self.doc)
+            doc = build_base_document(doc, self.fragment)
+        else:
+            LOG.warning('No document to use.')
+            doc = build_error_document(self.fragment)
 
         return doc
