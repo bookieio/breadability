@@ -140,21 +140,29 @@ def score_candidates(nodes):
         # Add a point for the paragraph itself as a base.
         content_score += 1
 
-        # Add points for any commas within this paragraph
-        content_score += innertext.count(',') if innertext else 0
-        LNODE.log(node, 1, "Bonus points for ,: " + str(innertext.count(',')))
+        if innertext:
+            # Add 0.25 points for any commas within this paragraph
+            content_score += innertext.count(',') * 0.25
+            LNODE.log(node, 1,
+                "Bonus points for ,: " + str(innertext.count(',')))
 
-        # For every 100 characters in this paragraph, add another point. Up to
-        # 3 points.
-        length_points = len(innertext) / 100 if innertext else 0
-        if length_points > 3:
-            content_score += 3
-        else:
-            content_score += length_points
-        LNODE.log(
-            node, 1,
-            "Length/content points: {0} : {1}".format(length_points,
-                                                      content_score))
+            # Subtract 0.5 points for each double quote within this paragraph
+            content_score += innertext.count('"') * (-0.5)
+            LNODE.log(node, 1,
+                'Penalty points for ": ' + str(innertext.count('"')))
+
+            # For every 100 characters in this paragraph, add another point.
+            # Up to 3 points.
+            length_points = len(innertext) / 100
+
+            if length_points > 3:
+                content_score += 3
+            else:
+                content_score += length_points
+            LNODE.log(
+                node, 1,
+                "Length/content points: {0} : {1}".format(length_points,
+                                                          content_score))
 
         # Add the score to the parent.
         LNODE.log(node, 1, "From this current node.")

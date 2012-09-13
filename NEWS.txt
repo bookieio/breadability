@@ -6,6 +6,14 @@
 News
 ====
 
+0.1.10
+-------
+
+* Release date: Sept 13th 2012*
+
+* Updated scoring bonus and penalty with , and " characters.
+
+
 0.1.9
 ------
 
