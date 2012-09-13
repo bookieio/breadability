@@ -140,9 +140,13 @@ def score_candidates(nodes):
         # Add a point for the paragraph itself as a base.
         content_score += 1
 
-        # Add points for any commas within this paragraph
-        content_score += innertext.count(',') if innertext else 0
+        # Add 0.25 points for any commas within this paragraph
+        content_score += innertext.count(',')*0.25 if innertext else 0
         LNODE.log(node, 1, "Bonus points for ,: " + str(innertext.count(',')))
+
+        # Subtract 0.5 points for each double quote within this paragraph
+        content_score += innertext.count('"')*(-0.5) if innertext else 0
+        LNODE.log(node, 1, "Penalty points for \": " + str(innertext.count('"')))
 
         # For every 100 characters in this paragraph, add another point. Up to
         # 3 points.
