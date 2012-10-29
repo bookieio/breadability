@@ -10,3 +10,8 @@ develop-eggs
 tmp
 build
 dist
+include/
+lib/
+local/
+man/
+share/
