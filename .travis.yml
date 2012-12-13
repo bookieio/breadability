@@ -6,4 +6,4 @@ before_install: sudo apt-get install libxml2-dev libxslt-dev
 # command to install dependencies
 install: pip install -r requirements.txt --use-mirrors
 # command to run tests
-script: nosetests src/breadability/tests
+script: python setup.py install && nosetests src/breadability/tests
