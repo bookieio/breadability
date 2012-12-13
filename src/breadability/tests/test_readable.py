@@ -1,7 +1,11 @@
 from lxml.etree import tounicode
 from lxml.html import document_fromstring
 from lxml.html import fragment_fromstring
-from unittest import TestCase
+try:
+    # Python < 2.7
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 
 from breadability.readable import Article
 from breadability.readable import get_class_weight
@@ -14,7 +18,7 @@ from breadability.tests import load_snippet
 from breadability.tests import load_article
 
 
-class TestReadableDocument(TestCase):
+class TestReadableDocument(unittest.TestCase):
     """Verify we can process html into a document to work off of."""
 
     def test_load_doc(self):
@@ -70,7 +74,7 @@ class TestReadableDocument(TestCase):
         self.assertEqual(doc._readable.get('class'), 'parsing-error')
 
 
-class TestCleaning(TestCase):
+class TestCleaning(unittest.TestCase):
     """Test out our cleaning processing we do."""
 
     def test_unlikely_hits(self):
@@ -141,7 +145,7 @@ class TestCleaning(TestCase):
             self.assertTrue(is_bad_link(link))
 
 
-class TestCandidateNodes(TestCase):
+class TestCandidateNodes(unittest.TestCase):
     """Candidate nodes are scoring containers we use."""
 
     def test_candidate_scores(self):
@@ -173,7 +177,7 @@ class TestCandidateNodes(TestCase):
         self.assertTrue(hasattr(doc, 'candidates'))
 
 
-class TestClassWeights(TestCase):
+class TestClassWeights(unittest.TestCase):
     """Certain ids and classes get us bonus points."""
 
     def test_positive_class(self):
@@ -197,7 +201,7 @@ class TestClassWeights(TestCase):
         self.assertEqual(get_class_weight(node), -25)
 
 
-class TestScoringNodes(TestCase):
+class TestScoringNodes(unittest.TestCase):
     """We take out list of potential nodes and score them up."""
 
     def test_we_get_candidates(self):
@@ -249,7 +253,7 @@ class TestScoringNodes(TestCase):
         self.assertEqual(pscore_400, pscore_50 + 3)
 
 
-class TestLinkDensityScoring(TestCase):
+class TestLinkDensityScoring(unittest.TestCase):
     """Link density will adjust out candidate scoresself."""
 
     def test_link_density(self):
@@ -263,7 +267,7 @@ class TestLinkDensityScoring(TestCase):
                 self.assertTrue(density >= 0.0 and density <= 1.0)
 
 
-class TestSiblings(TestCase):
+class TestSiblings(unittest.TestCase):
     """Siblings will be included if their content is related."""
 
     def test_bad_siblings_not_counted(self):

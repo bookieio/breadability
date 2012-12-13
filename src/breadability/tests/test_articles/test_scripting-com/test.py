@@ -1,13 +1,18 @@
 import os
 from operator import attrgetter
-from unittest import TestCase
+try:
+    # Python < 2.7
+    import unittest2 as unittest
+except ImportError:
+    import unittest
+
 
 from breadability.readable import Article
 from breadability.readable import check_siblings
 from breadability.readable import prep_article
 
 
-class TestArticle(TestCase):
+class TestArticle(unittest.TestCase):
     """Test the scoring and parsing of the Article"""
 
     def setUp(self):

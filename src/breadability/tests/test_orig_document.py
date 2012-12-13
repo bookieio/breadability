@@ -1,11 +1,16 @@
 from collections import defaultdict
-from unittest import TestCase
+
+try:
+    # Python < 2.7
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 
 from breadability.document import OriginalDocument
 from breadability.tests import load_snippet
 
 
-class TestOriginalDocument(TestCase):
+class TestOriginalDocument(unittest.TestCase):
 
     """Verify we can process html into a document to work off of."""
 

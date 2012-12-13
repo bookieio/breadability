@@ -25,6 +25,7 @@ tests_require = [
 if sys.version_info < (2, 7):
     # Require argparse since it's not in the stdlib yet.
     install_requires.append('argparse')
+    install_requires.append('unittest2')
 
 setup(
     name='breadability',

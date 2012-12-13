@@ -13,12 +13,16 @@ TESTPATH = path.join(
 
 TESTTPL = """
 import os
-from unittest import TestCase
+try:
+    # Python < 2.7
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 
 from breadability.readable import Article
 
 
-class TestArticle(TestCase):
+class TestArticle(unittest.TestCase):
     \"\"\"Test the scoring and parsing of the Article\"\"\"
 
     def setUp(self):

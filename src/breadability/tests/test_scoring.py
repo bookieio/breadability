@@ -2,7 +2,11 @@ import re
 from lxml.html import document_fromstring
 from lxml.html import fragment_fromstring
 from operator import attrgetter
-from unittest import TestCase
+try:
+    # Python < 2.7
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 
 from breadability.readable import Article
 from breadability.scoring import check_node_attr
@@ -14,7 +18,7 @@ from breadability.readable import is_unlikely_node
 from breadability.tests import load_snippet
 
 
-class TestCheckNodeAttr(TestCase):
+class TestCheckNodeAttr(unittest.TestCase):
     """Verify a node has a class/id in the given set.
 
     The idea is that we have sets of known good/bad ids and classes and need
@@ -52,7 +56,7 @@ class TestCheckNodeAttr(TestCase):
         self.assertFalse(check_node_attr(test_node, 'id', test_re))
 
 
-class TestLinkDensity(TestCase):
+class TestLinkDensity(unittest.TestCase):
     """Verify we calc our link density correctly."""
 
     def test_empty_node(self):
@@ -73,7 +77,7 @@ class TestLinkDensity(TestCase):
                 places=3)
 
 
-class TestClassWeight(TestCase):
+class TestClassWeight(unittest.TestCase):
     """Verify we score nodes correctly based on their class/id attributes."""
 
     def test_no_matches_zero(self):
@@ -125,7 +129,7 @@ class TestClassWeight(TestCase):
         self.assertEqual(get_class_weight(node), 25)
 
 
-class TestUnlikelyNode(TestCase):
+class TestUnlikelyNode(unittest.TestCase):
     """is_unlikely_node should help verify our node is good/bad."""
 
     def test_body_is_always_likely(self):
@@ -161,7 +165,7 @@ class TestUnlikelyNode(TestCase):
         self.assertFalse(is_unlikely_node(node))
 
 
-class TestScoredNode(TestCase):
+class TestScoredNode(unittest.TestCase):
     """ScoredNodes constructed have initial content_scores, etc."""
 
     def test_hash_id(self):
@@ -209,7 +213,7 @@ class TestScoredNode(TestCase):
         self.assertEqual(snode.content_score, -3)
 
 
-class TestScoreCandidates(TestCase):
+class TestScoreCandidates(unittest.TestCase):
     """The grand daddy of tests to make sure our scoring works
 
     Now scoring details will change over time, so the most important thing is

@@ -1,10 +1,14 @@
 import os
-from unittest import TestCase
+try:
+    # Python < 2.7
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 
 from breadability.readable import Article
 
 
-class TestAntipopeBlog(TestCase):
+class TestAntipopeBlog(unittest.TestCase):
     """Test the scoring and parsing of the Blog Post"""
 
     def setUp(self):
