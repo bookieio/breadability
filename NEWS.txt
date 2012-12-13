@@ -6,6 +6,15 @@
 News
 ====
 
+0.1.11
+-------
+
+* Release date: Dec 12th 2012*
+
+* Add argparse to the install requires for python < 2.7
+
+
+
 0.1.10
 -------
 

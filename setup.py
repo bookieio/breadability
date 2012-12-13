@@ -1,12 +1,12 @@
 from setuptools import setup, find_packages
+import sys
 import os
 
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.rst')).read()
 NEWS = open(os.path.join(here, 'NEWS.txt')).read()
 
-
-version = '0.1.10'
+version = '0.1.11'
 install_requires = [
     # List your project dependencies here.
     # For more details, see:
@@ -22,12 +22,18 @@ tests_require = [
 ]
 
 
-setup(name='breadability',
+if sys.version_info < (2, 7):
+    # Require argparse since it's not in the stdlib yet.
+    install_requires.append('unittest2')
+
+setup(
+    name='breadability',
     version=version,
     description="Redone port of Readability API in Python",
     long_description=README + '\n\n' + NEWS,
     classifiers=[
-      # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+        # Get strings from
+        # http://pypi.python.org/pypi?%3Aaction=list_classifiers
     ],
     keywords='readable parsing html content bookie',
     author='Rick Harding',
@@ -44,9 +50,9 @@ setup(name='breadability',
         'test': tests_require
     },
     entry_points={
-        'console_scripts':
-            ['breadability=breadability:client.main',
-             'breadability_newtest=breadability:newtest.main',
-            ]
+        'console_scripts': [
+            'breadability=breadability:client.main',
+            'breadability_newtest=breadability:newtest.main',
+        ]
     }
 )
