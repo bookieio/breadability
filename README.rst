@@ -1,5 +1,5 @@
 breadability - another readability Python port
-===============================================
+==============================================
 .. image:: https://api.travis-ci.org/miso-belica/breadability.png?branch=master
    :target: https://travis-ci.org/miso-belica/breadability
 
@@ -20,55 +20,58 @@ This is a pretty straight port of the JS here:
 
 
 Installation
--------------
+------------
 This does depend on lxml so you'll need some C headers in order to install
 things from pip so that it can compile.
 
-::
+.. code-block:: bash
 
-    sudo apt-get install libxml2-dev libxslt-dev
-    pip install breadability
+    $ [sudo] apt-get install libxml2-dev libxslt-dev
+    $ [sudo] pip install git+git://github.com/miso-belica/breadability.git
 
 Tests
-------
-::
+-----
+.. code-block:: bash
 
-    nosetests --with-coverage --cover-package=breadability --cover-erase tests
-    nosetests-3.3 --with-coverage --cover-package=breadability --cover-erase tests
+    $ nosetests --with-coverage --cover-package=breadability --cover-erase tests
+    $ nosetests-3.3 --with-coverage --cover-package=breadability --cover-erase tests
 
 
 Usage
-------
-
-cmd line
-~~~~~~~~~
+-----
+Command line
+~~~~~~~~~~~~
 
 ::
 
     $ breadability http://wiki.python.org/moin/BeginnersGuide
 
 Options
-``````````
+```````
 
-  - b will write out the parsed content to a temp file and open it in a
-    browser for viewing.
-  - d will write out debug scoring statements to help track why a node was
-    chosen as the document and why some nodes were removed from the final
-    product.
-  - f will override the default behaviour of getting an html fragment (<div>)
-    and give you back a full <html> document.
-  - v will output in verbose debug mode and help let you know why it parsed
-    how it did.
+- b will write out the parsed content to a temp file and open it in a
+  browser for viewing.
+- d will write out debug scoring statements to help track why a node was
+  chosen as the document and why some nodes were removed from the final
+  product.
+- f will override the default behaviour of getting an html fragment (<div>)
+  and give you back a full <html> document.
+- v will output in verbose debug mode and help let you know why it parsed
+  how it did.
 
 
-Using from Python
-~~~~~~~~~~~~~~~~~~
+Python API
+~~~~~~~~~~
+.. code-block:: python
 
-::
+    from __future__ import print_function
 
     from breadability.readable import Article
-    doc = Article(html_text, url=url_came_from)
-    print doc.readable
+
+
+    if __name__ == "__main__":
+        document = Article(html_as_text, url=source_url)
+        print(document.readable)
 
 
 Work to be done
@@ -86,33 +89,26 @@ Fortunately, I need this library for my tools:
 so I really need this to be an active and improving project.
 
 
-Off the top of my heads todo list:
+Off the top of my heads TODO list:
 
-  - Support metadata from parsed article [url, confidence scores, all
-    candidates we thought about?]
-  - More tests, more thorough tests
-  - More sample articles we need to test against in the test_articles
-  - Tests that run through and check for regressions of the test_articles
-  - Tidy'ing the HTML that comes out, might help with regression tests ^^
-  - Multiple page articles
-  - Performance tuning, we do a lot of looping and re-drop some nodes that
-    should be skipped. We should have a set of regression tests for this so
-    that if we implement a change that blows up performance we know it right
-    away.
-  - More docs for things, but sphinx docs and in code comments to help
-    understand wtf we're doing and why. That's the biggest hurdle to some of
-    this stuff.
-
-Helping out
-------------
-If you want to help, shoot me a pull request, an issue report with broken
-urls, etc.
-
-You can ping me on irc, I'm always in the `#bookie` channel in freenode.
+- Support metadata from parsed article [url, confidence scores, all
+  candidates we thought about?]
+- More tests, more thorough tests
+- More sample articles we need to test against in the test_articles
+- Tests that run through and check for regressions of the test_articles
+- Tidy'ing the HTML that comes out, might help with regression tests ^^
+- Multiple page articles
+- Performance tuning, we do a lot of looping and re-drop some nodes that
+  should be skipped. We should have a set of regression tests for this so
+  that if we implement a change that blows up performance we know it right
+  away.
+- More docs for things, but sphinx docs and in code comments to help
+  understand wtf we're doing and why. That's the biggest hurdle to some of
+  this stuff.
 
 
 Inspiration
-~~~~~~~~~~~~
+~~~~~~~~~~~
 
 - `python-readability`_
 - `decruft`_
