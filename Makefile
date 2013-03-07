@@ -2,7 +2,6 @@
 WD := $(shell pwd)
 PY := bin/python
 PIP := bin/pip
-PEP8 := bin/pep8
 NOSE := bin/nosetests
 
 # ###########
@@ -10,10 +9,10 @@ NOSE := bin/nosetests
 # ###########
 .PHONY: test
 test: venv develop $(NOSE)
-	$(NOSE) --with-id -s src/breadability/tests
+	$(NOSE) --with-id -s tests
 
 $(NOSE):
-	$(PIP) install nose pep8 pylint coverage
+	$(PIP) install nose coverage
 
 # #######
 # INSTALL
@@ -58,4 +57,4 @@ upload:
 
 .PHONY: version_update
 version_update:
-	$(EDITOR) setup.py src/breadability/__init__.py NEWS.txt
+	$(EDITOR) setup.py __init__.py CHANGELOG.rst
