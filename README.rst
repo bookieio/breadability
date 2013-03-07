@@ -1,6 +1,6 @@
 breadability - another readability Python port
 ===============================================
-.. image:: https://api.travis-ci.org/miso-belica/breadability.png?branch=py3k
+.. image:: https://api.travis-ci.org/miso-belica/breadability.png?branch=master
    :target: https://travis-ci.org/miso-belica/breadability
 
 I've tried to work with the various forks of some ancient codebase that ported
