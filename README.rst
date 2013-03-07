@@ -1,5 +1,8 @@
 breadability - another readability Python port
 ===============================================
+.. image:: https://api.travis-ci.org/miso-belica/breadability.png?branch=py3k
+   :target: https://travis-ci.org/miso-belica/breadability
+
 I've tried to work with the various forks of some ancient codebase that ported
 `readability`_ to Python. The lack of tests, unused regex's, and commented out
 sections of code in other Python ports just drove me nuts.
@@ -101,12 +104,6 @@ urls, etc.
 You can ping me on irc, I'm always in the `#bookie` channel in freenode.
 
 
-Important Links
-----------------
-
-- `Builds`_ are done on `TravisCI`_
-
-
 Inspiration
 ~~~~~~~~~~~~
 
@@ -117,7 +114,6 @@ Inspiration
 
 
 .. _readability: http://code.google.com/p/arc90labs-readability/
-.. _Builds: http://travis-ci.org/#!/miso-belica/breadability
 .. _TravisCI: http://travis-ci.org/
 .. _decruft: https://github.com/dcramer/decruft
 .. _python-readability: https://github.com/buriy/python-readability
