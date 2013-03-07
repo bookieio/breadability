@@ -117,7 +117,7 @@ Inspiration
 
 
 .. _readability: http://code.google.com/p/arc90labs-readability/
-.. _Builds: http://travis-ci.org/#!/mitechie/breadability
+.. _Builds: http://travis-ci.org/#!/miso-belica/breadability
 .. _TravisCI: http://travis-ci.org/
 .. _decruft: https://github.com/dcramer/decruft
 .. _python-readability: https://github.com/buriy/python-readability
