@@ -7,7 +7,7 @@ except ImportError:
     import unittest
 
 from breadability.document import OriginalDocument
-from breadability.tests import load_snippet
+from utils import load_snippet
 
 
 class TestOriginalDocument(unittest.TestCase):

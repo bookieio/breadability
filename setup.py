@@ -41,12 +41,12 @@ setup(
     author_email='rharding@mitechie.com',
     url='http://docs.bmark.us',
     license='BSD',
-    packages=find_packages('src'),
-    package_dir={'': 'src'},
+    packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
     install_requires=install_requires,
     tests_require=tests_require,
+    test_suite='tests',
     extras_require={
         'test': tests_require
     },

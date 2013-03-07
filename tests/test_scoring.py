@@ -1,4 +1,5 @@
 import re
+
 from lxml.html import document_fromstring
 from lxml.html import fragment_fromstring
 from operator import attrgetter
@@ -15,7 +16,7 @@ from breadability.scoring import ScoredNode
 from breadability.scoring import score_candidates
 from breadability.readable import get_link_density
 from breadability.readable import is_unlikely_node
-from breadability.tests import load_snippet
+from utils import load_snippet
 
 
 class TestCheckNodeAttr(unittest.TestCase):
