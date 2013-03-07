@@ -7,6 +7,7 @@ try:
 except ImportError:
     import unittest
 
+from breadability._py3k import to_unicode
 from breadability.readable import Article
 from breadability.readable import get_class_weight
 from breadability.readable import get_link_density
@@ -119,7 +120,7 @@ class TestCleaning(unittest.TestCase):
         self.assertEqual(
             tounicode(
                 transform_misused_divs_into_paragraphs(test_doc)),
-            u"<html><body><p>simple</p></body></html>"
+            to_unicode("<html><body><p>simple</p></body></html>")
         )
 
         test_html2 = ('<html><body><div>simple<a href="">link</a>'
@@ -128,7 +129,7 @@ class TestCleaning(unittest.TestCase):
         self.assertEqual(
             tounicode(
                 transform_misused_divs_into_paragraphs(test_doc2)),
-                u'<html><body><p>simple<a href="">link</a></p></body></html>'
+                to_unicode('<html><body><p>simple<a href="">link</a></p></body></html>')
         )
 
     def test_bad_links(self):

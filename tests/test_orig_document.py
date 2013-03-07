@@ -18,7 +18,7 @@ class TestOriginalDocument(unittest.TestCase):
     def test_readin_min_document(self):
         """Verify we can read in a min html document"""
         doc = OriginalDocument(load_snippet('document_min.html'))
-        self.assertTrue(to_unicode(doc).startswith(u'<html>'))
+        self.assertTrue(to_unicode(doc).startswith(to_unicode('<html>')))
         self.assertEqual(doc.title, 'Min Document Title')
 
     def test_readin_with_base_url(self):
@@ -26,7 +26,7 @@ class TestOriginalDocument(unittest.TestCase):
         doc = OriginalDocument(
             load_snippet('document_absolute_url.html'),
             url="http://blog.mitechie.com/test.html")
-        self.assertTrue(to_unicode(doc).startswith(u'<html>'))
+        self.assertTrue(to_unicode(doc).startswith(to_unicode('<html>')))
 
         # find the links on the page and make sure each one starts with out
         # base url we told it to use.

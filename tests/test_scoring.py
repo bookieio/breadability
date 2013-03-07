@@ -9,6 +9,7 @@ try:
 except ImportError:
     import unittest
 
+from breadability._py3k import to_unicode
 from breadability.readable import Article
 from breadability.scoring import check_node_attr
 from breadability.scoring import get_class_weight
@@ -62,7 +63,7 @@ class TestLinkDensity(unittest.TestCase):
 
     def test_empty_node(self):
         """An empty node doesn't have much of a link density"""
-        empty_div = u"<div></div>"
+        empty_div = to_unicode("<div></div>")
         doc = Article(empty_div)
         assert 0 == get_link_density(doc._readable), "Link density is nadda"
 
@@ -83,7 +84,7 @@ class TestClassWeight(unittest.TestCase):
 
     def test_no_matches_zero(self):
         """If you don't have the attribute then you get a weight of 0"""
-        empty_div = u"<div></div>"
+        empty_div = to_unicode("<div></div>")
         node = fragment_fromstring(empty_div)
 
         self.assertEqual(get_class_weight(node), 0)

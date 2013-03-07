@@ -8,9 +8,11 @@ Helpers:
 import logging
 import sys
 import time
+
 from collections import namedtuple
 from hashlib import md5
 from lxml.etree import tounicode
+from breadability._py3k import to_unicode
 
 
 # For pretty log messages, if available
@@ -125,10 +127,10 @@ class LogHelper(object):
                 LOG.error("Cannot hash the current node." + str(exc))
             hash_id = hashed.hexdigest()[0:8]
             # if hash_id in ['9c880b27', '8393b7d7', '69bfebdd']:
-            print(u"{0} :: {1}\n{2}".format(
+            print(to_unicode("{0} :: {1}\n{2}").format(
                 hash_id,
                 description,
-                content.replace(u"\n", u"")[0:202],
+                content.replace(to_unicode("\n"), to_unicode(""))[0:202],
             ))
 
 
