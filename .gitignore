@@ -1,5 +1,6 @@
 *.pyc
 *.prof
+.coverage
 
 .installed.cfg
 bin
