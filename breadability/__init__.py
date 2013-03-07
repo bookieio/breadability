@@ -1,3 +1,3 @@
-VERSION = '0.1.11'
-import client
-from scripts import newtest
+from ._version import VERSION
+from .scripts import newtest
+from . import client

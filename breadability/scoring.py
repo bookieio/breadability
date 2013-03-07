@@ -1,10 +1,15 @@
+# -*- coding: utf8 -*-
+
 """Handle dealing with scoring nodes and content for our parsing."""
+
+from __future__ import absolute_import
+
 import re
+
 from hashlib import md5
 from lxml.etree import tounicode
-
-from breadability.logconfig import LNODE
-from breadability.logconfig import LOG
+from .logconfig import LNODE
+from .logconfig import LOG
 
 # A series of sets of attributes we check to help in determining if a node is
 # a potential candidate or not.
@@ -38,7 +43,7 @@ def generate_hash_id(node):
     hashed = md5()
     try:
         hashed.update(content.encode('utf-8', "replace"))
-    except Exception, e:
+    except Exception as e:
         LOG.error("BOOM! " + str(e))
 
     return hashed.hexdigest()[0:8]
@@ -153,7 +158,7 @@ def score_candidates(nodes):
 
             # For every 100 characters in this paragraph, add another point.
             # Up to 3 points.
-            length_points = len(innertext) / 100
+            length_points = len(innertext) // 100
 
             if length_points > 3:
                 content_score += 3

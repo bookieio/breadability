@@ -1,3 +1,7 @@
+# -*- coding: utf8 -*-
+
+from __future__ import absolute_import
+
 import re
 from lxml.etree import tounicode
 from lxml.etree import tostring
@@ -7,14 +11,14 @@ from lxml.html import fromstring
 from operator import attrgetter
 from pprint import PrettyPrinter
 
-from breadability.document import OriginalDocument
-from breadability.logconfig import LOG
-from breadability.logconfig import LNODE
-from breadability.scoring import score_candidates
-from breadability.scoring import get_link_density
-from breadability.scoring import get_class_weight
-from breadability.scoring import is_unlikely_node
-from breadability.utils import cached_property
+from .document import OriginalDocument
+from .logconfig import LOG
+from .logconfig import LNODE
+from .scoring import score_candidates
+from .scoring import get_link_density
+from .scoring import get_class_weight
+from .scoring import is_unlikely_node
+from .utils import cached_property
 
 
 html_cleaner = Cleaner(scripts=True, javascript=True, comments=True,

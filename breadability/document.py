@@ -1,4 +1,8 @@
+# -*- coding: utf8 -*-
+
 """Generate a clean nice starting html document to process for an article."""
+
+from __future__ import absolute_import
 
 import chardet
 import re
@@ -8,8 +12,9 @@ from lxml.etree import XMLSyntaxError
 from lxml.html import document_fromstring
 from lxml.html import HTMLParser
 
-from breadability.logconfig import LOG
-from breadability.utils import cached_property
+from ._py3k import unicode, to_string
+from .logconfig import LOG
+from .utils import cached_property
 
 
 utf8_parser = HTMLParser(encoding='utf-8')
@@ -60,7 +65,7 @@ def build_doc(page):
             page_unicode.encode('utf-8', 'replace'),
             parser=utf8_parser)
         return doc
-    except XMLSyntaxError, exc:
+    except XMLSyntaxError as exc:
         LOG.error('Failed to parse: ' + str(exc))
         raise ValueError('Failed to parse document contents.')
 
@@ -75,7 +80,7 @@ class OriginalDocument(object):
 
     def __str__(self):
         """Render out our document as a string"""
-        return tostring(self.html)
+        return to_string(tostring(self.html))
 
     def __unicode__(self):
         """Render out our document as a string"""

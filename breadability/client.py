@@ -1,3 +1,7 @@
+# -*- coding: utf8 -*-
+
+from __future__ import absolute_import
+
 import argparse
 import codecs
 import locale
@@ -7,11 +11,11 @@ import webbrowser
 
 from tempfile import mkstemp
 
-from breadability import VERSION
-from breadability.logconfig import LOG
-from breadability.logconfig import LNODE
-from breadability.logconfig import set_logging_level
-from breadability.readable import Article
+from ._version import VERSION
+from .logconfig import LOG
+from .logconfig import LNODE
+from .logconfig import set_logging_level
+from .readable import Article
 
 
 LOGLEVEL = 'WARNING'

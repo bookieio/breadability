@@ -6,6 +6,7 @@ try:
 except ImportError:
     import unittest
 
+from breadability._py3k import to_unicode
 from breadability.document import OriginalDocument
 from utils import load_snippet
 
@@ -17,7 +18,7 @@ class TestOriginalDocument(unittest.TestCase):
     def test_readin_min_document(self):
         """Verify we can read in a min html document"""
         doc = OriginalDocument(load_snippet('document_min.html'))
-        self.assertTrue(str(doc).startswith(u'<html>'))
+        self.assertTrue(to_unicode(doc).startswith(u'<html>'))
         self.assertEqual(doc.title, 'Min Document Title')
 
     def test_readin_with_base_url(self):
@@ -25,7 +26,7 @@ class TestOriginalDocument(unittest.TestCase):
         doc = OriginalDocument(
             load_snippet('document_absolute_url.html'),
             url="http://blog.mitechie.com/test.html")
-        self.assertTrue(str(doc).startswith(u'<html>'))
+        self.assertTrue(to_unicode(doc).startswith(u'<html>'))
 
         # find the links on the page and make sure each one starts with out
         # base url we told it to use.
