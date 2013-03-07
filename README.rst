@@ -29,6 +29,13 @@ things from pip so that it can compile.
     sudo apt-get install libxml2-dev libxslt-dev
     pip install breadability
 
+Tests
+------
+::
+
+    nosetests --with-coverage --cover-package=breadability --cover-erase tests
+    nosetests-3.3 --with-coverage --cover-package=breadability --cover-erase tests
+
 
 Usage
 ------
