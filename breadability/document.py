@@ -4,15 +4,16 @@
 
 from __future__ import absolute_import
 
-import chardet
 import re
+import charade
+
 from lxml.etree import tostring
 from lxml.etree import tounicode
 from lxml.etree import XMLSyntaxError
 from lxml.html import document_fromstring
 from lxml.html import HTMLParser
 
-from ._py3k import unicode, to_string
+from ._py3k import unicode, to_string, to_bytes
 from .logconfig import LOG
 from .utils import cached_property
 
@@ -21,7 +22,7 @@ utf8_parser = HTMLParser(encoding='utf-8')
 
 
 def get_encoding(page):
-    text = re.sub('</?[^>]*>\s*', ' ', page)
+    text = re.sub(to_bytes('</?[^>]*>\s*'), to_bytes(' '), page)
     enc = 'utf-8'
     if not text.strip() or len(text) < 10:
         return enc  # can't guess
@@ -33,7 +34,7 @@ def get_encoding(page):
             return enc
     except UnicodeDecodeError:
         pass
-    res = chardet.detect(text)
+    res = charade.detect(text)
     enc = res['encoding']
     # print '->', enc, "%.2f" % res['confidence']
     if enc == 'MacCyrillic':

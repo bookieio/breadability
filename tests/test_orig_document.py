@@ -1,4 +1,4 @@
-from collections import defaultdict
+# -*- coding: utf8 -*-
 
 try:
     # Python < 2.7
@@ -6,13 +6,13 @@ try:
 except ImportError:
     import unittest
 
+from collections import defaultdict
 from breadability._py3k import to_unicode
-from breadability.document import OriginalDocument
+from breadability.document import OriginalDocument, get_encoding
 from utils import load_snippet
 
 
 class TestOriginalDocument(unittest.TestCase):
-
     """Verify we can process html into a document to work off of."""
 
     def test_readin_min_document(self):
@@ -48,3 +48,7 @@ class TestOriginalDocument(unittest.TestCase):
         """We convert all <br/> tags to <p> tags"""
         doc = OriginalDocument(load_snippet('document_min.html'))
         self.assertIsNone(doc.html.find('.//br'))
+
+    def test_encoding(self):
+        text = to_unicode("ľščťžýáíéäúňôůě").encode("iso-8859-2")
+        encoding = get_encoding(text)

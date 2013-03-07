@@ -1,6 +1,4 @@
-chardet
+charade
 lxml
 coverage
 nose
-pep8
-pylint
