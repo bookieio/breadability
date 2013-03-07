@@ -2,7 +2,8 @@
 
 Changelog for breadability
 ==========================
-
+- Added support for Python >= 3.2.
+- Py3k compatible package 'charade' is used instead of 'chardet'.
 
 0.1.11 (Dec 12th 2012)
 -----------------------
