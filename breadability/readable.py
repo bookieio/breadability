@@ -3,6 +3,8 @@
 from __future__ import absolute_import
 
 import re
+import logging
+
 from lxml.etree import tounicode
 from lxml.etree import tostring
 from lxml.html.clean import Cleaner
@@ -12,8 +14,6 @@ from operator import attrgetter
 from pprint import PrettyPrinter
 
 from .document import OriginalDocument
-from .logconfig import LOG
-from .logconfig import LNODE
 from .scoring import score_candidates
 from .scoring import get_link_density
 from .scoring import get_class_weight
@@ -40,6 +40,8 @@ BASE_DOC = """
 """
 SCORABLE_TAGS = ['div', 'p', 'td', 'pre', 'article']
 
+logger = logging.getLogger("breadability")
+
 
 def drop_tag(doc, *tags):
     """Helper to just remove any nodes that match this html tag passed in
@@ -50,7 +52,7 @@ def drop_tag(doc, *tags):
     for tag in tags:
         found = doc.iterfind(".//" + tag)
         for n in found:
-            LNODE.log(n, 1, "Dropping tag")
+            logger.debug("Dropping tag %s", tag)
             n.drop_tree()
     return doc
 
@@ -168,7 +170,7 @@ def transform_misused_divs_into_paragraphs(doc):
             # We need to create a <p> and put all it's contents in there
             # We'll just stringify it, then regex replace the first/last
             # div bits to turn them into <p> vs <div>.
-            LNODE.log(elem, 1, 'Turning leaf <div> into <p>')
+            logger.debug('Turning leaf <div> into <p>')
             orig = tounicode(elem).strip()
             started = re.sub(r'^<\s*div', '<p', orig)
             ended = re.sub(r'div>$', 'p>', started)
@@ -193,7 +195,7 @@ def check_siblings(candidate_node, candidate_list):
         content_bonus = 0
 
         if sibling is candidate_node.node:
-            LNODE.log(sibling, 1, 'Sibling is the node so append')
+            logger.debug('Sibling is the node so append')
             append = True
 
         # Give a bonus if sibling nodes and top candidates have the example
@@ -220,7 +222,7 @@ def check_siblings(candidate_node, candidate_list):
                     append = True
 
         if append:
-            LNODE.log(sibling, 1, 'Sibling being appended')
+            logger.debug('Sibling being appended')
             if sibling.tag not in ['div', 'p']:
                 # We have a node that isn't a common block level element, like
                 # a form or td tag. Turn it into a div so it doesn't get
@@ -237,18 +239,18 @@ def clean_document(node):
     if node is None or len(node) == 0:
         return
 
-    LNODE.log(node, 2, "Processing doc")
+    logger.debug("Processing doc")
     clean_list = ['object', 'h1']
     to_drop = []
 
     # If there is only one h2, they are probably using it as a header and
     # not a subheader, so remove it since we already have a header.
     if len(node.findall('.//h2')) == 1:
-        LOG.debug('Adding H2 to list of nodes to clean.')
+        logger.debug('Adding H2 to list of nodes to clean.')
         clean_list.append('h2')
 
     for n in node.iter():
-        LNODE.log(n, 2, "Cleaning iter node")
+        logger.debug("Cleaning iter node")
         # clean out any in-line style properties
         if 'style' in n.attrib:
             n.set('style', '')
@@ -267,7 +269,7 @@ def clean_document(node):
                     allow = True
 
             if not allow:
-                LNODE.log(n, 2, "Dropping Node")
+                logger.debug("Dropping Node")
                 to_drop.append(n)
 
         if n.tag in ['h1', 'h2', 'h3', 'h4']:
@@ -275,7 +277,7 @@ def clean_document(node):
             # if the heading has no css weight or a high link density,
             # remove it
             if get_class_weight(n) < 0 or get_link_density(n) > .33:
-                LNODE.log(n, 2, "Dropping <hX>, it's insignificant")
+                logger.debug("Dropping <hX>, it's insignificant")
                 to_drop.append(n)
 
         # clean out extra <p>
@@ -283,7 +285,7 @@ def clean_document(node):
             # if the p has no children and has no content...well then down
             # with it.
             if not n.getchildren() and len(n.text_content()) < 5:
-                LNODE.log(n, 2, 'Dropping extra <p>')
+                logger.debug('Dropping extra <p>')
                 to_drop.append(n)
 
         # finally try out the conditional cleaning of the target node
@@ -298,11 +300,11 @@ def clean_conditionally(node):
     """Remove the clean_el if it looks like bad content based on rules."""
     target_tags = ['form', 'table', 'ul', 'div', 'p']
 
-    LNODE.log(node, 2, 'Cleaning conditionally node.')
+    logger.debug('Cleaning conditionally node.')
 
     if node.tag not in target_tags:
         # this is not the tag you're looking for
-        LNODE.log(node, 2, 'Node cleared.')
+        logger.debug('Node cleared.')
         return
 
     weight = get_class_weight(node)
@@ -311,12 +313,12 @@ def clean_conditionally(node):
     content_score = 0
 
     if (weight + content_score < 0):
-        LNODE.log(node, 2, 'Dropping conditional node')
-        LNODE.log(node, 2, 'Weight + score < 0')
+        logger.debug('Dropping conditional node')
+        logger.debug('Weight + score < 0')
         return True
 
     if node.text_content().count(',') < 10:
-        LOG.debug("There aren't 10 ,s so we're processing more")
+        logger.debug("There aren't 10 ,s so we're processing more")
 
         # If there are not very many commas, and the number of
         # non-paragraph elements is more than paragraphs or other ominous
@@ -337,36 +339,32 @@ def clean_conditionally(node):
         remove_node = False
 
         if li > p and node.tag != 'ul' and node.tag != 'ol':
-            LNODE.log(node, 2, 'Conditional drop: li > p and not ul/ol')
+            logger.debug('Conditional drop: li > p and not ul/ol')
             remove_node = True
         elif inputs > p / 3.0:
-            LNODE.log(node, 2, 'Conditional drop: inputs > p/3.0')
+            logger.debug('Conditional drop: inputs > p/3.0')
             remove_node = True
         elif content_length < 25 and (img == 0 or img > 2):
-            LNODE.log(node, 2,
-                'Conditional drop: len < 25 and 0/>2 images')
+            logger.debug('Conditional drop: len < 25 and 0/>2 images')
             remove_node = True
         elif weight < 25 and link_density > 0.2:
-            LNODE.log(node, 2,
-                'Conditional drop: weight small and link is dense')
+            logger.debug('Conditional drop: weight small and link is dense')
             remove_node = True
         elif weight >= 25 and link_density > 0.5:
-            LNODE.log(node, 2,
-                'Conditional drop: weight big but link heavy')
+            logger.debug('Conditional drop: weight big but link heavy')
             remove_node = True
         elif (embed == 1 and content_length < 75) or embed > 1:
-            LNODE.log(node, 2,
-                'Conditional drop: embed w/o much content or many embed')
+            logger.debug('Conditional drop: embed w/o much content or many embed')
             remove_node = True
 
         if remove_node:
-            LNODE.log(node, 2, 'Node will be removed')
+            logger.debug('Node will be removed')
         else:
-            LNODE.log(node, 2, 'Node cleared')
+            logger.debug('Node cleared')
         return remove_node
 
     # nope, don't remove anything
-    LNODE.log(node, 2, 'Node Cleared final.')
+    logger.debug('Node Cleared final.')
     return False
 
 
@@ -397,11 +395,11 @@ def find_candidates(doc):
 
     for node in doc.iter():
         if is_unlikely_node(node):
-            LOG.debug('We should drop unlikely: ' + str(node))
+            logger.debug('We should drop unlikely: ' + str(node))
             should_remove.append(node)
             continue
         if node.tag == 'a' and is_bad_link(node):
-            LOG.debug('We should drop bad link: ' + str(node))
+            logger.debug('We should drop bad link: ' + str(node))
             should_remove.append(node)
             continue
         if node.tag in scorable_node_tags and node not in nodes_to_score:
@@ -422,7 +420,7 @@ class Article(object):
         doc.
 
         """
-        LOG.debug('Url: ' + str(url))
+        logger.debug('Url: ' + str(url))
         self.orig = OriginalDocument(html, url=url)
         self.fragment = fragment
 
@@ -464,7 +462,7 @@ class Article(object):
     def _readable(self):
         """The readable parsed article"""
         if self.candidates:
-            LOG.debug('Candidates found:')
+            logger.debug('Candidates found:')
             pp = PrettyPrinter(indent=2)
 
             # cleanup by removing the should_drop we spotted.
@@ -474,23 +472,23 @@ class Article(object):
             # right now we return the highest scoring candidate content
             by_score = sorted([c for c in self.candidates.values()],
                 key=attrgetter('content_score'), reverse=True)
-            LOG.debug(pp.pformat(by_score))
+            logger.debug(pp.pformat(by_score))
 
             # since we have several candidates, check the winner's siblings
             # for extra content
             winner = by_score[0]
-            LOG.debug('Selected winning node: ' + str(winner))
+            logger.debug('Selected winning node: ' + str(winner))
             updated_winner = check_siblings(winner, self.candidates)
-            LOG.debug('Begin final prep of article')
+            logger.debug('Begin final prep of article')
             updated_winner.node = prep_article(updated_winner.node)
             if updated_winner.node is not None:
                 doc = build_base_document(updated_winner.node, self.fragment)
             else:
-                LOG.warning('Had candidates but failed to find a cleaned winning doc.')
+                logger.warning('Had candidates but failed to find a cleaned winning doc.')
                 doc = self._handle_no_candidates()
         else:
-            LOG.warning('No candidates found: using document.')
-            LOG.debug('Begin final prep of article')
+            logger.warning('No candidates found: using document.')
+            logger.debug('Begin final prep of article')
             doc = self._handle_no_candidates()
 
         return doc
@@ -505,7 +503,7 @@ class Article(object):
             doc = prep_article(self.doc)
             doc = build_base_document(doc, self.fragment)
         else:
-            LOG.warning('No document to use.')
+            logger.warning('No document to use.')
             doc = build_error_document(self.fragment)
 
         return doc

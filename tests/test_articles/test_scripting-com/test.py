@@ -44,10 +44,7 @@ class TestArticle(unittest.TestCase):
         # from lxml.etree import tounicode
         found = False
         wanted_hash = '04e46055'
-        # from breadability.logconfig import LNODE
-        # from breadability.logconfig import set_logging_level
-        # set_logging_level('DEBUG')
-        # LNODE.activate()
+
         for node in doc.candidates.values():
             if node.hash_id == wanted_hash:
                 found = node
@@ -70,5 +67,3 @@ class TestArticle(unittest.TestCase):
         # This article hits up against the img > p conditional filtering
         # because of the many .gif images in the content. We've removed that
         # rule.
-        # set_logging_level('INFO')
-        # LNODE.deactivate()

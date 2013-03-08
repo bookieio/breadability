@@ -5,6 +5,7 @@
 from __future__ import absolute_import
 
 import re
+import logging
 import charade
 
 from lxml.etree import tostring
@@ -14,11 +15,11 @@ from lxml.html import document_fromstring
 from lxml.html import HTMLParser
 
 from ._py3k import unicode, to_string, to_bytes
-from .logconfig import LOG
 from .utils import cached_property
 
 
 utf8_parser = HTMLParser(encoding='utf-8')
+logger = logging.getLogger("breadability")
 
 
 def get_encoding(page):
@@ -46,7 +47,7 @@ def get_encoding(page):
 
 def replace_multi_br_to_paragraphs(html):
     """Convert multiple <br>s into paragraphs"""
-    LOG.debug('Replacing multiple <br/> to <p>')
+    logger.debug('Replacing multiple <br/> to <p>')
     rep = re.compile("(<br[^>]*>[ \n\r\t]*){2,}", re.I)
     return rep.sub('</p><p>', html)
 
@@ -54,7 +55,7 @@ def replace_multi_br_to_paragraphs(html):
 def build_doc(page):
     """Requires that the `page` not be None"""
     if page is None:
-        LOG.error("Page content is None, can't build_doc")
+        logger.error("Page content is None, can't build_doc")
         return ''
     if isinstance(page, unicode):
         page_unicode = page
@@ -67,7 +68,7 @@ def build_doc(page):
             parser=utf8_parser)
         return doc
     except XMLSyntaxError as exc:
-        LOG.error('Failed to parse: ' + str(exc))
+        logger.error('Failed to parse: ' + str(exc))
         raise ValueError('Failed to parse document contents.')
 
 
@@ -95,7 +96,7 @@ class OriginalDocument(object):
         # doc = html_cleaner.clean_html(doc)
         base_href = self.url
         if base_href:
-            LOG.debug('Making links absolute')
+            logger.debug('Making links absolute')
             doc.make_links_absolute(base_href, resolve_base_href=True)
         else:
             doc.resolve_base_href()

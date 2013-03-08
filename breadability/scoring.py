@@ -5,11 +5,10 @@
 from __future__ import absolute_import
 
 import re
+import logging
 
 from hashlib import md5
 from lxml.etree import tounicode
-from .logconfig import LNODE
-from .logconfig import LOG
 
 # A series of sets of attributes we check to help in determining if a node is
 # a potential candidate or not.
@@ -22,6 +21,8 @@ CLS_WEIGHT_POSITIVE = re.compile(('article|body|content|entry|hentry|main|'
 CLS_WEIGHT_NEGATIVE = re.compile(('combx|comment|com-|contact|foot|footer|'
     'footnote|head|masthead|media|meta|outbrain|promo|related|scroll|shoutbox|'
     'sidebar|sponsor|shopping|tags|tool|widget'), re.I)
+
+logger = logging.getLogger("breadability")
 
 
 def check_node_attr(node, attr, checkset):
@@ -44,7 +45,7 @@ def generate_hash_id(node):
     try:
         hashed.update(content.encode('utf-8', "replace"))
     except Exception as e:
-        LOG.error("BOOM! " + str(e))
+        logger.exception("BOOM! %r", e)
 
     return hashed.hexdigest()[0:8]
 
@@ -112,7 +113,7 @@ def score_candidates(nodes):
     candidates = {}
 
     for node in nodes:
-        LNODE.log(node, 1, "Scoring Node")
+        logger.debug("Scoring Node")
 
         content_score = 0
         # if the node has no parent it knows of, then it ends up creating a
@@ -122,16 +123,12 @@ def score_candidates(nodes):
         innertext = node.text_content()
 
         if parent is None or grand is None:
-            LNODE.log(
-                node, 1,
-                "Skipping candidate because parent/grand are none")
+            logger.debug("Skipping candidate because parent/grand are none")
             continue
 
         # If this paragraph is less than 25 characters, don't even count it.
         if innertext and len(innertext) < MIN_HIT_LENTH:
-            LNODE.log(
-                node, 1,
-                "Skipping candidate because not enough content.")
+            logger.debug("Skipping candidate because not enough content.")
             continue
 
         # Initialize readability data for the parent.
@@ -148,13 +145,11 @@ def score_candidates(nodes):
         if innertext:
             # Add 0.25 points for any commas within this paragraph
             content_score += innertext.count(',') * 0.25
-            LNODE.log(node, 1,
-                "Bonus points for ,: " + str(innertext.count(',')))
+            logger.debug("Bonus points for ,: " + str(innertext.count(',')))
 
             # Subtract 0.5 points for each double quote within this paragraph
             content_score += innertext.count('"') * (-0.5)
-            LNODE.log(node, 1,
-                'Penalty points for ": ' + str(innertext.count('"')))
+            logger.debug('Penalty points for ": ' + str(innertext.count('"')))
 
             # For every 100 characters in this paragraph, add another point.
             # Up to 3 points.
@@ -164,35 +159,22 @@ def score_candidates(nodes):
                 content_score += 3
             else:
                 content_score += length_points
-            LNODE.log(
-                node, 1,
-                "Length/content points: {0} : {1}".format(length_points,
-                                                          content_score))
+            logger.debug("Length/content points: %r : %r", length_points,
+                content_score)
 
         # Add the score to the parent.
-        LNODE.log(node, 1, "From this current node.")
+        logger.debug("From this current node.")
         candidates[parent].content_score += content_score
-        LNODE.log(
-            candidates[parent].node,
-            1,
-            "Giving parent bonus points: " + str(
-                candidates[parent].content_score))
+        logger.debug("Giving parent bonus points: %r", candidates[parent].content_score)
         # The grandparent gets half.
-        LNODE.log(candidates[grand].node, 1, "Giving grand bonus points")
+        logger.debug("Giving grand bonus points")
         candidates[grand].content_score += (content_score / 2.0)
-        LNODE.log(
-            candidates[parent].node,
-            1,
-            "Giving grand bonus points: " + str(
-                candidates[grand].content_score))
+        logger.debug("Giving grand bonus points: %r", candidates[grand].content_score)
 
     for candidate in candidates.values():
         adjustment = 1 - get_link_density(candidate.node)
-        LNODE.log(
-            candidate.node,
-            1,
-            "Getting link density adjustment: {0} * {1} ".format(
-                candidate.content_score, adjustment))
+        logger.debug("Getting link density adjustment: %r * %r",
+            candidate.content_score, adjustment)
         candidate.content_score = candidate.content_score * (adjustment)
 
     return candidates

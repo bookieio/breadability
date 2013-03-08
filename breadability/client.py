@@ -3,6 +3,7 @@
 from __future__ import absolute_import
 
 import argparse
+import logging
 import codecs
 import locale
 import sys
@@ -12,13 +13,7 @@ import webbrowser
 from tempfile import mkstemp
 
 from ._version import VERSION
-from .logconfig import LOG
-from .logconfig import LNODE
-from .logconfig import set_logging_level
 from .readable import Article
-
-
-LOGLEVEL = 'WARNING'
 
 
 def parse_args():
@@ -61,15 +56,14 @@ def parse_args():
 
 def main():
     args = parse_args()
+    logger = logging.getLogger("breadability")
 
     if args.verbose:
-        set_logging_level('DEBUG')
+        logger.seLevel(logging.DEBUG)
 
-    if args.debug:
-        LNODE.activate()
 
     target = args.path[0]
-    LOG.debug("Target: " + target)
+    logger.debug("Target: %r", target)
 
     if target.startswith('http') or target.startswith('www'):
         is_url = True
