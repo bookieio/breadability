@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 
 from __future__ import absolute_import
 
@@ -18,9 +19,37 @@ from breadability.scoring import check_node_attr
 from breadability.scoring import get_class_weight
 from breadability.scoring import ScoredNode
 from breadability.scoring import score_candidates
+from breadability.scoring import generate_hash_id
 from breadability.readable import get_link_density
 from breadability.readable import is_unlikely_node
 from .utils import load_snippet
+
+
+class TestHashId(unittest.TestCase):
+    def test_generate_hash(self):
+        dom = fragment_fromstring("<div>ľščťžýáí</div>")
+        generate_hash_id(dom)
+
+    def test_hash_from_id_on_exception(self):
+        generate_hash_id(None)
+
+    def test_different_hashes(self):
+        dom = fragment_fromstring("<div>ľščťžýáí</div>")
+        hash_dom = generate_hash_id(dom)
+        hash_none = generate_hash_id(None)
+
+        self.assertNotEqual(hash_dom, hash_none)
+
+    def test_equal_hashes(self):
+        dom1 = fragment_fromstring("<div>ľščťžýáí</div>")
+        dom2 = fragment_fromstring("<div>ľščťžýáí</div>")
+        hash_dom1 = generate_hash_id(dom1)
+        hash_dom2 = generate_hash_id(dom2)
+        self.assertEqual(hash_dom1, hash_dom2)
+
+        hash_none1 = generate_hash_id(None)
+        hash_none2 = generate_hash_id(None)
+        self.assertEqual(hash_none1, hash_none2)
 
 
 class TestCheckNodeAttr(unittest.TestCase):

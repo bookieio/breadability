@@ -8,7 +8,8 @@ import re
 import logging
 
 from hashlib import md5
-from lxml.etree import tounicode
+from lxml.etree import tostring
+from ._py3k import to_bytes
 
 # A series of sets of attributes we check to help in determining if a node is
 # a potential candidate or not.
@@ -35,19 +36,19 @@ def check_node_attr(node, attr, checkset):
 
 
 def generate_hash_id(node):
-    """Generate a hash_id for the node in question.
+    """
+    Generates a hash_id for the node in question.
 
     :param node: lxml etree node
-
     """
-    content = tounicode(node)
-    hashed = md5()
     try:
-        hashed.update(content.encode('utf-8', "replace"))
+        content = tostring(node)
     except Exception as e:
-        logger.exception("BOOM! %r", e)
+        logger.exception("Generating of hash failed")
+        content = to_bytes(repr(node))
 
-    return hashed.hexdigest()[0:8]
+    hash_id = md5(content).hexdigest()
+    return hash_id[:8]
 
 
 def get_link_density(node, node_text=None):
