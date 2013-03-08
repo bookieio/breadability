@@ -52,20 +52,17 @@ def generate_hash_id(node):
 
 
 def get_link_density(node, node_text=None):
-    """Generate a value for the number of links in the node.
+    """
+    Generates a value for the number of links in the node.
 
     :param node: pared elementree node
-    :param node_text: if we already have the text_content() make this easier
-    on us.
+    :param node_text: if we already have the text_content() make
+        this easier on us.
     :returns float:
-
     """
-    link_length = sum([len(a.text_content()) or 0
-        for a in node.findall(".//a")])
-    if node_text:
-        text_length = len(node_text)
-    else:
-        text_length = len(node.text_content())
+    link_length = sum(len(a.text_content()) or 0 for a in node.findall(".//a"))
+    text_length = len(node_text if node_text else node.text_content())
+
     return float(link_length) / max(text_length, 1)
 
 
