@@ -1,5 +1,7 @@
 # -*- coding: utf8 -*-
 
+from __future__ import absolute_import
+
 try:
     # Python < 2.7
     import unittest2 as unittest
@@ -9,7 +11,7 @@ except ImportError:
 from collections import defaultdict
 from breadability._py3k import to_unicode
 from breadability.document import OriginalDocument, get_encoding
-from utils import load_snippet
+from .utils import load_snippet
 
 
 class TestOriginalDocument(unittest.TestCase):

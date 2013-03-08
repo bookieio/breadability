@@ -1,3 +1,6 @@
+
+from __future__ import absolute_import
+
 import re
 
 from lxml.html import document_fromstring
@@ -17,7 +20,7 @@ from breadability.scoring import ScoredNode
 from breadability.scoring import score_candidates
 from breadability.readable import get_link_density
 from breadability.readable import is_unlikely_node
-from utils import load_snippet
+from .utils import load_snippet
 
 
 class TestCheckNodeAttr(unittest.TestCase):

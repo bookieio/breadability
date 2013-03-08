@@ -1,3 +1,6 @@
+
+from __future__ import absolute_import
+
 from lxml.etree import tounicode
 from lxml.html import document_fromstring
 from lxml.html import fragment_fromstring
@@ -15,7 +18,7 @@ from breadability.readable import is_bad_link
 from breadability.readable import score_candidates
 from breadability.readable import transform_misused_divs_into_paragraphs
 from breadability.scoring import ScoredNode
-from utils import load_snippet, load_article
+from .utils import load_snippet, load_article
 
 
 class TestReadableDocument(unittest.TestCase):
