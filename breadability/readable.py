@@ -5,28 +5,24 @@ from __future__ import absolute_import
 import re
 import logging
 
-from lxml.etree import tounicode
-from lxml.etree import tostring
-from lxml.html.clean import Cleaner
-from lxml.html import fragment_fromstring
-from lxml.html import fromstring
 from operator import attrgetter
 from pprint import PrettyPrinter
+from lxml.html.clean import Cleaner
+from lxml.etree import tounicode, tostring
+from lxml.html import fragment_fromstring, fromstring
 
 from .document import OriginalDocument
-from .scoring import score_candidates
-from .scoring import get_link_density
-from .scoring import get_class_weight
-from .scoring import is_unlikely_node
+from .scoring import (score_candidates, get_link_density, get_class_weight,
+    is_unlikely_node)
 from .utils import cached_property
 
 
 html_cleaner = Cleaner(scripts=True, javascript=True, comments=True,
-                  style=True, links=True, meta=False, add_nofollow=False,
-                  page_structure=False, processing_instructions=True,
-                  embedded=False, frames=False, forms=False,
-                  annoying_tags=False, remove_tags=None,
-                  remove_unknown_tags=False, safe_attrs_only=False)
+    style=True, links=True, meta=False, add_nofollow=False,
+    page_structure=False, processing_instructions=True,
+    embedded=False, frames=False, forms=False,
+    annoying_tags=False, remove_tags=None,
+    remove_unknown_tags=False, safe_attrs_only=False)
 
 
 BASE_DOC = """
