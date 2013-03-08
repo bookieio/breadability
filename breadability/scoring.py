@@ -26,13 +26,13 @@ CLS_WEIGHT_NEGATIVE = re.compile(('combx|comment|com-|contact|foot|footer|'
 logger = logging.getLogger("breadability")
 
 
-def check_node_attr(node, attr, checkset):
-    value = node.get(attr) or ""
-    check = checkset.search(value)
-    if check:
-        return True
-    else:
+def check_node_attribute(node, attribute_name, pattern):
+    attribute = node.get(attribute_name)
+
+    if attribute is None:
         return False
+    else:
+        return bool(pattern.search(attribute))
 
 
 def generate_hash_id(node):
@@ -76,14 +76,14 @@ def get_class_weight(node):
 
     """
     weight = 0
-    if check_node_attr(node, 'class', CLS_WEIGHT_NEGATIVE):
+    if check_node_attribute(node, 'class', CLS_WEIGHT_NEGATIVE):
         weight = weight - 25
-    if check_node_attr(node, 'class', CLS_WEIGHT_POSITIVE):
+    if check_node_attribute(node, 'class', CLS_WEIGHT_POSITIVE):
         weight = weight + 25
 
-    if check_node_attr(node, 'id', CLS_WEIGHT_NEGATIVE):
+    if check_node_attribute(node, 'id', CLS_WEIGHT_NEGATIVE):
         weight = weight - 25
-    if check_node_attr(node, 'id', CLS_WEIGHT_POSITIVE):
+    if check_node_attribute(node, 'id', CLS_WEIGHT_POSITIVE):
         weight = weight + 25
 
     return weight
@@ -96,11 +96,11 @@ def is_unlikely_node(node):
     class/id in the likely list then it might need to be removed.
 
     """
-    unlikely = check_node_attr(node, 'class', CLS_UNLIKELY) or \
-        check_node_attr(node, 'id', CLS_UNLIKELY)
+    unlikely = check_node_attribute(node, 'class', CLS_UNLIKELY) or \
+        check_node_attribute(node, 'id', CLS_UNLIKELY)
 
-    maybe = check_node_attr(node, 'class', CLS_MAYBE) or \
-        check_node_attr(node, 'id', CLS_MAYBE)
+    maybe = check_node_attribute(node, 'class', CLS_MAYBE) or \
+        check_node_attribute(node, 'id', CLS_MAYBE)
 
     if unlikely and not maybe and node.tag != 'body':
         return True
