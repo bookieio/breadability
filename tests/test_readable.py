@@ -25,12 +25,12 @@ class TestReadableDocument(unittest.TestCase):
         """We get back an element tree from our original doc"""
         doc = Article(load_snippet('document_min.html'))
         # We get back the document as a div tag currently by default.
-        self.assertEqual(doc._readable.tag, 'div')
+        self.assertEqual(doc.readable_dom.tag, 'div')
 
     def test_doc_no_scripts_styles(self):
         """Step #1 remove all scripts from the document"""
         doc = Article(load_snippet('document_scripts.html'))
-        readable = doc._readable
+        readable = doc.readable_dom
         self.assertEqual(readable.findall(".//script"), [])
         self.assertEqual(readable.findall(".//style"), [])
         self.assertEqual(readable.findall(".//link"), [])
@@ -42,8 +42,8 @@ class TestReadableDocument(unittest.TestCase):
 
         """
         doc = Article(load_snippet('document_min.html'))
-        self.assertEqual(doc._readable.tag, 'div')
-        self.assertEqual(doc._readable.get('id'), 'readabilityBody')
+        self.assertEqual(doc.readable_dom.tag, 'div')
+        self.assertEqual(doc.readable_dom.get('id'), 'readabilityBody')
 
     def test_body_doesnt_exist(self):
         """If we can't find a body, then we create one.
@@ -52,8 +52,8 @@ class TestReadableDocument(unittest.TestCase):
 
         """
         doc = Article(load_snippet('document_no_body.html'))
-        self.assertEqual(doc._readable.tag, 'div')
-        self.assertEqual(doc._readable.get('id'), 'readabilityBody')
+        self.assertEqual(doc.readable_dom.tag, 'div')
+        self.assertEqual(doc.readable_dom.get('id'), 'readabilityBody')
 
     def test_bare_content(self):
         """If the document is just pure content, no html tags we should be ok
@@ -62,16 +62,16 @@ class TestReadableDocument(unittest.TestCase):
 
         """
         doc = Article(load_snippet('document_only_content.html'))
-        self.assertEqual(doc._readable.tag, 'div')
-        self.assertEqual(doc._readable.get('id'), 'readabilityBody')
+        self.assertEqual(doc.readable_dom.tag, 'div')
+        self.assertEqual(doc.readable_dom.get('id'), 'readabilityBody')
 
 
     def test_no_content(self):
         """Without content we supply an empty unparsed doc."""
         doc = Article('')
-        self.assertEqual(doc._readable.tag, 'div')
-        self.assertEqual(doc._readable.get('id'), 'readabilityBody')
-        self.assertEqual(doc._readable.get('class'), 'parsing-error')
+        self.assertEqual(doc.readable_dom.tag, 'div')
+        self.assertEqual(doc.readable_dom.get('id'), 'readabilityBody')
+        self.assertEqual(doc.readable_dom.get('class'), 'parsing-error')
 
 
 class TestCleaning(unittest.TestCase):
@@ -80,7 +80,7 @@ class TestCleaning(unittest.TestCase):
     def test_unlikely_hits(self):
         """Verify we wipe out things from our unlikely list."""
         doc = Article(load_snippet('test_readable_unlikely.html'))
-        readable = doc._readable
+        readable = doc.readable_dom
         must_not_appear = ['comment', 'community', 'disqus', 'extra', 'foot',
                 'header', 'menu', 'remark', 'rss', 'shoutbox', 'sidebar',
                 'sponsor', 'ad-break', 'agegate', 'pagination' '', 'pager',

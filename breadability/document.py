@@ -102,17 +102,17 @@ class OriginalDocument(object):
             doc.resolve_base_href()
         return doc
 
-    @cached_property(ttl=600)
+    @cached_property
     def html(self):
         """The parsed html document from the input"""
         return self._parse(self.orig_html)
 
-    @cached_property(ttl=600)
+    @cached_property
     def links(self):
         """Links within the document"""
         return self.html.findall(".//a")
 
-    @cached_property(ttl=600)
+    @cached_property
     def title(self):
         """Pull the title attribute out of the parsed document"""
         titleElem = self.html.find('.//title')

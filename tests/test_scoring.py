@@ -65,17 +65,17 @@ class TestLinkDensity(unittest.TestCase):
         """An empty node doesn't have much of a link density"""
         empty_div = to_unicode("<div></div>")
         doc = Article(empty_div)
-        assert 0 == get_link_density(doc._readable), "Link density is nadda"
+        assert 0 == get_link_density(doc.readable_dom), "Link density is nadda"
 
     def test_small_doc_no_links(self):
         doc = Article(load_snippet('document_min.html'))
-        assert 0 == get_link_density(doc._readable), "Still no link density"
+        assert 0 == get_link_density(doc.readable_dom), "Still no link density"
 
     def test_several_links(self):
         """This doc has a 3 links with the majority of content."""
         doc = Article(load_snippet('document_absolute_url.html'))
         self.assertAlmostEqual(
-                get_link_density(doc._readable), 0.349,
+                get_link_density(doc.readable_dom), 0.349,
                 places=3)
 
 

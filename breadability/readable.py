@@ -421,12 +421,12 @@ class Article(object):
         self.fragment = fragment
 
     def __str__(self):
-        return tostring(self._readable)
+        return tostring(self._readable())
 
     def __unicode__(self):
-        return tounicode(self._readable)
+        return tounicode(self._readable())
 
-    @cached_property(ttl=600)
+    @cached_property
     def doc(self):
         """The doc is the parsed xml tree of the given html."""
         try:
@@ -439,7 +439,7 @@ class Article(object):
         except ValueError:
             return None
 
-    @cached_property(ttl=600)
+    @cached_property
     def candidates(self):
         """Generate the list of candidates from the doc."""
         doc = self.doc
@@ -450,11 +450,14 @@ class Article(object):
         else:
             return None
 
-    @cached_property(ttl=600)
+    @cached_property
     def readable(self):
-        return tounicode(self._readable)
+        return tounicode(self.readable_dom)
 
-    @cached_property(ttl=600)
+    @cached_property
+    def readable_dom(self):
+        return self._readable()
+
     def _readable(self):
         """The readable parsed article"""
         if self.candidates:
