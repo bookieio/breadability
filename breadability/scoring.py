@@ -15,13 +15,13 @@ from ._py3k import to_bytes
 # a potential candidate or not.
 CLS_UNLIKELY = re.compile(('combx|comment|community|disqus|extra|foot|header|'
     'menu|remark|rss|shoutbox|sidebar|sponsor|ad-break|agegate|pagination|'
-    'pager|perma|popup|tweet|twitter'), re.I)
-CLS_MAYBE = re.compile('and|article|body|column|main|shadow', re.I)
+    'pager|perma|popup|tweet|twitter'), re.IGNORECASE)
+CLS_MAYBE = re.compile('and|article|body|column|main|shadow', re.IGNORECASE)
 CLS_WEIGHT_POSITIVE = re.compile(('article|body|content|entry|hentry|main|'
-    'page|pagination|post|text|blog|story'), re.I)
+    'page|pagination|post|text|blog|story'), re.IGNORECASE)
 CLS_WEIGHT_NEGATIVE = re.compile(('combx|comment|com-|contact|foot|footer|'
     'footnote|head|masthead|media|meta|outbrain|promo|related|scroll|shoutbox|'
-    'sidebar|sponsor|shopping|tags|tool|widget'), re.I)
+    'sidebar|sponsor|shopping|tags|tool|widget'), re.IGNORECASE)
 
 logger = logging.getLogger("breadability")
 
@@ -67,31 +67,32 @@ def get_link_density(node, node_text=None):
 
 
 def get_class_weight(node):
-    """Get an elements class/id weight.
+    """
+    Computes weight of element according to its class/id.
 
     We're using sets to help efficiently check for existence of matches.
-
     """
     weight = 0
+
     if check_node_attribute(node, 'class', CLS_WEIGHT_NEGATIVE):
-        weight = weight - 25
+        weight -= 25
     if check_node_attribute(node, 'class', CLS_WEIGHT_POSITIVE):
-        weight = weight + 25
+        weight += 25
 
     if check_node_attribute(node, 'id', CLS_WEIGHT_NEGATIVE):
-        weight = weight - 25
+        weight -= 25
     if check_node_attribute(node, 'id', CLS_WEIGHT_POSITIVE):
-        weight = weight + 25
+        weight += 25
 
     return weight
 
 
 def is_unlikely_node(node):
-    """Short helper for checking unlikely status.
+    """
+    Short helper for checking unlikely status.
 
     If the class or id are in the unlikely list, and there's not also a
     class/id in the likely list then it might need to be removed.
-
     """
     unlikely = check_node_attribute(node, 'class', CLS_UNLIKELY) or \
         check_node_attribute(node, 'id', CLS_UNLIKELY)
@@ -99,10 +100,7 @@ def is_unlikely_node(node):
     maybe = check_node_attribute(node, 'class', CLS_MAYBE) or \
         check_node_attribute(node, 'id', CLS_MAYBE)
 
-    if unlikely and not maybe and node.tag != 'body':
-        return True
-    else:
-        return False
+    return bool(unlikely and not maybe and node.tag != 'body')
 
 
 def score_candidates(nodes):
@@ -126,7 +124,7 @@ def score_candidates(nodes):
 
         # If this paragraph is less than 25 characters, don't even count it.
         if innertext and len(innertext) < MIN_HIT_LENTH:
-            logger.debug("Skipping candidate because not enough content.")
+            logger.debug("Skipping candidate because inner text is shorter than %d characters.", MIN_HIT_LENTH)
             continue
 
         # Initialize readability data for the parent.
@@ -152,11 +150,7 @@ def score_candidates(nodes):
             # For every 100 characters in this paragraph, add another point.
             # Up to 3 points.
             length_points = len(innertext) // 100
-
-            if length_points > 3:
-                content_score += 3
-            else:
-                content_score += length_points
+            content_score += min(length_points, 3)
             logger.debug("Length/content points: %r : %r", length_points,
                 content_score)
 
@@ -173,46 +167,44 @@ def score_candidates(nodes):
         adjustment = 1 - get_link_density(candidate.node)
         logger.debug("Getting link density adjustment: %r * %r",
             candidate.content_score, adjustment)
-        candidate.content_score = candidate.content_score * (adjustment)
+        candidate.content_score = candidate.content_score * adjustment
 
     return candidates
 
 
 class ScoredNode(object):
-    """We need Scored nodes we use to track possible article matches
+    """
+    We need Scored nodes we use to track possible article matches
 
     We might have a bunch of these so we use __slots__ to keep memory usage
     down.
-
     """
-    __slots__ = ['node', 'content_score']
-
-    def __repr__(self):
-        """Helpful representation of our Scored Node"""
-        return "{0}: {1:0.1F}\t{2}".format(
-            self.hash_id,
-            self.content_score,
-            self.node)
+    __slots__ = ('node', 'content_score')
 
     def __init__(self, node):
         """Given node, set an initial score and weigh based on css and id"""
         self.node = node
-        content_score = 0
-        if node.tag in ['div', 'article']:
-            content_score = 5
+        self.content_score = 0
 
-        if node.tag in ['pre', 'td', 'blockquote']:
-            content_score = 3
+        if node.tag in ('div', 'article'):
+            self.content_score = 5
+        if node.tag in ('pre', 'td', 'blockquote'):
+            self.content_score = 3
 
-        if node.tag in ['address', 'ol', 'ul', 'dl', 'dd', 'dt', 'li',
-            'form']:
-            content_score = -3
-        if node.tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'th']:
-            content_score = -5
+        if node.tag in ('address', 'ol', 'ul', 'dl', 'dd', 'dt', 'li', 'form'):
+            self.content_score = -3
+        if node.tag in ('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'th'):
+            self.content_score = -5
 
-        content_score += get_class_weight(node)
-        self.content_score = content_score
+        self.content_score += get_class_weight(node)
 
     @property
     def hash_id(self):
         return generate_hash_id(self.node)
+
+    def __repr__(self):
+        return "<ScoredNode: {0}, {1:0.1F} {2}>".format(
+            self.hash_id,
+            self.content_score,
+            self.node
+        )
