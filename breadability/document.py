@@ -8,11 +8,8 @@ import re
 import logging
 import charade
 
-from lxml.etree import tostring
-from lxml.etree import tounicode
-from lxml.etree import XMLSyntaxError
-from lxml.html import document_fromstring
-from lxml.html import HTMLParser
+from lxml.etree import tostring, tounicode, XMLSyntaxError
+from lxml.html import document_fromstring, HTMLParser
 
 from ._py3k import unicode, to_string, to_bytes
 from .utils import cached_property
@@ -23,33 +20,39 @@ logger = logging.getLogger("breadability")
 
 
 def get_encoding(page):
+    encoding = 'utf-8'
     text = re.sub(to_bytes('</?[^>]*>\s*'), to_bytes(' '), page)
-    enc = 'utf-8'
+
+    # don't veture to guess
     if not text.strip() or len(text) < 10:
-        return enc  # can't guess
+        return encoding
+
     try:
-        diff = text.decode(enc, 'ignore').encode(enc)
+        diff = text.decode(encoding, 'ignore').encode(encoding)
         sizes = len(diff), len(text)
+
         # 99% of utf-8
         if abs(len(text) - len(diff)) < max(sizes) * 0.01:
-            return enc
+            return encoding
     except UnicodeDecodeError:
         pass
-    res = charade.detect(text)
-    enc = res['encoding']
-    # print '->', enc, "%.2f" % res['confidence']
-    if enc == 'MacCyrillic':
-        enc = 'cp1251'
-    if not enc:
-        enc = 'utf-8'
-    return enc
 
+    encoding_detector = charade.detect(text)
+    encoding = encoding_detector['encoding']
 
+    if not encoding:
+        encoding = 'utf-8'
+    elif encoding == 'MacCyrillic':
+        encoding = 'cp1251'
+
+    return encoding
+
+MULTIPLE_BR_TAGS_PATTERN = re.compile(r"(?:<br[^>]*>\s*){2,}", re.IGNORECASE)
 def replace_multi_br_to_paragraphs(html):
-    """Convert multiple <br>s into paragraphs"""
+    """Converts multiple <br> tags into paragraphs."""
     logger.debug('Replacing multiple <br/> to <p>')
-    rep = re.compile("(<br[^>]*>[ \n\r\t]*){2,}", re.I)
-    return rep.sub('</p><p>', html)
+
+    return MULTIPLE_BR_TAGS_PATTERN.sub('</p><p>', html)
 
 
 def build_doc(page):
@@ -57,24 +60,26 @@ def build_doc(page):
     if page is None:
         logger.error("Page content is None, can't build_doc")
         return ''
+
     if isinstance(page, unicode):
         page_unicode = page
     else:
-        enc = get_encoding(page)
-        page_unicode = page.decode(enc, 'replace')
+        encoding = get_encoding(page)
+        page_unicode = page.decode(encoding, 'replace')
+
     try:
         doc = document_fromstring(
             page_unicode.encode('utf-8', 'replace'),
             parser=utf8_parser)
         return doc
-    except XMLSyntaxError as exc:
-        logger.error('Failed to parse: ' + str(exc))
-        raise ValueError('Failed to parse document contents.')
+    except XMLSyntaxError:
+        msg = 'Failed to parse document contents.'
+        logger.exception(msg)
+        raise ValueError(msg)
 
 
 class OriginalDocument(object):
     """The original document to process"""
-    _base_href = None
 
     def __init__(self, html, url=None):
         self.orig_html = html
@@ -100,6 +105,7 @@ class OriginalDocument(object):
             doc.make_links_absolute(base_href, resolve_base_href=True)
         else:
             doc.resolve_base_href()
+
         return doc
 
     @cached_property
