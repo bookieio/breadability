@@ -42,7 +42,7 @@ setup(
     zip_safe=False,
     install_requires=install_requires,
     tests_require=tests_require,
-    test_suite='tests',
+    test_suite='tests.run_tests.run',
     extras_require={
         'test': tests_require
     },
