@@ -25,7 +25,7 @@ html_cleaner = Cleaner(scripts=True, javascript=True, comments=True,
     remove_unknown_tags=False, safe_attrs_only=False)
 
 
-BASE_DOC = """
+NULL_DOCUMENT = """
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
@@ -34,53 +34,57 @@ BASE_DOC = """
     </body>
 </html>
 """
-SCORABLE_TAGS = ['div', 'p', 'td', 'pre', 'article']
+SCORABLE_TAGS = ('div', 'p', 'td', 'pre', 'article')
 
 logger = logging.getLogger("breadability")
 
 
-def drop_tag(doc, *tags):
-    """Helper to just remove any nodes that match this html tag passed in
+def drop_tag(document, *tags):
+    """
+    Helper to just remove any nodes that match this html tag passed in
 
     :param *tags: one or more html tag strings to remove e.g. style, script
-
     """
     for tag in tags:
-        found = doc.iterfind(".//" + tag)
-        for n in found:
+        for node in document.iterfind(".//" + tag):
             logger.debug("Dropping tag %s", tag)
-            n.drop_tree()
-    return doc
+            node.drop_tree()
+
+    return document
 
 
-def is_bad_link(a_node):
-    """Helper to determine if the link is something to clean out
+def is_bad_link(node):
+    """
+    Helper to determine if the link is something to clean out
 
     We've hit articles with many multiple links that should be cleaned out
     because they're just there to pollute the space. See tests for examples.
-
     """
-    if a_node.tag == 'a':
-        name = a_node.get('name')
-        href = a_node.get('href')
-        if name and not href:
+    if node.tag != 'a':
+        return False
+
+    name = node.get('name')
+    href = node.get('href')
+    if name and not href:
+        return True
+
+    if href:
+        url_bits = href.split('#')
+        if len(url_bits) == 2 and len(url_bits[1]) > 25:
             return True
 
-        if href:
-            url_bits = href.split('#')
-            if len(url_bits) == 2:
-                if len(url_bits[1]) > 25:
-                    return True
     return False
 
 
 def ok_embedded_video(node):
     """Check if this embed/video is an ok one to count."""
-    keep_keywords = ['youtube', 'blip.tv', 'vimeo']
+    good_keywords = ('youtube', 'blip.tv', 'vimeo')
+
     node_str = tounicode(node)
-    for key in keep_keywords:
+    for key in good_keywords:
         if key in node_str:
             return True
+
     return False
 
 
@@ -88,9 +92,8 @@ def build_base_document(html, fragment=True):
     """Return a base document with the body as root.
 
     :param html: Parsed Element object
-    :param fragment: Should we return a <div> doc fragment or a full <html>
-    doc.
-
+    :param fragment: Should we return a <div> doc fragment or
+        a full <html> doc.
     """
     if html.tag == 'body':
         html.tag = 'div'
@@ -104,18 +107,17 @@ def build_base_document(html, fragment=True):
         frag.append(html)
 
         if not fragment:
-            output = fromstring(BASE_DOC)
+            output = fromstring(NULL_DOCUMENT)
             insert_point = output.find('.//body')
             insert_point.append(frag)
         else:
             output = frag
     else:
-
         found_body.tag = 'div'
         found_body.set('id', 'readabilityBody')
 
         if not fragment:
-            output = fromstring(BASE_DOC)
+            output = fromstring(NULL_DOCUMENT)
             insert_point = output.find('.//body')
             insert_point.append(found_body)
         else:
@@ -128,16 +130,15 @@ def build_base_document(html, fragment=True):
 def build_error_document(html, fragment=True):
     """Return an empty erorr document with the body as root.
 
-    :param fragment: Should we return a <div> doc fragment or a full <html>
-    doc.
-
+    :param fragment: Should we return a <div> doc fragment or
+        a full <html> doc.
     """
     frag = fragment_fromstring('<div/>')
     frag.set('id', 'readabilityBody')
     frag.set('class', 'parsing-error')
 
     if not fragment:
-        output = fromstring(BASE_DOC)
+        output = fromstring(NULL_DOCUMENT)
         insert_point = output.find('.//body')
         insert_point.append(frag)
     else:
@@ -156,10 +157,9 @@ def transform_misused_divs_into_paragraphs(doc):
     The idea is that we process all divs and if the div does not contain
     another list of divs, then we replace it with a p tag instead appending
     it's contents/children to it.
-
     """
     for elem in doc.iter(tag='div'):
-        child_tags = [n.tag for n in elem.getchildren()]
+        child_tags = tuple(n.tag for n in elem.getchildren())
         if 'div' not in child_tags:
             # if there is no div inside of this div...then it's a leaf
             # node in a sense.
@@ -171,6 +171,7 @@ def transform_misused_divs_into_paragraphs(doc):
             started = re.sub(r'^<\s*div', '<p', orig)
             ended = re.sub(r'div>$', 'p>', started)
             elem.getparent().replace(elem, fromstring(ended))
+
     return doc
 
 
@@ -178,7 +179,6 @@ def check_siblings(candidate_node, candidate_list):
     """Look through siblings for content that might also be related.
 
     Things like preambles, content split by ads that we removed, etc.
-
     """
     candidate_css = candidate_node.node.get('class')
     potential_target = candidate_node.content_score * 0.2
@@ -219,7 +219,7 @@ def check_siblings(candidate_node, candidate_list):
 
         if append:
             logger.debug('Sibling being appended')
-            if sibling.tag not in ['div', 'p']:
+            if sibling.tag not in ('div', 'p'):
                 # We have a node that isn't a common block level element, like
                 # a form or td tag. Turn it into a div so it doesn't get
                 # filtered out later by accident.
@@ -254,7 +254,7 @@ def clean_document(node):
         # remove all of the following tags
         # Clean a node of all elements of type "tag".
         # (Unless it's a youtube/vimeo video. People love movies.)
-        is_embed = True if n.tag in ['object', 'embed'] else False
+        is_embed = bool(n.tag in ('object', 'embed'))
         if n.tag in clean_list:
             allow = False
 
@@ -268,7 +268,7 @@ def clean_document(node):
                 logger.debug("Dropping Node")
                 to_drop.append(n)
 
-        if n.tag in ['h1', 'h2', 'h3', 'h4']:
+        if n.tag in ('h1', 'h2', 'h3', 'h4'):
             # clean headings
             # if the heading has no css weight or a high link density,
             # remove it
@@ -288,13 +288,20 @@ def clean_document(node):
         if clean_conditionally(n):
             to_drop.append(n)
 
-    [n.drop_tree() for n in to_drop if n.getparent() is not None]
+    drop_nodes_with_parents(to_drop)
+
     return node
+
+
+def drop_nodes_with_parents(nodes):
+    for node in nodes:
+        if node.getparent() is not None:
+            node.drop_tree()
 
 
 def clean_conditionally(node):
     """Remove the clean_el if it looks like bad content based on rules."""
-    target_tags = ['form', 'table', 'ul', 'div', 'p']
+    target_tags = ('form', 'table', 'ul', 'div', 'p')
 
     logger.debug('Cleaning conditionally node.')
 
@@ -308,7 +315,7 @@ def clean_conditionally(node):
     # before else default to 0
     content_score = 0
 
-    if (weight + content_score < 0):
+    if weight + content_score < 0:
         logger.debug('Dropping conditional node')
         logger.debug('Weight + score < 0')
         return True
@@ -372,10 +379,8 @@ def prep_article(doc):
     - forms
     - strip empty <p>
     - extra tags
-
     """
-    doc = clean_document(doc)
-    return doc
+    return clean_document(doc)
 
 
 def find_candidates(doc):
@@ -383,9 +388,7 @@ def find_candidates(doc):
 
     Here's we're going to remove unlikely nodes, find scores on the rest, and
     clean up and return the final best match.
-
     """
-    scorable_node_tags = SCORABLE_TAGS
     nodes_to_score = []
     should_remove = []
 
@@ -398,8 +401,9 @@ def find_candidates(doc):
             logger.debug('We should drop bad link: ' + str(node))
             should_remove.append(node)
             continue
-        if node.tag in scorable_node_tags and node not in nodes_to_score:
+        if node.tag in SCORABLE_TAGS and node not in nodes_to_score:
             nodes_to_score.append(node)
+
     return score_candidates(nodes_to_score), should_remove
 
 
@@ -412,9 +416,8 @@ class Article(object):
 
         :param html: The string of html we're going to parse.
         :param url: The url so we can adjust the links to still work.
-        :param fragment: Should we return a <div> fragment or a full <html>
-        doc.
-
+        :param fragment: Should we return a <div> fragment or
+            a full <html> doc.
         """
         logger.debug('Url: ' + str(url))
         self.orig = OriginalDocument(html, url=url)
@@ -461,12 +464,11 @@ class Article(object):
     def _readable(self):
         """The readable parsed article"""
         if self.candidates:
-            logger.debug('Candidates found:')
+            logger.debug('Candidates found')
             pp = PrettyPrinter(indent=2)
 
             # cleanup by removing the should_drop we spotted.
-            [n.drop_tree() for n in self._should_drop
-                if n.getparent() is not None]
+            drop_nodes_with_parents(self._should_drop)
 
             # right now we return the highest scoring candidate content
             by_score = sorted([c for c in self.candidates.values()],
@@ -497,8 +499,8 @@ class Article(object):
         # since we've not found a good candidate we're should help this
         if self.doc is not None and len(self.doc):
             # cleanup by removing the should_drop we spotted.
-            [n.drop_tree() for n in self._should_drop
-                if n.getparent() is not None]
+            drop_nodes_with_parents(self._should_drop)
+
             doc = prep_article(self.doc)
             doc = build_base_document(doc, self.fragment)
         else:
