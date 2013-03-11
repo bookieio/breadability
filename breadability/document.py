@@ -15,67 +15,60 @@ from ._py3k import unicode, to_string, to_bytes
 from .utils import cached_property
 
 
-utf8_parser = HTMLParser(encoding='utf-8')
 logger = logging.getLogger("breadability")
 
 
-def get_encoding(page):
-    encoding = 'utf-8'
-    text = re.sub(to_bytes('</?[^>]*>\s*'), to_bytes(' '), page)
+def determine_encoding(page):
+    encoding = "utf8"
+    text = re.sub(to_bytes(r"</?[^>]*>\s*"), to_bytes(" "), page)
 
-    # don't veture to guess
+    # don't venture to guess
     if not text.strip() or len(text) < 10:
         return encoding
 
-    try:
-        diff = text.decode(encoding, 'ignore').encode(encoding)
-        sizes = len(diff), len(text)
+    # try enforce UTF-8
+    diff = text.decode(encoding, "ignore").encode(encoding)
+    sizes = len(diff), len(text)
 
-        # 99% of utf-8
-        if abs(len(text) - len(diff)) < max(sizes) * 0.01:
-            return encoding
-    except UnicodeDecodeError:
-        pass
+    # 99% of UTF-8
+    if abs(len(text) - len(diff)) < max(sizes) * 0.01:
+        return encoding
 
+    # try detect encoding
     encoding_detector = charade.detect(text)
-    encoding = encoding_detector['encoding']
-
-    if not encoding:
-        encoding = 'utf-8'
-    elif encoding == 'MacCyrillic':
-        encoding = 'cp1251'
+    if encoding_detector["encoding"]:
+        encoding = encoding_detector["encoding"]
 
     return encoding
+
 
 MULTIPLE_BR_TAGS_PATTERN = re.compile(r"(?:<br[^>]*>\s*){2,}", re.IGNORECASE)
 def replace_multi_br_to_paragraphs(html):
     """Converts multiple <br> tags into paragraphs."""
-    logger.debug('Replacing multiple <br/> to <p>')
+    logger.debug("Replacing multiple <br/> to <p>")
 
-    return MULTIPLE_BR_TAGS_PATTERN.sub('</p><p>', html)
+    return MULTIPLE_BR_TAGS_PATTERN.sub("</p><p>", html)
 
 
-def build_doc(page):
-    """Requires that the `page` not be None"""
-    if page is None:
-        logger.error("Page content is None, can't build_doc")
-        return ''
+UTF8_PARSER = HTMLParser(encoding="utf8")
+def build_document(html_content, base_href=None):
+    """Requires that the `html_content` not be None"""
+    assert html_content is not None
 
-    if isinstance(page, unicode):
-        page_unicode = page
-    else:
-        encoding = get_encoding(page)
-        page_unicode = page.decode(encoding, 'replace')
+    if isinstance(html_content, unicode):
+        html_content = html_content.encode("utf8", "replace")
 
     try:
-        doc = document_fromstring(
-            page_unicode.encode('utf-8', 'replace'),
-            parser=utf8_parser)
-        return doc
+        document = document_fromstring(html_content, parser=UTF8_PARSER)
     except XMLSyntaxError:
-        msg = 'Failed to parse document contents.'
-        logger.exception(msg)
-        raise ValueError(msg)
+        raise ValueError("Failed to parse document contents.")
+
+    if base_href:
+        document.make_links_absolute(base_href, resolve_base_href=True)
+    else:
+        document.resolve_base_href()
+
+    return document
 
 
 class OriginalDocument(object):
@@ -94,19 +87,11 @@ class OriginalDocument(object):
         return tounicode(self.html)
 
     def _parse(self, html):
-        """Generate an lxml document from our html."""
+        """Generate an lxml document from html."""
         html = replace_multi_br_to_paragraphs(html)
-        doc = build_doc(html)
+        document = build_document(html, self.url)
 
-        # doc = html_cleaner.clean_html(doc)
-        base_href = self.url
-        if base_href:
-            logger.debug('Making links absolute')
-            doc.make_links_absolute(base_href, resolve_base_href=True)
-        else:
-            doc.resolve_base_href()
-
-        return doc
+        return document
 
     @cached_property
     def html(self):
@@ -121,8 +106,8 @@ class OriginalDocument(object):
     @cached_property
     def title(self):
         """Pull the title attribute out of the parsed document"""
-        titleElem = self.html.find('.//title')
-        if titleElem is None or titleElem.text is None:
-            return ''
+        title_element = self.html.find(".//title")
+        if title_element is None or title_element.text is None:
+            return ""
         else:
-            return titleElem.text
+            return title_element.text.strip()

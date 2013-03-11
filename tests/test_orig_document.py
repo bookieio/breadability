@@ -9,8 +9,8 @@ except ImportError:
     import unittest
 
 from collections import defaultdict
-from breadability._py3k import to_unicode
-from breadability.document import OriginalDocument, get_encoding
+from breadability._py3k import to_unicode, to_bytes
+from breadability.document import OriginalDocument, determine_encoding
 from .utils import load_snippet
 
 
@@ -51,6 +51,30 @@ class TestOriginalDocument(unittest.TestCase):
         doc = OriginalDocument(load_snippet('document_min.html'))
         self.assertIsNone(doc.html.find('.//br'))
 
+    def test_empty_title(self):
+        """We convert all <br/> tags to <p> tags"""
+        document = OriginalDocument("<html><head><title></title></head><body></body></html>")
+        self.assertEqual(document.title, "")
+
+    def test_title_only_with_tags(self):
+        """We convert all <br/> tags to <p> tags"""
+        document = OriginalDocument("<html><head><title><em></em></title></head><body></body></html>")
+        self.assertEqual(document.title, "")
+
+    def test_no_title(self):
+        """We convert all <br/> tags to <p> tags"""
+        document = OriginalDocument("<html><head></head><body></body></html>")
+        self.assertEqual(document.title, "")
+
     def test_encoding(self):
         text = to_unicode("ľščťžýáíéäúňôůě").encode("iso-8859-2")
-        encoding = get_encoding(text)
+        encoding = determine_encoding(text)
+
+    def test_encoding_short(self):
+        text = to_unicode("ľščťžýáíé").encode("iso-8859-2")
+        encoding = determine_encoding(text)
+        self.assertEqual(encoding, "utf8")
+
+        text = to_bytes("ľščťžýáíé")
+        encoding = determine_encoding(text)
+        self.assertEqual(encoding, "utf8")
