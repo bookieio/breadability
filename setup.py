@@ -9,7 +9,7 @@ NEWS = open(os.path.join(here, 'CHANGELOG.rst')).read()
 version = '0.1.11'
 install_requires = [
     # http://packages.python.org/distribute/setuptools.html#declaring-dependencies
-    'docopt==0.6.*',
+    'docopt>=0.6.1,<0.7',
     'charade',
     'lxml',
 ]
