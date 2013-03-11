@@ -11,29 +11,45 @@ from hashlib import md5
 from lxml.etree import tostring
 from ._py3k import to_bytes
 
+
 # A series of sets of attributes we check to help in determining if a node is
 # a potential candidate or not.
-CLS_UNLIKELY = re.compile(('combx|comment|community|disqus|extra|foot|header|'
-    'menu|remark|rss|shoutbox|sidebar|sponsor|ad-break|agegate|pagination|'
-    'pager|perma|popup|tweet|twitter'), re.IGNORECASE)
-CLS_MAYBE = re.compile('and|article|body|column|main|shadow', re.IGNORECASE)
-CLS_WEIGHT_POSITIVE = re.compile(('article|body|content|entry|hentry|main|'
-    'page|pagination|post|text|blog|story'), re.IGNORECASE)
-CLS_WEIGHT_NEGATIVE = re.compile(('combx|comment|com-|contact|foot|footer|'
-    'footnote|head|masthead|media|meta|outbrain|promo|related|scroll|shoutbox|'
-    'sidebar|sponsor|shopping|tags|tool|widget'), re.IGNORECASE)
+CLS_UNLIKELY = re.compile(
+    "combx|comment|community|disqus|extra|foot|header|menu|remark|rss|shoutbox|"
+    "sidebar|sponsor|ad-break|agegate|pagination|pager|perma|popup|tweet|"
+    "twitter",
+    re.IGNORECASE
+)
+CLS_MAYBE = re.compile(
+    "and|article|body|column|main|shadow",
+    re.IGNORECASE
+)
+CLS_WEIGHT_POSITIVE = re.compile(
+    "article|body|content|entry|hentry|main|page|pagination|post|text|blog|"
+    "story",
+    re.IGNORECASE
+)
+CLS_WEIGHT_NEGATIVE = re.compile(
+    "combx|comment|com-|contact|foot|footer|footnote|head|masthead|media|meta|"
+    "outbrain|promo|related|scroll|shoutbox|sidebar|sponsor|shopping|tags|tool|"
+    "widget",
+    re.IGNORECASE
+)
 
 logger = logging.getLogger("breadability")
 
 
-def check_node_attribute(node, attribute_name, pattern):
-    attribute = node.get(attribute_name)
+def check_node_attributes(pattern, node, *attributes):
+    """
+    Searches match in attributes against given pattern and if
+    finds the match against any of them returns True.
+    """
+    for attribute_name in attributes:
+        attribute = node.get(attribute_name)
+        if attribute is not None and pattern.search(attribute):
+            return True
 
-    if attribute is None:
-        return False
-    else:
-        return bool(pattern.search(attribute))
-
+    return False
 
 def generate_hash_id(node):
     """
@@ -74,14 +90,14 @@ def get_class_weight(node):
     """
     weight = 0
 
-    if check_node_attribute(node, 'class', CLS_WEIGHT_NEGATIVE):
+    if check_node_attributes(CLS_WEIGHT_NEGATIVE, node, "class"):
         weight -= 25
-    if check_node_attribute(node, 'class', CLS_WEIGHT_POSITIVE):
+    if check_node_attributes(CLS_WEIGHT_POSITIVE, node, "class"):
         weight += 25
 
-    if check_node_attribute(node, 'id', CLS_WEIGHT_NEGATIVE):
+    if check_node_attributes(CLS_WEIGHT_NEGATIVE, node, "id"):
         weight -= 25
-    if check_node_attribute(node, 'id', CLS_WEIGHT_POSITIVE):
+    if check_node_attributes(CLS_WEIGHT_POSITIVE, node, "id"):
         weight += 25
 
     return weight
@@ -94,13 +110,10 @@ def is_unlikely_node(node):
     If the class or id are in the unlikely list, and there's not also a
     class/id in the likely list then it might need to be removed.
     """
-    unlikely = check_node_attribute(node, 'class', CLS_UNLIKELY) or \
-        check_node_attribute(node, 'id', CLS_UNLIKELY)
+    unlikely = check_node_attributes(CLS_UNLIKELY, node, "class", "id")
+    maybe = check_node_attributes(CLS_MAYBE, node, "class", "id")
 
-    maybe = check_node_attribute(node, 'class', CLS_MAYBE) or \
-        check_node_attribute(node, 'id', CLS_MAYBE)
-
-    return bool(unlikely and not maybe and node.tag != 'body')
+    return bool(unlikely and not maybe and node.tag != "body")
 
 
 def score_candidates(nodes):
@@ -111,62 +124,62 @@ def score_candidates(nodes):
     for node in nodes:
         logger.debug("Scoring Node")
 
-        content_score = 0
-        # if the node has no parent it knows of, then it ends up creating a
-        # body and html tag to parent the html fragment.
+        # if the node has no parent it knows of
+        # then it ends up creating a body & html tag to parent the html fragment
         parent = node.getparent()
-        grand = parent.getparent() if parent is not None else None
-        innertext = node.text_content()
-
-        if parent is None or grand is None:
-            logger.debug("Skipping candidate because parent/grand are none")
+        if parent is None:
+            logger.debug("Skipping node - parent node is none.")
             continue
 
-        # If this paragraph is less than 25 characters, don't even count it.
-        if innertext and len(innertext) < MIN_HIT_LENTH:
+        grand = parent.getparent()
+        if grand is None:
+            logger.debug("Skipping node - grand parent node is none.")
+            continue
+
+        # if paragraph is < `MIN_HIT_LENTH` characters don't even count it
+        inner_text = node.text_content().strip()
+        if len(inner_text) < MIN_HIT_LENTH:
             logger.debug("Skipping candidate because inner text is shorter than %d characters.", MIN_HIT_LENTH)
             continue
 
-        # Initialize readability data for the parent.
-        # if the parent node isn't in the candidate list, add it
+        # initialize readability data for the parent
+        # add parent node if it isn't in the candidate list
         if parent not in candidates:
             candidates[parent] = ScoredNode(parent)
 
         if grand not in candidates:
             candidates[grand] = ScoredNode(grand)
 
-        # Add a point for the paragraph itself as a base.
-        content_score += 1
+        # add a point for the paragraph itself as a base
+        content_score = 1
 
-        if innertext:
-            # Add 0.25 points for any commas within this paragraph
-            content_score += innertext.count(',') * 0.25
-            logger.debug("Bonus points for ,: " + str(innertext.count(',')))
+        if inner_text:
+            # add 0.25 points for any commas within this paragraph
+            commas_count = inner_text.count(",")
+            content_score += commas_count * 0.25
+            logger.debug("Bonus points for commas: %d", commas_count)
 
-            # Subtract 0.5 points for each double quote within this paragraph
-            content_score += innertext.count('"') * (-0.5)
-            logger.debug('Penalty points for ": ' + str(innertext.count('"')))
+            # subtract 0.5 points for each double quote within this paragraph
+            double_quotes_count = inner_text.count('"')
+            content_score += double_quotes_count * -0.5
+            logger.debug("Penalty points for double-quotes: %d", double_quotes_count)
 
-            # For every 100 characters in this paragraph, add another point.
-            # Up to 3 points.
-            length_points = len(innertext) // 100
+            # for every 100 characters in this paragraph, add another point
+            # up to 3 points
+            length_points = len(inner_text) // 100
             content_score += min(length_points, 3)
-            logger.debug("Length/content points: %r : %r", length_points,
-                content_score)
+            logger.debug("Length/content points: %d : %f", length_points, content_score)
 
-        # Add the score to the parent.
-        logger.debug("From this current node.")
+        # add the score to the parent
         candidates[parent].content_score += content_score
-        logger.debug("Giving parent bonus points: %r", candidates[parent].content_score)
-        # The grandparent gets half.
-        logger.debug("Giving grand bonus points")
-        candidates[grand].content_score += (content_score / 2.0)
-        logger.debug("Giving grand bonus points: %r", candidates[grand].content_score)
+        logger.debug("Giving parent bonus points: %f", candidates[parent].content_score)
+        # the grand node gets half
+        candidates[grand].content_score += content_score / 2.0
+        logger.debug("Giving grand bonus points: %f", candidates[grand].content_score)
 
     for candidate in candidates.values():
         adjustment = 1 - get_link_density(candidate.node)
-        logger.debug("Getting link density adjustment: %r * %r",
-            candidate.content_score, adjustment)
+        logger.debug("Getting link density adjustment: %f * %f", candidate.content_score, adjustment)
         candidate.content_score = candidate.content_score * adjustment
 
     return candidates

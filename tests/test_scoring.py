@@ -15,7 +15,7 @@ except ImportError:
 
 from breadability._py3k import to_unicode
 from breadability.readable import Article
-from breadability.scoring import check_node_attribute
+from breadability.scoring import check_node_attributes
 from breadability.scoring import get_class_weight
 from breadability.scoring import ScoredNode
 from breadability.scoring import score_candidates
@@ -61,33 +61,33 @@ class TestCheckNodeAttr(unittest.TestCase):
     """
     def test_has_class(self):
         """Verify that a node has a class in our set."""
-        test_re = re.compile('test1|test2', re.I)
+        test_pattern = re.compile('test1|test2', re.I)
         test_node = fragment_fromstring('<div/>')
         test_node.set('class', 'test2 comment')
 
-        self.assertTrue(check_node_attribute(test_node, 'class', test_re))
+        self.assertTrue(check_node_attributes(test_pattern, test_node, 'class'))
 
     def test_has_id(self):
         """Verify that a node has an id in our set."""
-        test_re = re.compile('test1|test2', re.I)
+        test_pattern = re.compile('test1|test2', re.I)
         test_node = fragment_fromstring('<div/>')
         test_node.set('id', 'test2')
 
-        self.assertTrue(check_node_attribute(test_node, 'id', test_re))
+        self.assertTrue(check_node_attributes(test_pattern, test_node, 'id'))
 
     def test_lacks_class(self):
         """Verify that a node does not have a class in our set."""
-        test_re = re.compile('test1|test2', re.I)
+        test_pattern = re.compile('test1|test2', re.I)
         test_node = fragment_fromstring('<div/>')
         test_node.set('class', 'test4 comment')
-        self.assertFalse(check_node_attribute(test_node, 'class', test_re))
+        self.assertFalse(check_node_attributes(test_pattern, test_node, 'class'))
 
     def test_lacks_id(self):
         """Verify that a node does not have an id in our set."""
-        test_re = re.compile('test1|test2', re.I)
+        test_pattern = re.compile('test1|test2', re.I)
         test_node = fragment_fromstring('<div/>')
         test_node.set('id', 'test4')
-        self.assertFalse(check_node_attribute(test_node, 'id', test_re))
+        self.assertFalse(check_node_attributes(test_pattern, test_node, 'id'))
 
 
 class TestLinkDensity(unittest.TestCase):
