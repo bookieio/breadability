@@ -9,6 +9,7 @@ NEWS = open(os.path.join(here, 'CHANGELOG.rst')).read()
 version = '0.1.11'
 install_requires = [
     # http://packages.python.org/distribute/setuptools.html#declaring-dependencies
+    'docopt==0.6.*',
     'charade',
     'lxml',
 ]
@@ -19,8 +20,6 @@ tests_require = [
 
 
 if sys.version_info < (2, 7):
-    # Require argparse since it's not in the stdlib yet.
-    install_requires.append('argparse')
     install_requires.append('unittest2')
 
 setup(

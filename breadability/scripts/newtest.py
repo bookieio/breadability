@@ -1,18 +1,43 @@
-import argparse
-import codecs
-from os import mkdir
-from os import path
+# -*- coding: utf8 -*-
 
+"""
+Helper to generate a new set of article test files for breadability.
+
+Usage:
+    breadability_newtest -n <name> <url>
+    breadability_newtest --version
+    breadability_newtest --help
+
+Arguments:
+  <url>                   The url of content to fetch for the article.html
+
+Options:
+  -n <name>, --name=<name>  Name of the test directory.
+  --version                 Show program's version number and exit.
+  -h, --help                Show this help message and exit.
+"""
+
+from __future__ import absolute_import
+
+import io
+
+from os import mkdir
+from os.path import join, dirname, pardir
+from docopt import docopt
 from .._version import VERSION
 from .._py3k import urllib
 
 
-TESTPATH = path.join(
-            path.dirname(path.dirname(__file__)),
-            'tests', 'test_articles')
+TEST_PATH = join(
+    dirname(__file__),
+    pardir,
+    "tests",
+    "test_articles"
+)
 
-TESTTPL = """
+TEST_TEMPLATE = """
 import os
+
 try:
     # Python < 2.7
     import unittest2 as unittest
@@ -23,86 +48,75 @@ from breadability.readable import Article
 
 
 class TestArticle(unittest.TestCase):
-    \"\"\"Test the scoring and parsing of the Article\"\"\"
+    '''Test the scoring and parsing of the Article'''
 
     def setUp(self):
-        \"\"\"Load up the article for us\"\"\"
+        '''Load up the article for us'''
         article_path = os.path.join(os.path.dirname(__file__), 'article.html')
         self.article = open(article_path).read()
 
     def tearDown(self):
-        \"\"\"Drop the article\"\"\"
+        '''Drop the article'''
         self.article = None
 
     def test_parses(self):
-        \"\"\"Verify we can parse the document.\"\"\"
+        '''Verify we can parse the document.'''
         doc = Article(self.article)
         self.assertTrue('id="readabilityBody"' in doc.readable)
 
     def test_content_exists(self):
-        \"\"\"Verify that some content exists.\"\"\"
-        pass
+        '''Verify that some content exists.'''
+        raise NotImplementedError()
 
     def test_content_does_not_exist(self):
-        \"\"\"Verify we cleaned out some content that shouldn't exist.\"\"\"
-        pass
+        '''Verify we cleaned out some content that shouldn't exist.'''
+        raise NotImplementedError()
 """
 
 
 def parse_args():
-    desc = "breadability helper to generate a new set of article test files."
-    parser = argparse.ArgumentParser(description=desc)
-    parser.add_argument('--version',
-        action='version', version=VERSION)
-
-    parser.add_argument('-n', '--name',
-        action='store',
-        required=True,
-        help='Name of the test directory')
-
-    parser.add_argument('url', metavar='URL', type=str, nargs=1,
-        help='The url of content to fetch for the article.html')
-
-    args = parser.parse_args()
-    return args
+    return docopt(__doc__, version=VERSION)
 
 
-def make_dir(name):
-    """Generate a new directory for tests.
+def make_test_directory(name):
+    """Generates a new directory for tests."""
+    directory_name = "test_" + name.replace(" ", "_")
+    directory_path = join(TEST_PATH, directory_name)
+    mkdir(directory_path)
 
-    """
-    dir_name = 'test_' + name.replace(' ', '_')
-    updated_name = path.join(TESTPATH, dir_name)
-    mkdir(updated_name)
-    return updated_name
+    return directory_path
 
 
-def make_files(dirname):
-    init_file = path.join(dirname, '__init__.py')
-    test_file = path.join(dirname, 'test.py')
+def make_test_files(directory_path):
+    init_file = join(directory_path, "__init__.py")
     open(init_file, "a").close()
-    with open(test_file, 'w') as f:
-        f.write(TESTTPL)
+
+    test_file = join(directory_path, "test.py")
+    with open(test_file, "w") as file:
+        file.write(TEST_TEMPLATE)
 
 
-def fetch_article(dirname, url):
+def fetch_article(directory_path, url):
     """Get the content of the url and make it the article.html"""
     opener = urllib.build_opener()
     opener.addheaders = [('Accept-Charset', 'utf-8')]
-    url_response = opener.open(url)
-    dl_html = url_response.read().decode('utf-8')
 
-    fh = codecs.open(path.join(dirname, 'article.html'), "w", "utf-8")
-    fh.write(dl_html)
-    fh.close()
+    response = opener.open(url)
+    html = response.read().decode("utf-8")
+    response.close()
+
+    path = join(directory_path, "article.html")
+    file = io.open(path, "w", encoding="utf8")
+    file.write(html)
+    file.close()
 
 
 def main():
     """Run the script."""
     args = parse_args()
-    new_dir = make_dir(args.name)
-    make_files(new_dir)
-    fetch_article(new_dir, args.url[0])
+    directory = make_test_directory(args["<name>"])
+    make_test_files(directory)
+    fetch_article(directory, args["<url>"])
 
 
 if __name__ == '__main__':

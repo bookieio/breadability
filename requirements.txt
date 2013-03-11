@@ -1,3 +1,4 @@
+docopt==0.6.*
 charade
 lxml
 coverage
