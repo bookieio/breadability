@@ -134,23 +134,6 @@ def build_error_document(html, fragment=True):
     return output
 
 
-def transform_misused_divs_into_paragraphs(document):
-    """
-    Turn all <div> elements that don't have children block level
-    elements into <p> elements.
-
-    Since we can't change the tree as we iterate over it, we must do this
-    before we process our document.
-    """
-    for element in document.iter(tag="div"):
-        child_tags = tuple(n.tag for n in element.getchildren())
-        if "div" not in child_tags:
-            logger.debug("Changing leaf <div> into <p>")
-            element.tag = "p"
-
-    return document
-
-
 def check_siblings(candidate_node, candidate_list):
     """Look through siblings for content that might also be related.
 
@@ -406,20 +389,20 @@ class Article(object):
         return tounicode(self._readable())
 
     @cached_property
-    def doc(self):
-        """The doc is the parsed xml tree of the given html."""
+    def dom(self):
+        """Parsed lxml tree (Document Object Model) of the given html."""
         try:
             document = self.orig.html
             # cleaning doesn't return, just wipes in place
             html_cleaner(document)
-            return transform_misused_divs_into_paragraphs(document)
+            return leaf_div_elements_into_paragraphs(document)
         except ValueError:
             return None
 
     @cached_property
     def candidates(self):
         """Generate the list of candidates from the doc."""
-        doc = self.doc
+        doc = self.dom
         if doc is not None and len(doc):
             candidates, should_drop = find_candidates(doc)
             self._should_drop = should_drop
@@ -471,14 +454,31 @@ class Article(object):
     def _handle_no_candidates(self):
         """If we fail to find a good candidate we need to find something else."""
         # since we've not found a good candidate we're should help this
-        if self.doc is not None and len(self.doc):
+        if self.dom is not None and len(self.dom):
             # cleanup by removing the should_drop we spotted.
             drop_nodes_with_parents(self._should_drop)
 
-            doc = prep_article(self.doc)
+            doc = prep_article(self.dom)
             doc = build_base_document(doc, self.fragment)
         else:
             logger.warning('No document to use.')
             doc = build_error_document(self.fragment)
 
         return doc
+
+
+def leaf_div_elements_into_paragraphs(document):
+    """
+    Turn all <div> elements that don't have children block level
+    elements into <p> elements.
+
+    Since we can't change the tree as we iterate over it, we must do this
+    before we process our document.
+    """
+    for element in document.iter(tag="div"):
+        child_tags = tuple(n.tag for n in element.getchildren())
+        if "div" not in child_tags:
+            logger.debug("Changing leaf <div> into <p>")
+            element.tag = "p"
+
+    return document

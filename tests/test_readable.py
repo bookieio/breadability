@@ -16,7 +16,7 @@ from breadability.readable import get_class_weight
 from breadability.readable import get_link_density
 from breadability.readable import is_bad_link
 from breadability.readable import score_candidates
-from breadability.readable import transform_misused_divs_into_paragraphs
+from breadability.readable import leaf_div_elements_into_paragraphs
 from breadability.scoring import ScoredNode
 from .utils import load_snippet, load_article
 
@@ -122,7 +122,7 @@ class TestCleaning(unittest.TestCase):
         test_doc = document_fromstring(test_html)
         self.assertEqual(
             tounicode(
-                transform_misused_divs_into_paragraphs(test_doc)),
+                leaf_div_elements_into_paragraphs(test_doc)),
             to_unicode("<html><body><p>simple</p></body></html>")
         )
 
@@ -131,7 +131,7 @@ class TestCleaning(unittest.TestCase):
         test_doc2 = document_fromstring(test_html2)
         self.assertEqual(
             tounicode(
-                transform_misused_divs_into_paragraphs(test_doc2)),
+                leaf_div_elements_into_paragraphs(test_doc2)),
                 to_unicode('<html><body><p>simple<a href="">link</a></p></body></html>')
         )
 
@@ -141,7 +141,7 @@ class TestCleaning(unittest.TestCase):
             "<html><body><div>text<div>child</div>aftertext</div></body></html>")
 
         self.assertEqual(
-            tounicode(transform_misused_divs_into_paragraphs(dom)),
+            tounicode(leaf_div_elements_into_paragraphs(dom)),
             to_unicode("<html><body><div>text<p>child</p>aftertext</div></body></html>")
         )
 
