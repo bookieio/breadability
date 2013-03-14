@@ -135,6 +135,16 @@ class TestCleaning(unittest.TestCase):
                 to_unicode('<html><body><p>simple<a href="">link</a></p></body></html>')
         )
 
+    def test_dont_transform_div_with_div(self):
+        """Verify that only child <div> element is replaced by <p>."""
+        dom = document_fromstring(
+            "<html><body><div>text<div>child</div>aftertext</div></body></html>")
+
+        self.assertEqual(
+            tounicode(transform_misused_divs_into_paragraphs(dom)),
+            to_unicode("<html><body><div>text<p>child</p>aftertext</div></body></html>")
+        )
+
     def test_bad_links(self):
         """Some links should just not belong."""
         bad_links = [

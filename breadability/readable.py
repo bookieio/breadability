@@ -134,31 +134,21 @@ def build_error_document(html, fragment=True):
     return output
 
 
-def transform_misused_divs_into_paragraphs(doc):
-    """Turn all divs that don't have children block level elements into p's
+def transform_misused_divs_into_paragraphs(document):
+    """
+    Turn all <div> elements that don't have children block level
+    elements into <p> elements.
 
     Since we can't change the tree as we iterate over it, we must do this
     before we process our document.
-
-    The idea is that we process all divs and if the div does not contain
-    another list of divs, then we replace it with a p tag instead appending
-    it's contents/children to it.
     """
-    for elem in doc.iter(tag='div'):
-        child_tags = tuple(n.tag for n in elem.getchildren())
-        if 'div' not in child_tags:
-            # if there is no div inside of this div...then it's a leaf
-            # node in a sense.
-            # We need to create a <p> and put all it's contents in there
-            # We'll just stringify it, then regex replace the first/last
-            # div bits to turn them into <p> vs <div>.
-            logger.debug('Turning leaf <div> into <p>')
-            orig = tounicode(elem).strip()
-            started = re.sub(r'^<\s*div', '<p', orig)
-            ended = re.sub(r'div>$', 'p>', started)
-            elem.getparent().replace(elem, fromstring(ended))
+    for element in document.iter(tag="div"):
+        child_tags = tuple(n.tag for n in element.getchildren())
+        if "div" not in child_tags:
+            logger.debug("Changing leaf <div> into <p>")
+            element.tag = "p"
 
-    return doc
+    return document
 
 
 def check_siblings(candidate_node, candidate_list):
@@ -419,11 +409,10 @@ class Article(object):
     def doc(self):
         """The doc is the parsed xml tree of the given html."""
         try:
-            doc = self.orig.html
+            document = self.orig.html
             # cleaning doesn't return, just wipes in place
-            html_cleaner(doc)
-            doc = transform_misused_divs_into_paragraphs(doc)
-            return doc
+            html_cleaner(document)
+            return transform_misused_divs_into_paragraphs(document)
         except ValueError:
             return None
 
