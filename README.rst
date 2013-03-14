@@ -42,21 +42,21 @@ Usage
 Command line
 ~~~~~~~~~~~~
 
-::
+.. code-block:: bash
 
     $ breadability http://wiki.python.org/moin/BeginnersGuide
 
 Options
 ```````
 
-- b will write out the parsed content to a temp file and open it in a
+- **b** will write out the parsed content to a temp file and open it in a
   browser for viewing.
-- d will write out debug scoring statements to help track why a node was
+- **d** will write out debug scoring statements to help track why a node was
   chosen as the document and why some nodes were removed from the final
   product.
-- f will override the default behaviour of getting an html fragment (<div>)
+- **f** will override the default behaviour of getting an html fragment (<div>)
   and give you back a full <html> document.
-- v will output in verbose debug mode and help let you know why it parsed
+- **v** will output in verbose debug mode and help let you know why it parsed
   how it did.
 
 

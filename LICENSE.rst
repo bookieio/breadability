@@ -1,4 +1,4 @@
-Copyright (c) 2013, Michal Belica
+Copyright (c) 2013 Rick Harding, Michal Belica and contributors
 
 All rights reserved.
 
