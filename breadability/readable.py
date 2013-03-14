@@ -21,7 +21,7 @@ html_cleaner = Cleaner(scripts=True, javascript=True, comments=True,
     style=True, links=True, meta=False, add_nofollow=False,
     page_structure=False, processing_instructions=True,
     embedded=False, frames=False, forms=False,
-    annoying_tags=False, remove_tags=None,
+    annoying_tags=False, remove_tags=None, kill_tags=("noscript", "iframe"),
     remove_unknown_tags=False, safe_attrs_only=False)
 
 
@@ -37,20 +37,6 @@ NULL_DOCUMENT = """
 SCORABLE_TAGS = ('div', 'p', 'td', 'pre', 'article')
 
 logger = logging.getLogger("breadability")
-
-
-def drop_tag(document, *tags):
-    """
-    Helper to just remove any nodes that match this html tag passed in
-
-    :param *tags: one or more html tag strings to remove e.g. style, script
-    """
-    for tag in tags:
-        for node in document.iterfind(".//" + tag):
-            logger.debug("Dropping tag %s", tag)
-            node.drop_tree()
-
-    return document
 
 
 def is_bad_link(node):
@@ -436,7 +422,6 @@ class Article(object):
             doc = self.orig.html
             # cleaning doesn't return, just wipes in place
             html_cleaner(doc)
-            doc = drop_tag(doc, 'noscript', 'iframe')
             doc = transform_misused_divs_into_paragraphs(doc)
             return doc
         except ValueError:
