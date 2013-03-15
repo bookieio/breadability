@@ -25,6 +25,7 @@ html_cleaner = Cleaner(scripts=True, javascript=True, comments=True,
     remove_unknown_tags=False, safe_attrs_only=False)
 
 
+SCORABLE_TAGS = ("div", "p", "td", "pre", "article")
 NULL_DOCUMENT = """
 <html>
     <head>
@@ -34,32 +35,8 @@ NULL_DOCUMENT = """
     </body>
 </html>
 """
-SCORABLE_TAGS = ('div', 'p', 'td', 'pre', 'article')
 
 logger = logging.getLogger("breadability")
-
-
-def is_bad_link(node):
-    """
-    Helper to determine if the link is something to clean out
-
-    We've hit articles with many multiple links that should be cleaned out
-    because they're just there to pollute the space. See tests for examples.
-    """
-    if node.tag != 'a':
-        return False
-
-    name = node.get('name')
-    href = node.get('href')
-    if name and not href:
-        return True
-
-    if href:
-        url_bits = href.split('#')
-        if len(url_bits) == 2 and len(url_bits[1]) > 25:
-            return True
-
-    return False
 
 
 def ok_embedded_video(node):
@@ -74,64 +51,50 @@ def ok_embedded_video(node):
     return False
 
 
-def build_base_document(html, fragment=True):
-    """Return a base document with the body as root.
-
-    :param html: Parsed Element object
-    :param fragment: Should we return a <div> doc fragment or
-        a full <html> doc.
+def build_base_document(dom, return_fragment=True):
     """
-    if html.tag == 'body':
-        html.tag = 'div'
-        found_body = html
-    else:
-        found_body = html.find('.//body')
+    Builds a base document with the body as root.
 
-    if found_body is None:
-        frag = fragment_fromstring('<div/>')
-        frag.set('id', 'readabilityBody')
-        frag.append(html)
-
-        if not fragment:
-            output = fromstring(NULL_DOCUMENT)
-            insert_point = output.find('.//body')
-            insert_point.append(frag)
-        else:
-            output = frag
-    else:
-        found_body.tag = 'div'
-        found_body.set('id', 'readabilityBody')
-
-        if not fragment:
-            output = fromstring(NULL_DOCUMENT)
-            insert_point = output.find('.//body')
-            insert_point.append(found_body)
-        else:
-            output = found_body
-
-    output.doctype = "<!DOCTYPE html>"
-    return output
-
-
-def build_error_document(html, fragment=True):
-    """Return an empty erorr document with the body as root.
-
-    :param fragment: Should we return a <div> doc fragment or
-        a full <html> doc.
+    :param dom: Parsed lxml tree (Document Object Model).
+    :param bool return_fragment: If True only <div> fragment is returned.
+        Otherwise full HTML document is returned.
     """
-    frag = fragment_fromstring('<div/>')
-    frag.set('id', 'readabilityBody')
-    frag.set('class', 'parsing-error')
+    body_element = dom.find(".//body")
 
-    if not fragment:
-        output = fromstring(NULL_DOCUMENT)
-        insert_point = output.find('.//body')
-        insert_point.append(frag)
+    if body_element is None:
+        fragment = fragment_fromstring('<div id="readabilityBody"/>')
+        fragment.append(dom)
     else:
-        output = frag
+        body_element.tag = "div"
+        body_element.set("id", "readabilityBody")
+        fragment = body_element
 
-    output.doctype = "<!DOCTYPE html>"
-    return output
+    return document_from_fragment(fragment, return_fragment)
+
+
+def build_error_document(dom, return_fragment=True):
+    """
+    Builds an empty erorr document with the body as root.
+
+    :param bool return_fragment: If True only <div> fragment is returned.
+        Otherwise full HTML document is returned.
+    """
+    fragment = fragment_fromstring(
+        '<div id="readabilityBody" class="parsing-error"/>')
+
+    return document_from_fragment(fragment, return_fragment)
+
+
+def document_from_fragment(fragment, return_fragment):
+    if return_fragment:
+        document = fragment
+    else:
+        document = fromstring(NULL_DOCUMENT)
+        body_element = document.find(".//body")
+        body_element.append(fragment)
+
+    document.doctype = "<!DOCTYPE html>"
+    return document
 
 
 def check_siblings(candidate_node, candidate_list):
@@ -342,33 +305,55 @@ def prep_article(doc):
     return clean_document(doc)
 
 
-def find_candidates(doc):
-    """Find cadidate nodes for the readable version of the article.
+def find_candidates(document):
+    """
+    Finds cadidate nodes for the readable version of the article.
 
-    Here's we're going to remove unlikely nodes, find scores on the rest, and
+    Here's we're going to remove unlikely nodes, find scores on the rest,
     clean up and return the final best match.
     """
-    nodes_to_score = []
-    should_remove = []
+    nodes_to_score = set()
+    should_remove = set()
 
-    for node in doc.iter():
+    for node in document.iter():
         if is_unlikely_node(node):
-            logger.debug('We should drop unlikely: ' + str(node))
-            should_remove.append(node)
-            continue
-        if node.tag == 'a' and is_bad_link(node):
-            logger.debug('We should drop bad link: ' + str(node))
-            should_remove.append(node)
-            continue
-        if node.tag in SCORABLE_TAGS and node not in nodes_to_score:
-            nodes_to_score.append(node)
+            logger.debug("We should drop unlikely: %s", str(node))
+            should_remove.add(node)
+        elif is_bad_link(node):
+            logger.debug("We should drop bad link: %s", str(node))
+            should_remove.add(node)
+        elif node.tag in SCORABLE_TAGS:
+            nodes_to_score.add(node)
 
     return score_candidates(nodes_to_score), should_remove
 
 
+def is_bad_link(node):
+    """
+    Helper to determine if the node is link that is useless.
+
+    We've hit articles with many multiple links that should be cleaned out
+    because they're just there to pollute the space. See tests for examples.
+    """
+    if node.tag != "a":
+        return False
+
+    name = node.get("name")
+    href = node.get("href")
+    if name and not href:
+        return True
+
+    if href:
+        href_parts = href.split("#")
+        if len(href_parts) == 2 and len(href_parts[1]) > 25:
+            return True
+
+    return False
+
+
 class Article(object):
     """Parsed readable object"""
-    _should_drop = []
+    _should_drop = ()
 
     def __init__(self, html, url=None, fragment=True):
         """Create the Article we're going to use.
@@ -401,14 +386,13 @@ class Article(object):
 
     @cached_property
     def candidates(self):
-        """Generate the list of candidates from the doc."""
-        doc = self.dom
-        if doc is not None and len(doc):
-            candidates, should_drop = find_candidates(doc)
-            self._should_drop = should_drop
-            return candidates
-        else:
+        """Generates list of candidates from the DOM."""
+        dom = self.dom
+        if dom is None or len(dom) == 0:
             return None
+
+        candidates, self._should_drop = find_candidates(dom)
+        return candidates
 
     @cached_property
     def readable(self):
@@ -420,51 +404,48 @@ class Article(object):
 
     def _readable(self):
         """The readable parsed article"""
-        if self.candidates:
-            logger.debug('Candidates found')
-            pp = PrettyPrinter(indent=2)
+        if not self.candidates:
+            logger.warning("No candidates found in document.")
+            return self._handle_no_candidates()
 
-            # cleanup by removing the should_drop we spotted.
-            drop_nodes_with_parents(self._should_drop)
+        # cleanup by removing the should_drop we spotted.
+        drop_nodes_with_parents(self._should_drop)
 
-            # right now we return the highest scoring candidate content
-            by_score = sorted([c for c in self.candidates.values()],
-                key=attrgetter('content_score'), reverse=True)
-            logger.debug(pp.pformat(by_score))
+        # right now we return the highest scoring candidate content
+        best_candidates = sorted((c for c in self.candidates.values()),
+            key=attrgetter("content_score"), reverse=True)
 
-            # since we have several candidates, check the winner's siblings
-            # for extra content
-            winner = by_score[0]
-            logger.debug('Selected winning node: ' + str(winner))
-            updated_winner = check_siblings(winner, self.candidates)
-            logger.debug('Begin final prep of article')
-            updated_winner.node = prep_article(updated_winner.node)
-            if updated_winner.node is not None:
-                doc = build_base_document(updated_winner.node, self.fragment)
-            else:
-                logger.warning('Had candidates but failed to find a cleaned winning doc.')
-                doc = self._handle_no_candidates()
+        printer = PrettyPrinter(indent=2)
+        logger.debug(printer.pformat(best_candidates))
+
+        # since we have several candidates, check the winner's siblings
+        # for extra content
+        winner = best_candidates[0]
+        updated_winner = check_siblings(winner, self.candidates)
+        logger.debug('Begin final prep of article')
+        updated_winner.node = prep_article(updated_winner.node)
+        if updated_winner.node is not None:
+            doc = build_base_document(updated_winner.node, self.fragment)
         else:
-            logger.warning('No candidates found: using document.')
-            logger.debug('Begin final prep of article')
+            logger.warning('Had candidates but failed to find a cleaned winning doc.')
             doc = self._handle_no_candidates()
 
         return doc
 
     def _handle_no_candidates(self):
-        """If we fail to find a good candidate we need to find something else."""
+        """
+        If we fail to find a good candidate we need to find something else.
+        """
         # since we've not found a good candidate we're should help this
         if self.dom is not None and len(self.dom):
             # cleanup by removing the should_drop we spotted.
             drop_nodes_with_parents(self._should_drop)
 
-            doc = prep_article(self.dom)
-            doc = build_base_document(doc, self.fragment)
+            dom = prep_article(self.dom)
+            return build_base_document(dom, self.fragment)
         else:
-            logger.warning('No document to use.')
-            doc = build_error_document(self.fragment)
-
-        return doc
+            logger.warning("No document to use.")
+            return build_error_document(self.fragment)
 
 
 def leaf_div_elements_into_paragraphs(document):
