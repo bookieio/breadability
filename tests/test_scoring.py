@@ -1,18 +1,13 @@
 # -*- coding: utf8 -*-
 
 from __future__ import absolute_import
+from __future__ import division, print_function, unicode_literals
 
 import re
 
+from operator import attrgetter
 from lxml.html import document_fromstring
 from lxml.html import fragment_fromstring
-from operator import attrgetter
-try:
-    # Python < 2.7
-    import unittest2 as unittest
-except ImportError:
-    import unittest
-
 from readability._py3k import to_unicode
 from readability.readable import Article
 from readability.scoring import check_node_attributes
@@ -22,6 +17,7 @@ from readability.scoring import score_candidates
 from readability.scoring import generate_hash_id
 from readability.readable import get_link_density
 from readability.readable import is_unlikely_node
+from .compat import unittest
 from .utils import load_snippet
 
 

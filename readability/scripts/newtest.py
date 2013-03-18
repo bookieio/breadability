@@ -35,43 +35,42 @@ TEST_PATH = join(
     "test_articles"
 )
 
-TEST_TEMPLATE = """
+TEST_TEMPLATE = '''# -*- coding: utf8 -*-
+
+from __future__ import absolute_import
+from __future__ import division, print_function, unicode_literals
+
 import os
 
-try:
-    # Python < 2.7
-    import unittest2 as unittest
-except ImportError:
-    import unittest
-
 from readability.readable import Article
+from ...compat import unittest
 
 
 class TestArticle(unittest.TestCase):
-    '''Test the scoring and parsing of the Article'''
+    """Test the scoring and parsing of the Article"""
 
     def setUp(self):
-        '''Load up the article for us'''
-        article_path = os.path.join(os.path.dirname(__file__), 'article.html')
+        """Load up the article for us"""
+        article_path = os.path.join(os.path.dirname(__file__), "article.html")
         self.article = open(article_path).read()
 
     def tearDown(self):
-        '''Drop the article'''
+        """Drop the article"""
         self.article = None
 
     def test_parses(self):
-        '''Verify we can parse the document.'''
+        """Verify we can parse the document."""
         doc = Article(self.article)
         self.assertTrue('id="readabilityBody"' in doc.readable)
 
     def test_content_exists(self):
-        '''Verify that some content exists.'''
+        """Verify that some content exists."""
         raise NotImplementedError()
 
     def test_content_does_not_exist(self):
-        '''Verify we cleaned out some content that shouldn't exist.'''
+        """Verify we cleaned out some content that shouldn't exist."""
         raise NotImplementedError()
-"""
+'''
 
 
 def parse_args():
@@ -99,7 +98,7 @@ def make_test_files(directory_path):
 def fetch_article(directory_path, url):
     """Get the content of the url and make it the article.html"""
     opener = urllib.build_opener()
-    opener.addheaders = [('Accept-Charset', 'utf-8')]
+    opener.addheaders = [("Accept-Charset", "utf-8")]
 
     response = opener.open(url)
     html = response.read().decode("utf-8")
@@ -119,5 +118,5 @@ def main():
     fetch_article(directory, args["<url>"])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

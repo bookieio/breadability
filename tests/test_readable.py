@@ -1,15 +1,11 @@
+# -*- coding: utf8 -*-
 
 from __future__ import absolute_import
+from __future__ import division, print_function, unicode_literals
 
 from lxml.etree import tounicode
 from lxml.html import document_fromstring
 from lxml.html import fragment_fromstring
-try:
-    # Python < 2.7
-    import unittest2 as unittest
-except ImportError:
-    import unittest
-
 from readability._py3k import to_unicode
 from readability.readable import Article
 from readability.readable import get_class_weight
@@ -18,6 +14,7 @@ from readability.readable import is_bad_link
 from readability.readable import score_candidates
 from readability.readable import leaf_div_elements_into_paragraphs
 from readability.scoring import ScoredNode
+from .compat import unittest
 from .utils import load_snippet, load_article
 
 

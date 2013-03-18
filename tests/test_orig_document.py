@@ -1,16 +1,12 @@
 # -*- coding: utf8 -*-
 
 from __future__ import absolute_import
-
-try:
-    # Python < 2.7
-    import unittest2 as unittest
-except ImportError:
-    import unittest
+from __future__ import division, print_function, unicode_literals
 
 from collections import defaultdict
 from readability._py3k import to_unicode, to_bytes
 from readability.document import OriginalDocument, determine_encoding
+from .compat import unittest
 from .utils import load_snippet
 
 
