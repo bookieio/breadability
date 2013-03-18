@@ -71,8 +71,8 @@ setup(
     test_suite="tests.run_tests.run",
     entry_points={
         "console_scripts": [
-            "readability=readability:client.main",
-            "readability_newtest=breadability:newtest.main",
+            "readability=readability.scripts.client:main",
+            "readability_test=readability.scripts.test_helper:main",
         ]
     }
 )

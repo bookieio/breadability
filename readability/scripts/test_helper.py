@@ -4,9 +4,9 @@
 Helper to generate a new set of article test files for readability.
 
 Usage:
-    readability_newtest -n <name> <url>
-    readability_newtest --version
-    readability_newtest --help
+    readability_test --name <name> <url>
+    readability_test --version
+    readability_test --help
 
 Arguments:
   <url>                   The url of content to fetch for the article.html
@@ -18,21 +18,19 @@ Options:
 """
 
 from __future__ import absolute_import
-
-import io
+from __future__ import division, print_function, unicode_literals
 
 from os import mkdir
-from os.path import join, dirname, pardir
+from os.path import join, dirname, pardir, exists as path_exists
 from docopt import docopt
 from .._version import VERSION
-from .._py3k import urllib
+from .._py3k import to_unicode, urllib
 
 
 TEST_PATH = join(
     dirname(__file__),
-    pardir,
-    "tests",
-    "test_articles"
+    pardir, pardir,
+    "tests/test_articles"
 )
 
 TEST_TEMPLATE = '''# -*- coding: utf8 -*-
@@ -40,36 +38,38 @@ TEST_TEMPLATE = '''# -*- coding: utf8 -*-
 from __future__ import absolute_import
 from __future__ import division, print_function, unicode_literals
 
-import os
-
+from os.path import join, dirname
 from readability.readable import Article
 from ...compat import unittest
 
 
 class TestArticle(unittest.TestCase):
-    """Test the scoring and parsing of the Article"""
+    """
+    Test the scoring and parsing of the article from URL below:
+    %(source_url)s
+    """
 
     def setUp(self):
         """Load up the article for us"""
-        article_path = os.path.join(os.path.dirname(__file__), "article.html")
-        self.article = open(article_path).read()
+        article_path = join(dirname(__file__), "article.html")
+        with open(article_path, "rb") as file:
+            self.document = Article(file.read(), "%(source_url)s")
 
     def tearDown(self):
         """Drop the article"""
-        self.article = None
+        self.document = None
 
     def test_parses(self):
         """Verify we can parse the document."""
-        doc = Article(self.article)
-        self.assertTrue('id="readabilityBody"' in doc.readable)
+        self.assertIn('id="readabilityBody"', self.document.readable)
 
     def test_content_exists(self):
         """Verify that some content exists."""
-        raise NotImplementedError()
+        self.assertIn("#&@#&@#&@", self.document.readable)
 
     def test_content_does_not_exist(self):
         """Verify we cleaned out some content that shouldn't exist."""
-        raise NotImplementedError()
+        self.assertNotIn("", self.document.readable)
 '''
 
 
@@ -81,18 +81,24 @@ def make_test_directory(name):
     """Generates a new directory for tests."""
     directory_name = "test_" + name.replace(" ", "_")
     directory_path = join(TEST_PATH, directory_name)
-    mkdir(directory_path)
+
+    if not path_exists(directory_path):
+        mkdir(directory_path)
 
     return directory_path
 
 
-def make_test_files(directory_path):
+def make_test_files(directory_path, url):
     init_file = join(directory_path, "__init__.py")
     open(init_file, "a").close()
 
+    data = TEST_TEMPLATE % {
+        "source_url": to_unicode(url)
+    }
+
     test_file = join(directory_path, "test.py")
     with open(test_file, "w") as file:
-        file.write(TEST_TEMPLATE)
+        file.write(data)
 
 
 def fetch_article(directory_path, url):
@@ -101,20 +107,19 @@ def fetch_article(directory_path, url):
     opener.addheaders = [("Accept-Charset", "utf-8")]
 
     response = opener.open(url)
-    html = response.read().decode("utf-8")
+    html_data = response.read()
     response.close()
 
     path = join(directory_path, "article.html")
-    file = io.open(path, "w", encoding="utf8")
-    file.write(html)
-    file.close()
+    with open(path, "wb") as file:
+        file.write(html_data)
 
 
 def main():
     """Run the script."""
     args = parse_args()
-    directory = make_test_directory(args["<name>"])
-    make_test_files(directory)
+    directory = make_test_directory(args["--name"])
+    make_test_files(directory, args["<url>"])
     fetch_article(directory, args["<url>"])
 
 
