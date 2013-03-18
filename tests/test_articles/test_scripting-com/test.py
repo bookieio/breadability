@@ -7,9 +7,9 @@ except ImportError:
     import unittest
 
 
-from breadability.readable import Article
-from breadability.readable import check_siblings
-from breadability.readable import prep_article
+from readability.readable import Article
+from readability.readable import check_siblings
+from readability.readable import prep_article
 
 
 class TestArticle(unittest.TestCase):

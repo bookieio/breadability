@@ -1,12 +1,12 @@
 # -*- coding: utf8 -*-
 
 """
-Helper to generate a new set of article test files for breadability.
+Helper to generate a new set of article test files for readability.
 
 Usage:
-    breadability_newtest -n <name> <url>
-    breadability_newtest --version
-    breadability_newtest --help
+    readability_newtest -n <name> <url>
+    readability_newtest --version
+    readability_newtest --help
 
 Arguments:
   <url>                   The url of content to fetch for the article.html
@@ -44,7 +44,7 @@ try:
 except ImportError:
     import unittest
 
-from breadability.readable import Article
+from readability.readable import Article
 
 
 class TestArticle(unittest.TestCase):

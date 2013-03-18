@@ -15,7 +15,7 @@ from ._py3k import unicode, to_string, to_bytes
 from .utils import cached_property
 
 
-logger = logging.getLogger("breadability")
+logger = logging.getLogger("readability")
 
 
 def determine_encoding(page):

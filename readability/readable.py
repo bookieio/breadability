@@ -36,7 +36,7 @@ NULL_DOCUMENT = """
 </html>
 """
 
-logger = logging.getLogger("breadability")
+logger = logging.getLogger("readability")
 
 
 def ok_embedded_video(node):

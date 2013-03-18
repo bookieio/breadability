@@ -13,15 +13,15 @@ try:
 except ImportError:
     import unittest
 
-from breadability._py3k import to_unicode
-from breadability.readable import Article
-from breadability.scoring import check_node_attributes
-from breadability.scoring import get_class_weight
-from breadability.scoring import ScoredNode
-from breadability.scoring import score_candidates
-from breadability.scoring import generate_hash_id
-from breadability.readable import get_link_density
-from breadability.readable import is_unlikely_node
+from readability._py3k import to_unicode
+from readability.readable import Article
+from readability.scoring import check_node_attributes
+from readability.scoring import get_class_weight
+from readability.scoring import ScoredNode
+from readability.scoring import score_candidates
+from readability.scoring import generate_hash_id
+from readability.readable import get_link_density
+from readability.readable import is_unlikely_node
 from .utils import load_snippet
 
 

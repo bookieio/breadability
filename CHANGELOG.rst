@@ -1,7 +1,8 @@
 .. :changelog:
 
-Changelog for breadability
+Changelog for readability
 ==========================
+- Renamed package to readability.
 - Added support for Python >= 3.2.
 - Py3k compatible package 'charade' is used instead of 'chardet'.
 
@@ -39,7 +40,7 @@ Changelog for breadability
 
 0.1.4 (June 16th 2012)
 ----------------------
-- Add a test generation helper breadability_newtest script.
+- Add a test generation helper readability_newtest script.
 - Add tests and fixes for the scripting news parse failure.
 
 0.1.3 (June 15th 2012)

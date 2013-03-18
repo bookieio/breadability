@@ -1,7 +1,7 @@
-breadability - another readability Python port
+Readability.py - another readability Python port
 ==============================================
-.. image:: https://api.travis-ci.org/miso-belica/breadability.png?branch=master
-   :target: https://travis-ci.org/miso-belica/breadability
+.. image:: https://api.travis-ci.org/miso-belica/readability.py.png?branch=master
+   :target: https://travis-ci.org/miso-belica/readability.py
 
 I've tried to work with the various forks of some ancient codebase that ported
 `readability`_ to Python. The lack of tests, unused regex's, and commented out
@@ -27,14 +27,14 @@ things from pip so that it can compile.
 .. code-block:: bash
 
     $ [sudo] apt-get install libxml2-dev libxslt-dev
-    $ [sudo] pip install git+git://github.com/miso-belica/breadability.git
+    $ [sudo] pip install git+git://github.com/miso-belica/readability.py.git
 
 Tests
 -----
 .. code-block:: bash
 
-    $ nosetests --with-coverage --cover-package=breadability --cover-erase tests
-    $ nosetests-3.3 --with-coverage --cover-package=breadability --cover-erase tests
+    $ nosetests --with-coverage --cover-package=readability --cover-erase tests
+    $ nosetests-3.3 --with-coverage --cover-package=readability --cover-erase tests
 
 
 Usage
@@ -44,7 +44,7 @@ Command line
 
 .. code-block:: bash
 
-    $ breadability http://wiki.python.org/moin/BeginnersGuide
+    $ readability http://wiki.python.org/moin/BeginnersGuide
 
 Options
 ```````
@@ -66,7 +66,7 @@ Python API
 
     from __future__ import print_function
 
-    from breadability.readable import Article
+    from readability.readable import Article
 
 
     if __name__ == "__main__":

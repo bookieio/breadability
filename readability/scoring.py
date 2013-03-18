@@ -36,7 +36,7 @@ CLS_WEIGHT_NEGATIVE = re.compile(
     re.IGNORECASE
 )
 
-logger = logging.getLogger("breadability")
+logger = logging.getLogger("readability")
 
 
 def check_node_attributes(pattern, node, *attributes):

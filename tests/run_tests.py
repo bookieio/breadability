@@ -12,7 +12,7 @@ from os.path import dirname, abspath
 DEFAULT_PARAMS = [
     "nosetests",
     "--with-coverage",
-    "--cover-package=breadability",
+    "--cover-package=readability",
     "--cover-erase",
 ]
 

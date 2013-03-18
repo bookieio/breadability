@@ -9,8 +9,8 @@ except ImportError:
     import unittest
 
 from collections import defaultdict
-from breadability._py3k import to_unicode, to_bytes
-from breadability.document import OriginalDocument, determine_encoding
+from readability._py3k import to_unicode, to_bytes
+from readability.document import OriginalDocument, determine_encoding
 from .utils import load_snippet
 
 

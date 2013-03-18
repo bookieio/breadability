@@ -2,7 +2,7 @@ import sys
 
 from os.path import abspath, dirname, join
 from setuptools import setup, find_packages
-from breadability import __version__
+from readability import __version__
 
 
 CURRENT_DIRECTORY = abspath(dirname(__file__))
@@ -29,20 +29,20 @@ if sys.version_info < (2, 7):
 
 
 setup(
-    name="breadability",
+    name="readability",
     version=__version__,
-    description="Port of Readability API in Python",
+    description="Port of Readability HTML parser in Python",
     long_description=long_description,
     keywords=[
+        "readability",
         "readable",
         "parsing",
-        "html",
+        "HTML",
         "content",
-        "bookie",
     ],
-    author="Rick Harding",
-    author_email="rharding@mitechie.com",
-    url="http://docs.bmark.us",
+    author="Michal Belica",
+    author_email="miso.belica@gmail.com",
+    url="https://github.com/miso-belica/readability.py",
     license="BSD",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -71,8 +71,8 @@ setup(
     test_suite="tests.run_tests.run",
     entry_points={
         "console_scripts": [
-            "breadability=breadability:client.main",
-            "breadability_newtest=breadability:newtest.main",
+            "readability=readability:client.main",
+            "readability_newtest=breadability:newtest.main",
         ]
     }
 )
