@@ -186,7 +186,7 @@ class TestCandidateNodes(unittest.TestCase):
 
     def test_article_enables_candidate_access(self):
         """Candidates are accessible after document processing."""
-        doc = Article(load_article('ars/ars.001.html'))
+        doc = Article(load_article('ars.001.html'))
         self.assertTrue(hasattr(doc, 'candidates'))
 
 
@@ -221,7 +221,7 @@ class TestScoringNodes(unittest.TestCase):
         """Processing candidates should get us a list of nodes to try out."""
         # we'll start out using our first real test document
         test_nodes = []
-        doc = document_fromstring(load_article('ars/ars.001.html'))
+        doc = document_fromstring(load_article('ars.001.html'))
         for node in doc.getiterator():
             if node.tag in ['p', 'td', 'pre']:
                 test_nodes.append(node)
@@ -271,7 +271,7 @@ class TestLinkDensityScoring(unittest.TestCase):
 
     def test_link_density(self):
         """Test that we get a link density"""
-        doc = document_fromstring(load_article('ars/ars.001.html'))
+        doc = document_fromstring(load_article('ars.001.html'))
         for node in doc.getiterator():
             if node.tag in ['p', 'td', 'pre']:
                 density = get_link_density(node)
