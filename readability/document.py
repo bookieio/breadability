@@ -11,7 +11,7 @@ import charade
 from lxml.etree import tostring, tounicode, XMLSyntaxError
 from lxml.html import document_fromstring, HTMLParser
 
-from ._py3k import unicode, to_string, to_bytes, to_unicode
+from ._py3k import unicode, to_bytes, to_unicode, unicode_compatible
 from .utils import cached_property
 
 
@@ -72,45 +72,44 @@ def build_document(html_content, base_href=None):
     return document
 
 
+@unicode_compatible
 class OriginalDocument(object):
-    """The original document to process"""
+    """The original document to process."""
 
     def __init__(self, html, url=None):
-        self.orig_html = html
-        self.url = url
+        self._html = html
+        self._url = url
 
-    def __str__(self):
-        """Render out our document as a string"""
-        return to_string(tostring(self.html))
+    @property
+    def url(self):
+        """Source URL of HTML document."""
+        return self._url
 
     def __unicode__(self):
-        """Render out our document as a string"""
+        """Renders the document as a string."""
         return tounicode(self.html)
 
-    def _parse(self, html):
-        """Generate an lxml document from html."""
+    @cached_property
+    def html(self):
+        """Parsed HTML document from the input."""
+        html = self._html
         if not isinstance(html, unicode):
             encoding = determine_encoding(html)
             html = html.decode(encoding)
 
         html = replace_multi_br_to_paragraphs(html)
-        document = build_document(html, self.url)
+        document = build_document(html, self._url)
 
         return document
 
     @cached_property
-    def html(self):
-        """The parsed html document from the input"""
-        return self._parse(self.orig_html)
-
-    @cached_property
     def links(self):
-        """Links within the document"""
+        """Links within the document."""
         return self.html.findall(".//a")
 
     @cached_property
     def title(self):
-        """Pull the title attribute out of the parsed document"""
+        """Title attribute of the parsed document."""
         title_element = self.html.find(".//title")
         if title_element is None or title_element.text is None:
             return ""

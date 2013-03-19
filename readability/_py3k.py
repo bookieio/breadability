@@ -24,6 +24,20 @@ except ImportError:
     import urllib.request as urllib
 
 
+def unicode_compatible(cls):
+    """
+    Decorator for unicode compatible classes. Method ``__unicode__``
+    has to be implemented to work decorator as expected.
+    """
+    if PY3:
+        cls.__str__ = cls.__unicode__
+        cls.__bytes__ = lambda self: self.__str__().encode("utf8")
+    else:
+        cls.__str__ = lambda self: self.__unicode__().encode("utf8")
+
+    return cls
+
+
 def to_string(object):
     return to_unicode(object) if PY3 else to_bytes(object)
 
