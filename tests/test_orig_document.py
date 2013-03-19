@@ -16,7 +16,7 @@ class TestOriginalDocument(unittest.TestCase):
     def test_readin_min_document(self):
         """Verify we can read in a min html document"""
         doc = OriginalDocument(load_snippet('document_min.html'))
-        self.assertTrue(to_unicode(doc).startswith(to_unicode('<html>')))
+        self.assertTrue(to_unicode(doc).startswith('<html>'))
         self.assertEqual(doc.title, 'Min Document Title')
 
     def test_readin_with_base_url(self):
@@ -24,7 +24,7 @@ class TestOriginalDocument(unittest.TestCase):
         doc = OriginalDocument(
             load_snippet('document_absolute_url.html'),
             url="http://blog.mitechie.com/test.html")
-        self.assertTrue(to_unicode(doc).startswith(to_unicode('<html>')))
+        self.assertTrue(to_unicode(doc).startswith('<html>'))
 
         # find the links on the page and make sure each one starts with out
         # base url we told it to use.
@@ -63,11 +63,11 @@ class TestOriginalDocument(unittest.TestCase):
         self.assertEqual(document.title, "")
 
     def test_encoding(self):
-        text = to_unicode("ľščťžýáíéäúňôůě").encode("iso-8859-2")
+        text = "ľščťžýáíéäúňôůě".encode("iso-8859-2")
         encoding = determine_encoding(text)
 
     def test_encoding_short(self):
-        text = to_unicode("ľščťžýáíé").encode("iso-8859-2")
+        text = "ľščťžýáíé".encode("iso-8859-2")
         encoding = determine_encoding(text)
         self.assertEqual(encoding, "utf8")
 
