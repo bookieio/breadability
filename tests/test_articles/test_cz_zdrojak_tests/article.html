@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<!--[if IE 7 | IE 8]>
+<html class="ie" lang="cs-CZ" prefix="og: http://ogp.me/ns#"><![endif]-->
+<!--[if !(IE 7) | !(IE 8)  ]><!--><html lang="cs-CZ" prefix="og: http://ogp.me/ns#"><!--<![endif]-->
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="apple-touch-icon" href="http://www.zdrojak.cz/wp-content/themes/zdrojak/images/touch-icon-iphone.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="http://www.zdrojak.cz/wp-content/themes/zdrojak/images/touch-icon-ipad.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="http://www.zdrojak.cz/wp-content/themes/zdrojak/images/touch-icon-iphone-retina.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="http://www.zdrojak.cz/wp-content/themes/zdrojak/images/touch-icon-ipad-retina.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="http://www.zdrojak.cz/wp-content/themes/zdrojak/images/apple-touch-icon-itunes.png" />
+    <meta name="apple-mobile-web-app-title" content="Zdrojak.cz" />
+    <title>Ještě k testování | Zdroják</title>
+    <link rel="profile" href="http://gmpg.org/xfn/11"/>
+    <link rel="pingback" href="http://www.zdrojak.cz/xmlrpc.php"/>
+    <!--[if lt IE 9]>
+	<script src="http://www.zdrojak.cz/wp-content/themes/twentytwelve/js/html5.js" type="text/javascript"></script>
+    <![endif]-->
+	
+<!-- This site is optimized with the Yoast WordPress SEO plugin v1.4.1 - http://yoast.com/wordpress/seo/ -->
+<meta name="description" content="SEO, MVC, návrhové vzory, knihovny a AJAX už všichni umí, nebo jsou o tom alespoň přesvědčeni. O použitelnosti má ponětí stále víc vývojářů. Kdekdo se zaklíná „čistým kódem“… Jen jedna věc vzbuzuje zatím stále silný odpor – testování! Racionálně vzato to nedává smysl, takže příčina bude někde jinde…"/>
+<link rel="canonical" href="http://www.zdrojak.cz/clanky/jeste-k-testovani/" />
+<meta property='og:locale' content='cs_CZ'/>
+<meta property='og:title' content='Ještě k testování - Zdroják'/>
+<meta property='og:description' content='SEO, MVC, návrhové vzory, knihovny a AJAX už všichni umí, nebo jsou o tom alespoň přesvědčeni. O použitelnosti má ponětí stále víc vývojářů. Kdekdo se zaklíná „čistým kódem“… Jen jedna věc vzbuzuje zatím stále silný odpor – testování! Racionálně vzato to nedává smysl, takže příčina bude někde jinde…'/>
+<meta property='og:url' content='http://www.zdrojak.cz/clanky/jeste-k-testovani/'/>
+<meta property='og:site_name' content='Zdroják'/>
+<meta property='og:type' content='article'/>
+<meta property='og:image' content='http://www.zdrojak.cz/wp-content/uploads/2011/01/know-how-1.png'/>
+<!-- / Yoast WordPress SEO plugin. -->
+
+<link rel="alternate" type="application/rss+xml" title="Zdroják &raquo; RSS zdroj" href="http://www.zdrojak.cz/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Zdroják &raquo; RSS komentářů" href="http://www.zdrojak.cz/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Zdroják &raquo; RSS komentářů pro Ještě k testování" href="http://www.zdrojak.cz/clanky/jeste-k-testovani/feed/" />
+<link rel='stylesheet' id='admin-bar-css'  href='http://www.zdrojak.cz/wp-includes/css/admin-bar.min.css?ver=3.5.1' type='text/css' media='all' />
+<link rel='stylesheet' id='boxes-css'  href='http://www.zdrojak.cz/wp-content/plugins/wordpress-seo/css/adminbar.css?ver=3.5.1' type='text/css' media='all' />
+<link rel='stylesheet' id='twentytwelve-style-css'  href='http://www.zdrojak.cz/wp-content/themes/zdrojak/style.css?ver=cdf3a74' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentytwelve-ie-css'  href='http://www.zdrojak.cz/wp-content/themes/twentytwelve/css/ie.css?ver=cdf3a74' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='wp-slimbox-css'  href='http://www.zdrojak.cz/wp-content/plugins/omSlimBox/slimbox/css/slimbox2.css?ver=2' type='text/css' media='all' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=3.5.1'></script>
+<script type='text/javascript' src='http://www.zdrojak.cz/wp-content/themes/zdrojak/js/zdrojak.min.js?ver=cdf3a74'></script>
+<script type='text/javascript' src='http://www.zdrojak.cz/wp-includes/js/comment-reply.min.js?ver=3.5.1'></script>
+<meta name="generator" content="WordPress 3.5.1" />
+	<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+<style type="text/css" media="print">#wpadminbar { display:none; }</style>
+<style type="text/css" media="screen">
+	html { margin-top: 28px !important; }
+	* html body { margin-top: 28px !important; }
+</style>
+<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #e6e6e6; }
+</style>
+    <link rel="shortcut icon" href="/favicon.ico"/>
+    <link rel="author" href="/humans.txt"/>
+</head>
+<body class="single single-post postid-3450 single-format-standard admin-bar no-customize-support custom-background">
+<div id="page" class="hfeed site">
+    <header id="masthead" class="site-header no-print" role="banner">
+
+        <div class="wrapper">
+            <h1 class="site-title visib">
+                <a href="http://www.zdrojak.cz/"
+                   title="Zdroják"
+                   rel="home">Zdroják</a>
+            </h1>
+
+            <h2 class="site-description hidden">o tvorbě webových stránek a aplikací</h2>
+
+            <nav id="site-navigation" class="main-navigation" role="navigation">
+
+                <div class="skip-link assistive-text hidden">
+                    <a href="#content" title="Přejít k obsahu webu">
+											Přejít k obsahu webu                    </a>
+                </div>
+
+							<form method="get" id="searchform" action="http://www.zdrojak.cz/">
+    <fieldset>
+        <legend>Hledat</legend>
+        <label for="s">Hledat</label>
+        <input type="search" class="field" name="s" id="s" autocomplete="off"/>
+        <input type="submit" class="submit" name="submit" id="searchsubmit"
+               value="Hledat"/>
+    </fieldset>
+</form>
+                <h3 class="menu-toggle">Menu</h3>
+							<div class="menu-top-menu-container"><ul id="menu-top-menu" class="nav-menu"><li id="menu-item-7124" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-7124"><a href="/clanky/">Rubriky</a>
+<ul class="sub-menu">
+	<li id="menu-item-7125" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7125"><a href="http://www.zdrojak.cz/databaze/">Databáze</a></li>
+	<li id="menu-item-7126" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7126"><a href="http://www.zdrojak.cz/javascript/">JavaScript</a></li>
+	<li id="menu-item-7127" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7127"><a href="http://www.zdrojak.cz/mobilni-vyvoj/">Mobilní vývoj</a></li>
+	<li id="menu-item-7128" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7128"><a href="http://www.zdrojak.cz/php/">PHP</a></li>
+	<li id="menu-item-7129" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7129"><a href="http://www.zdrojak.cz/rozhovory/">Rozhovory</a></li>
+	<li id="menu-item-7130" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-7130"><a href="http://www.zdrojak.cz/ruzne/">Různé</a></li>
+	<li id="menu-item-7131" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7131"><a href="http://www.zdrojak.cz/webdesign/">Webdesign</a></li>
+</ul>
+</li>
+<li id="menu-item-7132" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7132"><a href="http://www.zdrojak.cz/n/">Nálepky</a></li>
+<li id="menu-item-7133" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-7133"><a href="/serialy/">Seriály</a></li>
+<li id="menu-item-7134" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-7134"><a target="_blank" href="http://www.root.cz/skoleni/">Školení</a></li>
+</ul></div>            </nav>
+        </div>
+    </header>
+
+	<div class="site-top">
+    <div class="wrapper">
+			<p id="breadcrumbs"><span xmlns:v="http://rdf.data-vocabulary.org/#"><span typeof="v:Breadcrumb"><a href="http://www.zdrojak.cz" rel="v:url" property="v:title">Zdroják</a></span> &raquo; <span typeof="v:Breadcrumb"><a href="http://www.zdrojak.cz/clanky/" rel="v:url" property="v:title">Články</a></span> &raquo; <span typeof="v:Breadcrumb"><a href="http://www.zdrojak.cz/ruzne/" rel="v:url" property="v:title">Různé</a></span> &raquo; <span typeof="v:Breadcrumb"><strong class="breadcrumb_last" property="v:title">Ještě k testování</strong></span></span></p>    </div>
+</div>    <div id="main" class="wrapper">
+<div id="primary" class="site-content">
+    <div id="content" role="main">
+
+			<article id="post-3450" class="post-3450 post type-post status-publish format-standard hentry category-ruzne tag-programovaci-jazyky tag-ruzne tag-subjektivne tag-testovani full">
+	    <header class="entry-header">
+						        <h1 class="entry-title">Ještě k testování</h1>
+        <div class="entry-meta"><a class="post" href="http://www.zdrojak.cz/clanky/">Články</a> - <span class="author vcard"><a class="url fn n" href="http://www.zdrojak.cz/autori/martin-maly/" title="Zobrazit všechny příspěvky, jejichž autorem je Martin Malý" rel="author">Martin Malý</a></span> - <a href="http://www.zdrojak.cz/ruzne/" title="Zobrazit všechny příspěvky z rubriky Různé" >Různé</a> - <time class="entry-date" datetime="2011-03-14T00:00:00+00:00">14.3.2011</time> </div>
+			    </header>
+
+	    <div class="entry-summary with-thumbnail">
+			        <div class='thumbnail'><img width="80" height="80" src="http://www.zdrojak.cz/wp-content/uploads/2011/01/know-how-1.png" class="attachment-post-thumbnail wp-post-image" alt="Know how" /></div>
+			        <div class="excerpt">
+					<p>SEO, MVC, návrhové vzory, knihovny a AJAX už všichni umí, nebo jsou o tom alespoň přesvědčeni. O použitelnosti má ponětí stále víc vývojářů. Kdekdo se zaklíná „čistým kódem“… Jen jedna věc vzbuzuje zatím stále silný odpor – testování! Racionálně vzato to nedává smysl, takže příčina bude někde jinde…</p>
+        </div>
+    </div>
+		
+    <div class="entry-content">
+
+			<div class="entry-terms tags">
+			
+			        <div class="entry-tags">
+					<h4>Nálepky:</h4><ul><li><a href="http://www.zdrojak.cz/n/programovaci-jazyky/" rel="tag">Programovací jazyky</a></li><li><a href="http://www.zdrojak.cz/n/ruzne/" rel="tag">Různé</a></li><li><a href="http://www.zdrojak.cz/n/subjektivne/" rel="tag">Subjektivně</a></li><li><a href="http://www.zdrojak.cz/n/testovani/" rel="tag">Testování</a></li></ul>        </div>
+			
+    </div>
+
+
+	<p>S automatizovaným testováním kódu (a ve zbytku článku budu mít na mysli právě to) jsem se setkal v několika firmách. Nikde ho nedělali. Když jsem se ptal proč, dozvěděl jsem se vždy nějakou variaci na <em>starý příběh o testování</em>.</p>
+<div class="rs-box">
+<h2>Starý příběh o testování</h2>
+<p>U nás ve firmě jsme vždycky psali kód tak, jak jsme uměli nejlíp. Postupně jsme se naučili pracovat s CVS a s knihovnami kódu a když byl čas, a že skoro nikdy nebyl, tak jsme zkoušeli i novinky. Mladý zapálený programátor nám jednou říkal, co se dozvěděl o Agile, jako že tam dělají ty scrumy a iterace a že programujou dva najednou, no to jsme se zasmáli, to jsou nesmysly, ale něco z toho jsme si vzali – zavedli jsme podle toho scrumu každodenní ranní porady.</p>
+<p>No a tenhle vendelín jednou taky přišel s tím testováním. Já programuju patnáct let, takže nějaké zkušenosti mám. Od začátku mi bylo jasný, že to je spousta práce navíc, kterou nám nikdo nezaplatí. Kluci budou hodinu psát třídu a dvě hodiny test – jako k čemu to je? No, ale všichni to chválej, tak na tom asi něco bude, tak jsme to v létě, když bylo volnějc, zkusili. U jednoho takovýho projektu, co jsme dělali, jsme začali psát ke každý třídě testovací skripty.</p>
+<p>Byl to šílenej vopich, kluci nadávali, že mají dvakrát tolik práce, že by za tu dobu byli už hotoví s celým projektem, a že je to jen zdržuje. Pár chyb to našlo, to sice jo, ale žádná sláva, na tu spoustu práce, co jsme s tím měli… Navíc to třeba vůbec nenašlo jasný chyby, co jsi v tom kódu viděl jen kdyžs ho přečetl! A nejhorší bylo, že u malých tříd to bylo OK, ale když jsme to dali dohromady a pustili proti databázi, tak se třeba ukázalo, že to vůbec nefunguje – a přitom ty unit testy byly všechny OK, OK, OK… Takovýhle testování je naprd. Navíc pak přišly nějaký změny a ty testy bysme museli stejně přepisovat, a to by se nám už vůbec nevyplatilo, udržovat dvojí kód, takže u nás jednoznačně #fail.</p>
+<p>Vono teoreticky to zní hezky a pro takový ty malý třídy, kde se něco počítá, je to možná dobrý, ale v praxi to je k ničemu… Jediný testování, který má smysl, je to, že si každý zkusí, jestli to, co napsal, taky funguje. Takhle to dělají programátoři odjakživa a šlape to.</p>
+<div class="cb"></div>
+</div>
+<p>Inu, v praxi je k ničemu každý pracovní postup, který aplikujete mechanicky, bez pochopení jeho podstaty (taková <em>kargokultická metodika</em>). Vzít si z agile jen „ranní porady“ je nejjistější způsob, jak zjistit, že „to nefunguje“.</p>
+<p>Ruku na srdce – kolikrát se vám stalo, že jste o něčem prohlásili, že to je „naprosto na houby“, až vám jednoho dne někdo ukázal, jak to používat, a vy jste museli uznat, že nástroj je výborný a „na houby“ bylo hlavně to, že jste s ním neuměli nebo nechápali, k čemu je? Mně mockrát.</p>
+<p>V pozadí mnohých sporů a odmítání je leckdy nepochopení. Dovolte mi, abych byl tedy chvíli „advokátem pro testování“; mým cílem není přesvědčit vás v článku o tom, že byste měli testovat a že se vám to vyplatí, ale zkusit vyviklat některé protiargumenty, v jejichž základu je právě nepochopení. Čímž neříkám, že můj pohled na testování je jediný správný (to ale nedělají ani advokáti; místo toho to nazývají „právní názor“).</p>
+<h2>Zvolený obor</h2>
+<p>Testování je velmi široká oblast a mnoha lidem splývá, proto než se pustím do obhajoby, musím nejprve vymezit oblast, které se bude obhajoba týkat. Rád bych se věnoval jednotkovým (unit) testům. Jsou pravděpodobně nejznámější, nejčastěji vyjmenovávané, ale na druhou stranu hodně specifické.</p>
+<p>Jednotkové testy jsou automatizované postupy pro otestování jednotky kódu (třída, knihovna, unit, skript, … – tedy <em>něco, co lze samostatně testovat</em>). Jejich cílem je strojově otestovat, zda daná jednotka dělá to, co dělat má, a zda nedělá něco, co dělat nemá. Je jasné, že automaticky můžeme otestovat pouze to, co se automaticky otestovat dá, resp. co lze automaticky otestovat snadno.</p>
+<div class="rs-tip-major">
+<p>Automatizované testování nenahrazuje ruční; doplňuje ho.</p>
+<div class="cb"></div>
+</div>
+<p>U jednotek testujeme, zda:</p>
+<ol>
+<li>vrací správné hodnoty na správné vstupní údaje</li>
+<li>vrací správné hodnoty na mezní vstupní údaje</li>
+<li>legitimně zhavaruje tehdy, když zhavarovat má</li>
+</ol>
+<p>Co to znamená? U jednoduchých funkcí zadáváme vstupní hodnoty a kontrolujeme výstupní, resp. chování funkce. U složitějších testujeme to, co testovat lze. Kupříkladu u třídy, která bude generovat CAPTCHA obrázek, nebudeme psát OCR, který bude vyhodnocovat, zda výsledek opravdu obsahuje požadované znaky, to je extremistický nesmysl. Otestujeme, zda při zadání dobrých vstupních údajů vygeneruje třída obrázek, jestli ten obrázek má patřičné rozměry a patřičný formát. To je snadné otestovat. To, jestli obrázek obsahuje opravdu daný text daným fontem, už nebudeme řešit unit testem; ověříme to metodou „kouknu a vidím“.</p>
+<div class="rs-tip-major">
+<p>Ne každé testování je automatizované; ne každé automatizované testování je unit test.</p>
+<div class="cb"></div>
+</div>
+<p>Jednotkové testy by měly v ideálním případě otestovat každou metodu třídy, každou funkci v knihovně, každý řádek kódu, navíc takovým způsobem, který je nezávislý na zbytku systému či na vnitřních stavech. Každý „testovací případ“ by měl pracovat s čistou kopií jednotky.</p>
+<p>Pokud jednotka používá nějaké komplexní funkce „zvenčí“, pak pro testování podstrčíme „mock object“, který se bude navenek tvářit tak, že opravdu funguje, ve skutečnosti ale jen vrátí testovací data. Řekněme, že budeme testovat HTML generátor, který generuje stránky ze záznamů v databázi. Namísto objektu, který přebírá data z databáze, podstrčíme „mock“ – jednoduchou třídu, která má stejné rozhraní, ale na <code>getTextById()</code> vrátí testovací „Lorem ipsum“. Jednotkové testy tak proběhnou nezávisle na okolí.</p>
+<div class="rs-tip-major">
+<p>Unit testy nezjistí, jestli celý dům bude stát. Testujeme jednotlivé cihly, maltu, tvárnice, tedy základní stavební prvky, a ověřujeme, jestli fungují tak, jak od nich očekáváme.</p>
+<div class="cb"></div>
+</div>
+<p><strong>Jednotkovými testy netestujeme, zda jednotka funguje spolu s ostatními; od toho jsou integrační testy. Netestujeme jimi ani to, jestli celá aplikace funguje.</strong> Očekávat, že jednotka pro generování HTML funguje, a tím pádem musí fungovat celý web, je bláhové. V dalším textu se nebudeme zabývat ani integračními testy, ani testováním aplikace, <strong>zůstaneme jen u automatizovaných jednotkových tes­tů.</strong></p>
+<h2>ISO9001</h2>
+<p>K čemu nám tedy takové testování je? Nezjistíme tím, jestli to spolupracuje se zbytkem aplikace, nezjistíme, jestli aplikace funguje… <strong>Automatizované unit testy mají jinou hodnotu: jsou automatické (můžou tedy běžet bez zásahu člověka, např. na serveru jako hook u verzovacího nástroje), opakovatelné a jejich výsledky lze dobře zpracovat.</strong></p>
+<p>Trochu to připomíná známou (a mnohými proklínanou) normu ISO9001. Tato norma nezajišťuje, jak si mnozí lidé myslí, jakost výrobků. Tato norma je zaměřena na to, aby veškeré procesy byly jasně popsané, specifikované a opakovatelné. ISO9001 vám nezaručí, že při výrobě neuděláte chybu. Postup podle této normy pouze zaručí, že chybu uděláte vždy stejně (pokud je procesní), nebo že zjistíte, kde vzniká, protože jednotlivé kroky jsou přesně popsané. Ano, je to opruz, popisovat přesně všechny procesy, sepisovat lejstra o tom, co se dělá a jak se to přesně dělá. Ale když je někde chyba, můžete se postupů popsaných v lejstrech při hledání držet. Buď zjistíte, že někdo postup nedodržel, nebo že je v procesu chyba – a pak ji můžete opravit a popsat proces znovu.</p>
+<p>S testováním je to podobné. Test není vaše ověření, že vše funguje; na to by byl leckdy opravdu drahý. Test je nástroj pro dlouhodobou udržitelnost kódu a pro rozumnou práci s ním. Dobře napsané testy dokáží odhalit problémy při zásahu do kódu. Většinu situací „tady přepíšu pár řádků, bude to ale fungovat stejně“, které vedou k prapodivným chybám, můžete s jednotkovými testy zachytit dřív, než si zavlečete do kódu skryté chyby.</p>
+<h2>Test je tak dobrý, jako jeho autor</h2>
+<p><strong>Testování je jako španělská hospoda – najdete tam jen to, co si s sebou přinesete.</strong> Žádný test neobjeví v kódu nic, co autor nedokáže popsat. Myslet si, že unit test objeví chybu tam, kde nikoho nenapadlo, že by mohla být, je naivní.</p>
+<p>Napsat dobrý test je trošku umění, především proto, že mnozí lidé postupují při ověřování chybně. Lidský mozek má tendenci hledat případy, které naši teorii potvrzují, namísto toho, aby hledal případy, které by jí vyvracely, kdyby fungovaly. Jinými slovy: <strong>musíme testovat nejen správnou funkčnost, ale i správnou nefunkčnost. </strong></p>
+<p>Najít ale všelijaké kombinace, které by měly zhavarovat, vyžaduje opravdu zkušeného programátora s dobrou fantazií. Taky nikdo netvrdí, že napsat dobré testy je hračka!</p>
+<h2>Jednotkové testování není všespásné</h2>
+<p>Myslet si, že napíšu jednotkový test a knihovna bude automaticky dobrá a použitelná je bláhové. Myslet si, že jednotkový test zaručí kvalitní kód, je taky nesmysl. Přesto mnozí očekávají od jednotkových testů něco, co jim jednotkové testy nemohou nabídnout, a jsou pak rozčarováni z toho, že jejich očekávání nebylo naplněno. Často pak z neúspěchu viní testování jako takové.</p>
+<p>Zopakujme si ještě jednou: <strong>Jednotkové testy slouží k automatizovanému, opakovatelnému a strojově zpracovatelnému testování izolovaných funkcí.</strong> Není to nástroj pro zajištění kvality nebo vhodnosti pro daný účel; nenahradí to dobrou analýzu ani dobrý návrh. Použijete je hlavně při dlouhodobé údržbě vlastního kódu. Naprosto neocenitelné jsou jejich služby ve chvíli, kdy napíšete „verzi 2“, která „<em>by měla být kompatibilní s verzí 1</em>“. Máte-li „verzi 1“ pokrytou dobrými testy, uvidíte na první pohled, jak to s tou kompatibilitou ve skutečnosti je.</p>
+<p>Pokud píšete kód vždy důsledně jen na jedno použití, nasadíte ho do aplikace a pak už se k němu nikdy nevrátíte, tak pravděpodobně tuhle výhodu neoceníte. <em>Po pravdě řečeno v takovém případě máte hlavně úplně jiný problém než to, že netestujete…</em></p>
+<h2>K čemu tedy?</h2>
+<p>Pokud se držíte metodiky <abbr title="Test-Driven Development">TDD</abbr>, tedy že nejprve píšete testy a až po nich kód, tak můžete brát <strong>psaní testů jako první použití vašeho nového kódu</strong>. Berte to jako příležitost zjistit, jak se s ním pracuje, a to ještě dřív, než ho opravdu napíšete. Uvidíte svůj kód očima jeho uživatele, což je zkušenost k nezaplacení. Třeba zjistíte, že budete muset něco v API změnit či upravit…</p>
+<p>TDD bývá někdy některými hodnocena jako příliš ortodoxní. Asi není třeba být vždy a za všech okolností doslovný a pokud napíšete nejdřív jednoduchou knihovnu a až po ní testy, nebude to jistě žádné velké neštěstí. Jen <em>pozor na to, že při obráceném postupu má člověk stále ještě v hlavě vlastní kód a mnohdy píše testy „na míru svému kódu a svým chybám“</em>.</p>
+<div class="rs-box">
+<p>Kupříkladu píšeme funkci, u níž je parametr i, jehož hodnota smí být max. 10 (včetně). Při psaní se překoukneme a  do funkce napíšeme test, který vyhodí výjimku, když <code>i&lt;10</code>. Pokud jsme nejprve napsali kód, tak máme mnohdy tendenci ověřovat, že pro <code>i=9</code> projde a pro <code>i=10</code> zhavaruje. Ve skutečnosti tedy testujeme to, že napsaný kód dělá to, co je v něm napsáno, nikoli že dělá to, co dělat má. Pokud začneme nejprve testem, pravděpodobně jej napíšeme správně.</p>
+<div class="cb"></div>
+</div>
+<h2>Testy patří k bontonu!</h2>
+<p>Testy jsou v podobné roli jako dokumentace: programátoři mají odpor k vytváření, protože to je „neproduktivní práce“. Když člověk programuje, v hlavě mu letí myšlenky a na nějaké psaní dokumentace není čas… Maximálně tak nějaký ten komentář do kódu.</p>
+<p>Propagátoři nových jazyků a čistého kódu hovoří o dokumentačních komentářích jako o samozřejmosti; měly by patřit do kódu stejně samozřejmě jako odsazování. Stejný pohled se začíná prosazovat i v oblasti testování. <strong>Pustit open source knihovnu do světa bez sady testů</strong> (a bez dokumentace) <strong>je v jistých kruzích už programátorské faux pas</strong>: <em>k čemu mi je kód, který si můžu upravit, když nemůžu rychle zjistit, jestli mi úprava něco nerozbila?</em></p>
+<p><strong>Napsat dobrý test je nutnost, pokud chceme svým kódem přispět do většího projektu.</strong> I ve firmách, které nedělají open source, je často používáno automatické testování, ať už kvůli <em>Continuous Integration</em>, tak třeba i pro měření kvality práce programátorů – pokud někdo soustavně <em>commituje</em> změny, které neprojdou testem, lze to snadno dohledat a zjistit příčiny.</p>
+<p><strong>Testy, podobně jako dokumentace, nejsou v podstatě nikdy hotové a kompletní. </strong>To, že se v kódu objeví chyba, kterou test nezachytil, není důkaz toho, že jednotkové testování nemá smysl, ale toho, že byl test neúplný. Můžete se rozčílit na všechny propagátory testů a napsat jim to do diskusí, nebo můžete problém popsat testem; to druhé bývá rychlejší a smysluplnější. Stejně tak když vám kolega řekne, že mu vaše třída nefunguje za takových a takových podmínek: to je ideální příležitost ty podmínky nasimulovat v testu!</p>
+<p>A nezapomeňte: <em>dobrý test vám kryje záda, když jde do tuhého a hledá se viník!</em></p>
+<h2>Stejně ale…</h2>
+<p class="rs-question">Pro nás je to drahé a zdržuje to.</p>
+<p class="rs-answer">Zkusili jste si to, testy jste psali tak, jak se psát mají, všechno jste udělali správně, ale zdržovalo vás to. Knihovny totiž nikdy nepřepisujete a ty testy byste stejně spustili jen jednou. Pak asi ano, pokud jste si jisti, že jste všechno udělali správně, a přesto jste si spočítali, že se vám to nevyplatí, tak OK. </p>
+<p class="rs-question">Nám chyby v kódu nevadí.</p>
+<p class="rs-answer">Komu by vadily, že? Místo psaní testů vymyslíme, jak opravy kódu prodat zákazníkovi jako vícepráce, a vyděláme na tom!</p>
+<p class="rs-question">Můj kód je vždy perfektní, protože jsem špičkový programátor.</p>
+<p class="rs-answer">Pardon, testem jsme vás nechtěli urazit. Víme, že jste špičkový stroj na kód, který není nikdy unavený, nikdy nedělá chyby, nikdy se nepřepíše, vždy je stoprocentně koncentrovaný – a že tomu věříte. Máte pro to ale i nějaký jiný důkaz než svoje tvrzení?</p>
+<p class="rs-question">
+Všechny tyhlety takzvaný „metodiky“ jsou jen tlamocviky mladých frikulínů, které mají zakrýt, že vlastně vůbec neuměj&#8216; programovat…</p>
+<p class="rs-answer">
+Ale jistě… „Opravdový programátor“ napíše cyklus DO přes tisíc řádků, a nesplete se! Přidejme ještě „pravidla jsou pro slabochy“ a „čára není zeď“, ať to máme komplet. Ale upřímně – pokud si myslíte, že programování je umění, měli byste programy vystavovat na výstavách, a ne je cpát lidem do počítačů, aby s nima pracovali…</p>
+<h2>Shrnutí</h2>
+<ul>
+<li>Testy nejsou kouzlo; je to metoda. Když ji neumíte a děláte ji špatně, nebude vám fungovat, tak prosté to je.</li>
+<li>Jednotkové testy testují to, co říkají: funkčnost jednotek kódu.</li>
+<li>Automatizovaný test otestuje jen to, co do něj napíšete.</li>
+<li>Jednotkový test nenahrazuje jiné metody testování; doplňuje je. Pokud chcete testovat, jak to bude fungovat dohromady, slouží k tomu integrační testy.</li>
+<li>Jednotkové testy děláme proto, že jsou opakovatelné, automatizovatelné a jejich výstup lze strojově vyhodnotit.</li>
+<li>Automatizovaný test nemá, na rozdíl od člověka, „své dny“ a vždy testuje vše tak jak má. Neznamená to ale, že můžou člověka plně nahradit – jen mu ulehčují mechanickou práci.</li>
+<li>Testování není ladění.</li>
+<li>Test je jen tak dobrý jako jeho autor; je-li autor lemrouch, je i test špatný.</li>
+<li>Hodina vynaložená na psaní testu ušetří den hledání podivné chyby za půl roku. Pokud hodláte ještě za půl roku pracovat ve stejném oboru, zvažte tento aspekt.</li>
+</ul>
+<p>Ke čtení naleznete mnoho různých materiálů, od teoretických po praktické ukázky. V češtině mě zaujala velmi podrobná <a href="http://www.poeta.cz/Zaklady_testovani.pdf">Příručka o testování (pdf)</a> od <span class="rs-person">Anny Borovcové</span> (<a href="http://testovanisoftwaru.blogspot.com/2009/08/zaklady-testovani.html">blog</a>).</p>
+<div class="rs-tip-major">
+<p>Pokud vás problematika zajímá, využijte možnosti navštívit školení <span class="rs-person">Jiřího Knesla</span> na téma <a href="http://akademie.blog.root.cz/skoleni-unit-testovani-v-php/">Testování v PHP</a> (viz <a href="http://weblog.shopio.cz/zajimavosti/skoleni-php-testovani/">zkušenosti</a> <a href="http://blog.mareksudak.cz/dojmy-ze-skoleni-unit-testovani-v-php">účastníků</a>).</p>
+<div class="cb"></div>
+</div>
+	    </div>
+		    <div class="entry-social bottom">
+			<div class="post-social-buttons social visible-desktop">
+    <h3 class="screen-reader-text">Sdílejte:</h3>
+    <ul>
+			        <li class="facebook">
+            <a title="Sdílet na Facebooku" href="http://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.zdrojak.cz%2Fclanky%2Fjeste-k-testovani%2F&amp;t=Je%C5%A1t%C4%9B+k+testov%C3%A1n%C3%AD"
+               onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=626');return false;"
+							target="_blank" rel="nofollow">
+                <span class="count">0</span></a>
+        </li>
+			        <li class="twitter">
+            <a title="Sdílet na Twitteru" href="https://twitter.com/intent/tweet?via=zdrojak&amp;url=http%3A%2F%2Fwww.zdrojak.cz%2Fclanky%2Fjeste-k-testovani%2F&amp;text=Je%C5%A1t%C4%9B+k+testov%C3%A1n%C3%AD"
+               onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=626');return false;"
+							target="_blank" rel="nofollow">
+                <span class="count">0</span></a>
+        </li>
+			        <li class="googleplus">
+            <a title="Sdílet na Google+" href="https://plus.google.com/share?url=http%3A%2F%2Fwww.zdrojak.cz%2Fclanky%2Fjeste-k-testovani%2F&amp;title=Je%C5%A1t%C4%9B+k+testov%C3%A1n%C3%AD"
+               onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=626');return false;"
+							target="_blank" rel="nofollow">
+                <span class="count">0</span></a>
+        </li>
+			    </ul>
+</div>    </div>
+	    <footer class="entry-meta">
+			<div class="author-info">
+    <div class="author-avatar">
+        <a href="http://www.zdrojak.cz/autori/martin-maly/" rel="author"><img width="96" height="120" src="http://www.zdrojak.cz/wp-content/uploads/2013/01/mmaly-122686257455681.png" class="attachment-thumbnail" alt="Martin Malý" /></a>
+    </div>
+    <div class="author-description">
+        <h2>
+            <a href="http://www.zdrojak.cz/autori/martin-maly/" rel=author">Martin Malý</a>
+        </h2>
+
+        <div class="text"><p>Začal programovat v roce 1984 s programovatelnou kalkulačkou. Pokračoval k BASICu, assembleru Z80, Forthu, Pascalu, Céčku, dalším assemblerům, před časem v PHP a teď je rád, že neprogramuje&#8230;</p>
+</div>
+    </div>
+</div>    </footer>
+</article>
+
+<div id="comments" class="comments-area table no-print">
+
+	<a class="comments_bubble visible-desktop" rel="nofollow" title="43 komentářů" href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comments">
+    <strong class="screen-reader-text">Komentáře: </strong>
+    <span class="count">43</span>
+    </a>    <h2 class="comments-title">Přehled komentářů</h2>
+
+
+	    <div class="comments-table">
+        <table>
+					<tr id="tr-comment-16006" class="comment even thread-even depth-1">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />danaketh</td>
+    <th class="comment-title"><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16006">Psaní testů</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T08:06:00+00:00">14.3.2011 v 06:06</time></td>
+</tr><tr id="tr-comment-16008" class="comment byuser comment-author-martin-maly bypostauthor odd alt depth-2">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/cf68d5ecb446e39c3cebe0873daf6f01?s=16&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D16&amp;r=G' class='avatar avatar-16 photo' height='16' width='16' />Martin Malý</td>
+    <th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16008">Re: Psaní testů</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T08:18:07+00:00">14.3.2011 v 06:18</time></td>
+</tr></div>
+<tr id="tr-comment-16018" class="comment even depth-2">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />myshpa</td>
+    <th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16018">Re: Psaní testů</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T09:52:45+00:00">14.3.2011 v 07:52</time></td>
+</tr></div>
+<tr id="tr-comment-16032" class="comment byuser comment-author-martin-maly bypostauthor odd alt depth-2">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/cf68d5ecb446e39c3cebe0873daf6f01?s=16&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D16&amp;r=G' class='avatar avatar-16 photo' height='16' width='16' />Martin Malý</td>
+    <th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16032">Re: Psaní testů</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T14:22:14+00:00">14.3.2011 ve 12:22</time></td>
+</tr></div>
+</div>
+<tr id="tr-comment-16007" class="comment even thread-odd thread-alt depth-1">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />jáchym</td>
+    <th class="comment-title"><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16007">tip na testování v javascriptu</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T08:17:35+00:00">14.3.2011 v 06:17</time></td>
+</tr><tr id="tr-comment-16010" class="comment byuser comment-author-martin-maly bypostauthor odd alt depth-2">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/cf68d5ecb446e39c3cebe0873daf6f01?s=16&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D16&amp;r=G' class='avatar avatar-16 photo' height='16' width='16' />Martin Malý</td>
+    <th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16010">Re: tip na testování v javascriptu</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T08:20:46+00:00">14.3.2011 v 06:20</time></td>
+</tr><tr id="tr-comment-16024" class="comment even depth-3">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />Jáchym</td>
+    <th class="comment-title"><span class="line"></span><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16024">Re: tip na testování v javascriptu</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T12:42:37+00:00">14.3.2011 v 10:42</time></td>
+</tr><tr id="tr-comment-16030" class="comment byuser comment-author-martin-maly bypostauthor odd alt depth-4">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/cf68d5ecb446e39c3cebe0873daf6f01?s=16&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D16&amp;r=G' class='avatar avatar-16 photo' height='16' width='16' />Martin Malý</td>
+    <th class="comment-title"><span class="line"></span><span class="line"></span><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16030">Re: tip na testování v javascriptu</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T13:58:09+00:00">14.3.2011 v 11:58</time></td>
+</tr></div>
+</div>
+</div>
+<tr id="tr-comment-16046" class="comment even depth-2">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />Aleš Roubíček</td>
+    <th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16046">Re: tip na testování v javascriptu</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T20:40:51+00:00">14.3.2011 ve 18:40</time></td>
+</tr></div>
+</div>
+<tr id="tr-comment-16009" class="comment odd alt thread-even depth-1">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />Mastodont</td>
+    <th class="comment-title"><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16009">Dotaz</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T08:18:43+00:00">14.3.2011 v 06:18</time></td>
+</tr><tr id="tr-comment-16011" class="comment byuser comment-author-martin-maly bypostauthor even depth-2">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/cf68d5ecb446e39c3cebe0873daf6f01?s=16&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D16&amp;r=G' class='avatar avatar-16 photo' height='16' width='16' />Martin Malý</td>
+    <th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16011">Re: Dotaz</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T08:34:00+00:00">14.3.2011 v 06:34</time></td>
+</tr><tr id="tr-comment-16012" class="comment odd alt depth-3">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />tdvorak</td>
+    <th class="comment-title"><span class="line"></span><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16012">Re: Dotaz</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T08:43:48+00:00">14.3.2011 v 06:43</time></td>
+</tr><tr id="tr-comment-16027" class="comment byuser comment-author-michal-augustyn even depth-4">
+		<td class="author"><img alt='' src='/wp-content/uploads/avatars/2009/07/augi.jpg' class='avatar avatar-16 photo' height='16' width='16' />Michal Augustýn</td>
+    <th class="comment-title"><span class="line"></span><span class="line"></span><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16027">Re: Dotaz</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T13:20:06+00:00">14.3.2011 v 11:20</time></td>
+</tr></div>
+</div>
+</div>
+<tr id="tr-comment-16021" class="comment odd alt depth-2">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />jos</td>
+    <th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16021">Re: Dotaz</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T10:33:47+00:00">14.3.2011 v 08:33</time></td>
+</tr><tr id="tr-comment-16022" class="comment byuser comment-author-martin-maly bypostauthor even depth-3">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/cf68d5ecb446e39c3cebe0873daf6f01?s=16&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D16&amp;r=G' class='avatar avatar-16 photo' height='16' width='16' />Martin Malý</td>
+    <th class="comment-title"><span class="line"></span><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16022">Re: Dotaz</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T11:41:11+00:00">14.3.2011 v 09:41</time></td>
+</tr></div>
+</div>
+</div>
+<tr id="tr-comment-16013" class="comment odd alt thread-odd thread-alt depth-1">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />Tomáš Herceg</td>
+    <th class="comment-title"><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16013">Unit testy</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T09:20:42+00:00">14.3.2011 v 07:20</time></td>
+</tr><tr id="tr-comment-16015" class="comment byuser comment-author-martin-maly bypostauthor even depth-2">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/cf68d5ecb446e39c3cebe0873daf6f01?s=16&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D16&amp;r=G' class='avatar avatar-16 photo' height='16' width='16' />Martin Malý</td>
+    <th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16015">Re: Unit testy</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T09:39:36+00:00">14.3.2011 v 07:39</time></td>
+</tr><tr id="tr-comment-16029" class="comment byuser comment-author-michal-augustyn odd alt depth-3">
+		<td class="author"><img alt='' src='/wp-content/uploads/avatars/2009/07/augi.jpg' class='avatar avatar-16 photo' height='16' width='16' />Michal Augustýn</td>
+    <th class="comment-title"><span class="line"></span><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16029">Re: Unit testy</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T13:47:15+00:00">14.3.2011 v 11:47</time></td>
+</tr><tr id="tr-comment-16031" class="comment byuser comment-author-martin-maly bypostauthor even depth-4">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/cf68d5ecb446e39c3cebe0873daf6f01?s=16&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D16&amp;r=G' class='avatar avatar-16 photo' height='16' width='16' />Martin Malý</td>
+    <th class="comment-title"><span class="line"></span><span class="line"></span><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16031">Re: Unit testy</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T13:59:53+00:00">14.3.2011 v 11:59</time></td>
+</tr></div>
+<tr id="tr-comment-16034" class="comment odd alt depth-4">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />vlk</td>
+    <th class="comment-title"><span class="line"></span><span class="line"></span><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16034">Re: Unit testy</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T15:51:05+00:00">14.3.2011 ve 13:51</time></td>
+</tr><tr id="tr-comment-16039" class="comment byuser comment-author-michal-augustyn even depth-5">
+		<td class="author"><img alt='' src='/wp-content/uploads/avatars/2009/07/augi.jpg' class='avatar avatar-16 photo' height='16' width='16' />Michal Augustýn</td>
+    <th class="comment-title"><span class="line"></span><span class="line"></span><span class="line"></span><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16039">Re: Unit testy</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T17:09:55+00:00">14.3.2011 ve 15:09</time></td>
+</tr></div>
+<tr id="tr-comment-16040" class="comment byuser comment-author-koubel odd alt depth-5">
+		<td class="author"><img alt='' src='http://1.gravatar.com/avatar/b9554e2b58b2863fceb0f53132f55a56?s=16&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D16&amp;r=G' class='avatar avatar-16 photo' height='16' width='16' />koubel</td>
+    <th class="comment-title"><span class="line"></span><span class="line"></span><span class="line"></span><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16040">TDD nedovolí prasit</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T17:38:12+00:00">14.3.2011 ve 15:38</time></td>
+</tr></div>
+</div>
+</div>
+<tr id="tr-comment-16035" class="comment even depth-3">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />tdvorak</td>
+    <th class="comment-title"><span class="line"></span><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16035">Re: Unit testy</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T16:16:26+00:00">14.3.2011 ve 14:16</time></td>
+</tr></div>
+<tr id="tr-comment-16036" class="comment odd alt depth-3">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />Tomáš Herceg</td>
+    <th class="comment-title"><span class="line"></span><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16036">Re: Unit testy</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T16:36:00+00:00">14.3.2011 ve 14:36</time></td>
+</tr><tr id="tr-comment-16037" class="comment byuser comment-author-drevolution even depth-4">
+		<td class="author"><img alt='' src='/wp-content/uploads/avatars/2006/03/drevolution.jpg' class='avatar avatar-16 photo' height='16' width='16' />drevolution</td>
+    <th class="comment-title"><span class="line"></span><span class="line"></span><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16037">Re: Unit testy</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T16:47:57+00:00">14.3.2011 ve 14:47</time></td>
+</tr></div>
+</div>
+<tr id="tr-comment-16038" class="comment byuser comment-author-ped odd alt depth-3">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/880ab36eec5a04a4afb1443836aae55f?s=16&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D16&amp;r=G' class='avatar avatar-16 photo' height='16' width='16' />Ped</td>
+    <th class="comment-title"><span class="line"></span><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16038">Re: Unit testy</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T16:59:15+00:00">14.3.2011 ve 14:59</time></td>
+</tr></div>
+<tr id="tr-comment-16048" class="comment byuser comment-author-frantisek-kucera even depth-3">
+		<td class="author"><img alt='' src='/wp-content/uploads/avatars/2006/09/xkucf03.jpg' class='avatar avatar-16 photo' height='16' width='16' />František Kučera</td>
+    <th class="comment-title"><span class="line"></span><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16048">Re: Unit testy</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T20:49:24+00:00">14.3.2011 ve 18:49</time></td>
+</tr></div>
+</div>
+</div>
+<tr id="tr-comment-16014" class="comment odd alt thread-even depth-1">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />Michal</td>
+    <th class="comment-title"><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16014">Testy v PHP</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T09:31:39+00:00">14.3.2011 v 07:31</time></td>
+</tr></div>
+<tr id="tr-comment-16028" class="comment even thread-odd thread-alt depth-1">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />rox</td>
+    <th class="comment-title"><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16028">Jeste se musime hodne ucit...</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T13:38:04+00:00">14.3.2011 v 11:38</time></td>
+</tr></div>
+<tr id="tr-comment-16041" class="comment odd alt thread-even depth-1">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />Opravdový odborník :-)</td>
+    <th class="comment-title"><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16041">Re: Ještě k testování</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T18:19:19+00:00">14.3.2011 ve 16:19</time></td>
+</tr><tr id="tr-comment-16044" class="comment byuser comment-author-martin-maly bypostauthor even depth-2">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/cf68d5ecb446e39c3cebe0873daf6f01?s=16&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D16&amp;r=G' class='avatar avatar-16 photo' height='16' width='16' />Martin Malý</td>
+    <th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16044">Re: Ještě k testování</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T20:07:29+00:00">14.3.2011 ve 18:07</time></td>
+</tr></div>
+<tr id="tr-comment-16047" class="comment byuser comment-author-martin-maly bypostauthor odd alt depth-2">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/cf68d5ecb446e39c3cebe0873daf6f01?s=16&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D16&amp;r=G' class='avatar avatar-16 photo' height='16' width='16' />Martin Malý</td>
+    <th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16047">Re: Ještě k testování</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T20:44:03+00:00">14.3.2011 ve 18:44</time></td>
+</tr><tr id="tr-comment-16699" class="comment even depth-3">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />Opravdový odborník :-)</td>
+    <th class="comment-title"><span class="line"></span><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16699">Re: Ještě k testování</a></th>
+		<td class="comments-date"><time datetime="2011-04-20T09:42:34+00:00">20.4.2011 v 07:42</time></td>
+</tr></div>
+</div>
+<tr id="tr-comment-16052" class="comment odd alt depth-2">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />valnoha</td>
+    <th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16052">Re: Ještě k testování</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T21:57:06+00:00">14.3.2011 ve 19:57</time></td>
+</tr></div>
+<tr id="tr-comment-23312" class="comment even depth-2">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />Charvi</td>
+    <th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-23312">Re: Ještě k testování</a></th>
+		<td class="comments-date"><time datetime="2012-10-06T00:06:25+00:00">6.10.2012 ve 22:06</time></td>
+</tr></div>
+</div>
+<tr id="tr-comment-16042" class="comment odd alt thread-odd thread-alt depth-1">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />heptau</td>
+    <th class="comment-title"><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16042">Testy nad databazi</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T18:21:41+00:00">14.3.2011 ve 16:21</time></td>
+</tr><tr id="tr-comment-16045" class="comment byuser comment-author-michal-augustyn even depth-2">
+		<td class="author"><img alt='' src='/wp-content/uploads/avatars/2009/07/augi.jpg' class='avatar avatar-16 photo' height='16' width='16' />Michal Augustýn</td>
+    <th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16045">Re: Testy nad databazi</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T20:31:44+00:00">14.3.2011 ve 18:31</time></td>
+</tr></div>
+<tr id="tr-comment-16049" class="comment odd alt depth-2">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />Aleš Roubíček</td>
+    <th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16049">Re: Testy nad databazi</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T20:49:59+00:00">14.3.2011 ve 18:49</time></td>
+</tr></div>
+<tr id="tr-comment-16050" class="comment byuser comment-author-frantisek-kucera even depth-2">
+		<td class="author"><img alt='' src='/wp-content/uploads/avatars/2006/09/xkucf03.jpg' class='avatar avatar-16 photo' height='16' width='16' />František Kučera</td>
+    <th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16050">Re: Testy nad databazi</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T21:33:11+00:00">14.3.2011 ve 19:33</time></td>
+</tr></div>
+<tr id="tr-comment-16051" class="comment byuser comment-author-maio odd alt depth-2">
+		<td class="author"><img alt='' src='/wp-content/uploads/avatars/2011/03/maio.jpg' class='avatar avatar-16 photo' height='16' width='16' />maio</td>
+    <th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16051">Re: Testy nad databazi</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T21:53:50+00:00">14.3.2011 ve 19:53</time></td>
+</tr></div>
+</div>
+<tr id="tr-comment-16053" class="comment byuser comment-author-maio even thread-even depth-1">
+		<td class="author"><img alt='' src='/wp-content/uploads/avatars/2011/03/maio.jpg' class='avatar avatar-16 photo' height='16' width='16' />maio</td>
+    <th class="comment-title"><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16053">Test-driven development</a></th>
+		<td class="comments-date"><time datetime="2011-03-14T22:41:07+00:00">14.3.2011 ve 20:41</time></td>
+</tr></div>
+<tr id="tr-comment-16057" class="comment odd alt thread-odd thread-alt depth-1">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />kert</td>
+    <th class="comment-title"><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16057">Šedivé příspěvky</a></th>
+		<td class="comments-date"><time datetime="2011-03-15T10:58:27+00:00">15.3.2011 v 08:58</time></td>
+</tr><tr id="tr-comment-16058" class="comment even depth-2">
+		<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />Kdyby</td>
+    <th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/jeste-k-testovani/?show=comments#comment-16058">Re: Šedivé příspěvky</a></th>
+		<td class="comments-date"><time datetime="2011-03-15T11:17:32+00:00">15.3.2011 v 09:17</time></td>
+</tr></div>
+</div>
+        </table>
+    </div>
+	
+	    <div class="comments-actions">
+			        <a class="menu-toggle comment-reply-link respond" href="?show=comments#respond">
+            Přidat komentář
+        </a>
+						        <a class="all-comments" href="?show=comments#comments">Zobrazit všechny komentáře</a>
+			    </div>
+	</div>        <nav class="nav-single no-print">
+            <h3 class="assistive-text">Navigace pro příspěvky</h3>
+            <span class="nav-previous">
+	            <a href="http://www.zdrojak.cz/clanky/co-zaujalo-jiriho-knesla/" rel="prev">Co zaujalo Jiřího Knesla</a>            </span>
+            <span class="nav-next">
+	            <a href="http://www.zdrojak.cz/clanky/zlepseni-vykonu-animaci-v-javascriptu/" rel="next">Zlepšení výkonu animací v JavaScriptu</a>            </span>
+        </nav>
+
+        <div class="print">Zdroj: http://www.zdrojak.cz/?p=3450</div>
+
+			
+    </div>
+
+</div>
+
+
+			<div id="secondary" class="widget-area" role="complementary">
+					<aside id="recent_category_posts-0" class="with-thumb widget widget_recent_entries">		<h3 class="widget-title">Webdesign</h3>		      <div class="thumbnail">
+				<img width="80" height="80" src="http://www.zdrojak.cz/wp-content/uploads/2011/02/html5-badge-1.png" class="attachment- wp-post-image" alt="Webdesign" title="Webdesign" />      </div>
+			    <ul>
+			        <li><a href="http://www.zdrojak.cz/clanky/bezpecny-sandboxovany-iframe/" title="Bezpečný sandboxovaný iframe">Bezpečný sandboxovaný iframe</a></li>
+			        <li><a href="http://www.zdrojak.cz/clanky/webove-stranky-dostanou-rozpoznavani-reci-prichazi-web-speech-api/" title="Webové stránky dostanou rozpoznávání řeči &#8211; přichází Web Speech API">Webové stránky dostanou rozpoznávání řeči &#8211; přichází Web Speech API</a></li>
+			        <li><a href="http://www.zdrojak.cz/clanky/metody-poskytovani-textovych-alternativ-obrazku-shrnuti/" title="Metody poskytování textových alternativ obrázků &#8211; shrnutí">Metody poskytování textových alternativ obrázků &#8211; shrnutí</a></li>
+			    </ul>
+		</aside>				<aside id="recent-posts-0" class="widget widget_recent_entries">		<h3 class="widget-title">Nejnovější příspěvky</h3>		<ul>
+					<li>
+				<a href="http://www.zdrojak.cz/clanky/zapier-propojovani-api/" title="Zapier &#8211; dejte propojování API ten správný šmrnc">Zapier &#8211; dejte propojování API ten správný šmrnc</a>
+						</li>
+					<li>
+				<a href="http://www.zdrojak.cz/clanky/testovani-v-php-tvorba-testovatelneho-kodu-ii/" title="Testování v PHP: tvorba testovatelného kódu II.">Testování v PHP: tvorba testovatelného kódu II.</a>
+						</li>
+					<li>
+				<a href="http://www.zdrojak.cz/clanky/menard-instant-angularjs-starter-recenze/" title="Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)">Dan Menard: Instant AngularJS Starter (recenze první knihy o AngularJS)</a>
+						</li>
+					<li>
+				<a href="http://www.zdrojak.cz/clanky/reportaz-z-devel-cz-konference-2013/" title="Reportáž z Devel.cz konference 2013">Reportáž z Devel.cz konference 2013</a>
+						</li>
+					<li>
+				<a href="http://www.zdrojak.cz/clanky/tvorba-moderniho-e-shopu-nahravani-obrazku-k-produktu/" title="Tvorba moderního e-shopu: nahrávání obrázků k produktu">Tvorba moderního e-shopu: nahrávání obrázků k produktu</a>
+						</li>
+				</ul>
+		</aside><aside id="related_posts-0" class="widget widget_related_posts"><h3 class="widget-title">Související články</h3><ul><li><a href="http://www.zdrojak.cz/clanky/doctrine-2-a-notorm-videotutorial/" rel="bookmark">Doctrine 2 a NotORM &#8211; videotutoriál</a></li><li><a href="http://www.zdrojak.cz/clanky/prasit-ci-neprasit/" rel="bookmark">Prasit, či neprasit?</a></li><li><a href="http://www.zdrojak.cz/clanky/vite-jak-uzivatele-pouzivaji-vasi-aplikaci/" rel="bookmark">Víte, jak uživatelé používají vaši aplikaci?</a></li><li><a href="http://www.zdrojak.cz/clanky/phpexcel-tabulky-jednoduse/" rel="bookmark">PHPExcel: tabulky jednoduše</a></li><li><a href="http://www.zdrojak.cz/clanky/knihy-pro-vyvojare-leden-unor-2010/" rel="bookmark">Knihy pro vývojáře &#8211; leden/únor 2010</a></li></ul></aside><aside id="recent-comments-0" class="widget widget_recent_comments"><h3 class="widget-title">Nejnovější komentáře</h3><ul id="recentcomments"><li class="recentcomments">Honza Marek u <a href="http://www.zdrojak.cz/clanky/testovani-v-php-tvorba-testovatelneho-kodu-ii/?show=comments#comment-24141">Testování v PHP: tvorba testovatelného kódu II.</a></li><li class="recentcomments">arron u <a href="http://www.zdrojak.cz/clanky/testovani-v-php-tvorba-testovatelneho-kodu-ii/?show=comments#comment-24140">Testování v PHP: tvorba testovatelného kódu II.</a></li><li class="recentcomments">pav u <a href="http://www.zdrojak.cz/clanky/testovani-v-php-tvorba-testovatelneho-kodu-ii/?show=comments#comment-24139">Testování v PHP: tvorba testovatelného kódu II.</a></li><li class="recentcomments">Martin Hassman u <a href="http://www.zdrojak.cz/clanky/uvodni-analyza-pro-moderni-e-shop/?show=comments#comment-24138">Úvodní analýza pro moderní e-shop</a></li><li class="recentcomments">xlilien u <a href="http://www.zdrojak.cz/clanky/uvodni-analyza-pro-moderni-e-shop/?show=comments#comment-24137">Úvodní analýza pro moderní e-shop</a></li></ul></aside>		</div><!-- #secondary -->
+	</div>
+<div id="bottom" class="site-bottom no-print">
+    <div class="wrapper">
+			<aside class="social widget widget_nav_menu">
+    <h3 class="widget-title">Sledujte</h3>
+
+    <div class="content">
+        <ul class="menu">
+            <li class="googleplus">
+                <a target="_blank" href="https://plus.google.com/101725826130888424314/posts">Google + Zdroják</a>
+            </li>
+            <li class="twitter">
+                <a target="_blank" href="https://twitter.com/zdrojak">Twitter @zdrojak</a>
+            </li>
+            <li class="mail">
+                <a href="/mail">Zpravodaj</a>
+            </li>
+            <li class="rss">
+                <a href="/feed">RSS</a>
+            </li>
+        </ul>
+    </div>
+</aside>    </div>
+</div>
+<footer id="colophon" class="site-footer no-print" role="contentinfo">
+
+    <div>
+        <p>
+            <a href="http://www.zdrojak.cz">Zdroják</a>, o tvorbě webových stránek a aplikací.
+            ISSN <span id="issn">1803-5620</span>
+        </p>
+
+        <p>Vydává <a href="http://www.devel.cz">Devel.cz Lab s.r.o.</a>. Všechna práva vyhrazena.</p>
+    </div>
+
+	    <ul>
+			        <li>
+            <a href="/redakce/"                title="Redakční texty" class="redakce">Redakce</a>
+            <span> | </span>
+        </li>
+			        <li>
+            <a href="/autori/"                title="Autoři" class="autori">Autoři</a>
+            <span> | </span>
+        </li>
+			        <li>
+            <a href="/redakce/kontakt/"                title="Kontakt" class="kontakt">Kontakt</a>
+            <span> | </span>
+        </li>
+			        <li>
+            <a href="http://www.iinfo.cz/reklama/" target="_blank"               title="Reklama" class="reklama">Reklama</a>
+            <span> | </span>
+        </li>
+			        <li>
+            <a href="/redakce/podminky-uzivani/"                title="Podmínky užívání" class="podminky-uzivani">Podmínky užívání</a>
+            <span> | </span>
+        </li>
+			        <li>
+            <a href="/redakce/podpora/"                title="Podpořte Zdroják" class="podporte-zdrojak">Podpořte Zdroják</a>
+            <span> | </span>
+        </li>
+			        <li>
+            <a href="/slovnicek/"                title="Slovníček" class="slovnicek">Slovníček</a>
+            <span> | </span>
+        </li>
+			        <li>
+            <a href="/redakce/rss-exporty/"                title="RSS" class="rss">RSS</a>
+            <span></span>
+        </li>
+			    </ul>
+	
+</footer>
+</div>
+<script type='text/javascript' src='http://www.zdrojak.cz/wp-includes/js/admin-bar.min.js?ver=3.5.1'></script>
+<script type='text/javascript' src='http://www.zdrojak.cz/wp-content/themes/twentytwelve/js/navigation.js?ver=1.0'></script>
+		<div id="wpadminbar" class="nojq nojs" role="navigation">
+			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Přejít k navigační liště</a>
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Horní navigační lišta" tabindex="0">
+				<ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+		<li id="wp-admin-bar-zd_login"><a class="ab-item"  href="http://www.zdrojak.cz/wp-login.php">Přihlásit se</a>		</li>
+		<li id="wp-admin-bar-zd_register"><a class="ab-item"  href="http://www.zdrojak.cz/wp-login.php?action=register">Registrace</a>		</li></ul><ul id="wp-admin-bar-root-default" class="ab-top-menu">
+		<li id="wp-admin-bar-devel_cz" class="link root"><a class="ab-item"  href="http://devel.cz" target="_blank" title="Devel.cz">Devel.cz</a>		</li>
+		<li id="wp-admin-bar-root_cz" class="link root"><a class="ab-item"  href="http://www.root.cz" target="_blank" title="Root.cz">Root.cz</a>		</li>
+		<li id="wp-admin-bar-lupa_cz" class="link lupa"><a class="ab-item"  href="http://www.lupa.cz" target="_blank" title="Lupa.cz">Lupa.cz</a>		</li>
+		<li id="wp-admin-bar-testomato_com" class="link testomato"><a class="ab-item"  href="http://www.testomato.com/" target="_blank" title="Testomato.com">Testomato.com</a>		</li></ul>			</div>
+			<a class="screen-reader-shortcut" href="http://www.zdrojak.cz/wp-login.php?action=logout&#038;_wpnonce=09e0bc3e07">Odhlásit se</a>
+		</div>
+
+		
+<div id="webstats">
+    <script src="http://c1.navrcholu.cz/code?site=72;t=t1x1" type="text/javascript"></script>
+    <noscript>
+        <div>
+            <img src="http://c1.navrcholu.cz/hit?site=72;t=t1x1;ref=;jss=0" width="1" height="1" alt=""/>
+        </div>
+    </noscript>
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-30960355-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function () {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+</div>
+<!-- d0e88e1c2777b950889c170b9b92adf8 -->
+</body>
+</html>

@@ -11,16 +11,17 @@ import charade
 from lxml.etree import tostring, tounicode, XMLSyntaxError
 from lxml.html import document_fromstring, HTMLParser
 
-from ._py3k import unicode, to_string, to_bytes
+from ._py3k import unicode, to_string, to_bytes, to_unicode
 from .utils import cached_property
 
 
 logger = logging.getLogger("readability")
 
 
+TAG_MARK_PATTERN = re.compile(to_bytes(r"</?[^>]*>\s*"))
 def determine_encoding(page):
     encoding = "utf8"
-    text = re.sub(to_bytes(r"</?[^>]*>\s*"), to_bytes(" "), page)
+    text = TAG_MARK_PATTERN.sub(to_bytes(" "), page)
 
     # don't venture to guess
     if not text.strip() or len(text) < 10:
@@ -42,12 +43,12 @@ def determine_encoding(page):
     return encoding
 
 
-MULTIPLE_BR_TAGS_PATTERN = re.compile(r"(?:<br[^>]*>\s*){2,}", re.IGNORECASE)
+MULTIPLE_BR_TAGS_PATTERN = re.compile(to_unicode(r"(?:<br[^>]*>\s*){2,}"), re.IGNORECASE)
 def replace_multi_br_to_paragraphs(html):
     """Converts multiple <br> tags into paragraphs."""
     logger.debug("Replacing multiple <br/> to <p>")
 
-    return MULTIPLE_BR_TAGS_PATTERN.sub("</p><p>", html)
+    return MULTIPLE_BR_TAGS_PATTERN.sub(to_unicode("</p><p>"), html)
 
 
 UTF8_PARSER = HTMLParser(encoding="utf8")
@@ -88,6 +89,10 @@ class OriginalDocument(object):
 
     def _parse(self, html):
         """Generate an lxml document from html."""
+        if not isinstance(html, unicode):
+            encoding = determine_encoding(html)
+            html = html.decode(encoding)
+
         html = replace_multi_br_to_paragraphs(html)
         document = build_document(html, self.url)
 
