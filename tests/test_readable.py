@@ -219,9 +219,8 @@ class TestScoringNodes(unittest.TestCase):
         # we'll start out using our first real test document
         test_nodes = []
         doc = document_fromstring(load_article('ars.001.html'))
-        for node in doc.getiterator():
-            if node.tag in ['p', 'td', 'pre']:
-                test_nodes.append(node)
+        for node in doc.iter('p', 'td', 'pre'):
+            test_nodes.append(node)
 
         candidates = score_candidates(test_nodes)
 
@@ -242,9 +241,9 @@ class TestScoringNodes(unittest.TestCase):
             test_div = div.format(content)
             doc = document_fromstring(document_str.format(test_div))
             test_nodes = []
-            for node in doc.getiterator():
-                if node.tag == 'p':
-                    test_nodes.append(node)
+            for node in doc.iter('p'):
+                test_nodes.append(node)
+
             return test_nodes
 
         test_nodes = build_doc(400)
@@ -269,12 +268,11 @@ class TestLinkDensityScoring(unittest.TestCase):
     def test_link_density(self):
         """Test that we get a link density"""
         doc = document_fromstring(load_article('ars.001.html'))
-        for node in doc.getiterator():
-            if node.tag in ['p', 'td', 'pre']:
-                density = get_link_density(node)
+        for node in doc.iter('p', 'td', 'pre'):
+            density = get_link_density(node)
 
-                # the density must be between 0, 1
-                self.assertTrue(density >= 0.0 and density <= 1.0)
+            # the density must be between 0, 1
+            self.assertTrue(density >= 0.0 and density <= 1.0)
 
 
 class TestSiblings(unittest.TestCase):
