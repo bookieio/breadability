@@ -278,12 +278,10 @@ class TestLinkDensityScoring(unittest.TestCase):
 class TestSiblings(unittest.TestCase):
     """Siblings will be included if their content is related."""
 
+    @unittest.skip("Not implemented yet.")
     def test_bad_siblings_not_counted(self):
-        """"""
+        raise NotImplementedError()
 
-        assert True, "TBD"
-
+    @unittest.skip("Not implemented yet.")
     def test_good_siblings_counted(self):
-        """"""
-
-        assert True, "TBD"
+        raise NotImplementedError()
