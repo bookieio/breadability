@@ -424,12 +424,19 @@ class Article(object):
         logger.debug('Begin final prep of article')
         updated_winner.node = prep_article(updated_winner.node)
         if updated_winner.node is not None:
-            doc = build_base_document(updated_winner.node, self.fragment)
+            dom = build_base_document(updated_winner.node, self.fragment)
         else:
             logger.warning('Had candidates but failed to find a cleaned winning DOM.')
-            doc = self._handle_no_candidates()
+            dom = self._handle_no_candidates()
 
-        return doc
+        return self._remove_orphans(dom.get_element_by_id("readabilityBody"))
+
+    def _remove_orphans(self, dom):
+        for node in dom.iterdescendants():
+            if len(node) == 1 and tuple(node)[0].tag == node.tag:
+                node.drop_tag()
+
+        return dom
 
     def _handle_no_candidates(self):
         """
@@ -441,7 +448,8 @@ class Article(object):
             drop_nodes_with_parents(self._should_drop)
 
             dom = prep_article(self.dom)
-            return build_base_document(dom, self.fragment)
+            dom = build_base_document(dom, self.fragment)
+            return self._remove_orphans(dom.get_element_by_id("readabilityBody"))
         else:
             logger.warning("No document to use.")
             return build_error_document(self.fragment)
