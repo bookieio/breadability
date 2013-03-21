@@ -449,7 +449,7 @@ class Article(object):
 
 def leaf_div_elements_into_paragraphs(document):
     """
-    Turn all <div> elements that don't have children block level
+    Turn some block elements that don't have children block level
     elements into <p> elements.
 
     Since we can't change the tree as we iterate over it, we must do this
@@ -457,8 +457,8 @@ def leaf_div_elements_into_paragraphs(document):
     """
     for element in document.iter(tag="div"):
         child_tags = tuple(n.tag for n in element.getchildren())
-        if "div" not in child_tags:
-            logger.debug("Changing leaf <div> into <p>")
+        if "div" not in child_tags and "p" not in child_tags:
+            logger.debug("Changing leaf block element <%s> into <p>", element.tag)
             element.tag = "p"
 
     return document
