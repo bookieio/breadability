@@ -5,6 +5,7 @@ from __future__ import absolute_import
 import re
 import logging
 
+from copy import deepcopy
 from operator import attrgetter
 from pprint import PrettyPrinter
 from lxml.html.clean import Cleaner
@@ -26,6 +27,13 @@ html_cleaner = Cleaner(scripts=True, javascript=True, comments=True,
 
 
 SCORABLE_TAGS = ("div", "p", "td", "pre", "article")
+ANNOTATION_TAGS = (
+    "a", "abbr", "acronym", "b", "big", "blink", "blockquote", "br", "cite",
+    "code", "dd", "del", "dir", "dl", "dt", "em", "font", "h", "h1", "h2",
+    "h3", "h4", "h5", "h6", "hr", "i", "ins", "kbd", "li", "marquee", "menu",
+    "ol", "p", "pre", "q", "s", "samp", "span", "strike", "strong", "sub",
+    "sup", "tt", "u", "ul", "var",
+)
 NULL_DOCUMENT = """
 <html>
     <head>
@@ -392,6 +400,15 @@ class Article(object):
 
         candidates, self._should_drop = find_candidates(dom)
         return candidates
+
+    @cached_property
+    def readable_annotated_text(self):
+        dom = deepcopy(self.readable_dom)
+        for node in dom.get_element_by_id("readabilityBody").iterdescendants():
+            if node.tag not in ANNOTATION_TAGS:
+                node.drop_tag()
+
+        return dom
 
     @cached_property
     def readable(self):
