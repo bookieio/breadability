@@ -2,6 +2,11 @@
 
 Changelog for readability
 ==========================
+- Added property ``Article.readable_annotated_text`` for gettng DOM
+  with same semantic tags (<em>, <strong>, ...).
+- Join node with 1 child of the same type. From
+  ``<div><div>...</div></div>`` we get ``<div>...</div>``.
+- Don't change <div> to <p> if it contains <p> elements.
 - Renamed test generation helper 'readability_newtest' -> 'readability_test'.
 - Renamed package to readability.
 - Added support for Python >= 3.2.
