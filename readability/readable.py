@@ -168,7 +168,7 @@ def clean_document(node):
         clean_list.append('h2')
 
     for n in node.iter():
-        logger.debug("Cleaning iter node")
+        logger.debug("Cleaning iter node: %s %r", n.tag, n.attrib)
         # clean out any in-line style properties
         if 'style' in n.attrib:
             n.set('style', '')
@@ -223,13 +223,11 @@ def drop_nodes_with_parents(nodes):
 
 def clean_conditionally(node):
     """Remove the clean_el if it looks like bad content based on rules."""
-    target_tags = ('form', 'table', 'ul', 'div', 'p')
+    logger.debug('Cleaning conditionally node: %s %r', node.tag, node.attrib)
 
-    logger.debug('Cleaning conditionally node.')
-
-    if node.tag not in target_tags:
+    if node.tag not in ('form', 'table', 'ul', 'div', 'p'):
         # this is not the tag you're looking for
-        logger.debug('Node cleared.')
+        logger.debug('Node cleared: %s %r', node.tag, node.attrib)
         return
 
     weight = get_class_weight(node)
@@ -242,8 +240,9 @@ def clean_conditionally(node):
         logger.debug('Weight + score < 0')
         return True
 
-    if node.text_content().count(',') < 10:
-        logger.debug("There aren't 10 ,s so we're processing more")
+    commas_count = node.text_content().count(',')
+    if commas_count < 10:
+        logger.debug("There are %d commas so we're processing more.", commas_count)
 
         # If there are not very many commas, and the number of
         # non-paragraph elements is more than paragraphs or other ominous
@@ -285,7 +284,7 @@ def clean_conditionally(node):
         if remove_node:
             logger.debug('Node will be removed')
         else:
-            logger.debug('Node cleared')
+            logger.debug('Node cleared: %s %r', node.tag, node.attrib)
         return remove_node
 
     # nope, don't remove anything
@@ -427,7 +426,7 @@ class Article(object):
         if updated_winner.node is not None:
             doc = build_base_document(updated_winner.node, self.fragment)
         else:
-            logger.warning('Had candidates but failed to find a cleaned winning doc.')
+            logger.warning('Had candidates but failed to find a cleaned winning DOM.')
             doc = self._handle_no_candidates()
 
         return doc
