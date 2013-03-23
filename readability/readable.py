@@ -360,7 +360,6 @@ def is_bad_link(node):
 
 class Article(object):
     """Parsed readable object"""
-    _should_drop = ()
 
     def __init__(self, html, url=None, fragment=True):
         """Create the Article we're going to use.
@@ -398,7 +397,9 @@ class Article(object):
         if dom is None or len(dom) == 0:
             return None
 
-        candidates, self._should_drop = find_candidates(dom)
+        candidates, unlikely_candidates = find_candidates(dom)
+        drop_nodes_with_parents(unlikely_candidates)
+
         return candidates
 
     @cached_property
@@ -423,9 +424,6 @@ class Article(object):
         if not self.candidates:
             logger.warning("No candidates found in document.")
             return self._handle_no_candidates()
-
-        # cleanup by removing the should_drop we spotted.
-        drop_nodes_with_parents(self._should_drop)
 
         # right now we return the highest scoring candidate content
         best_candidates = sorted((c for c in self.candidates.values()),
@@ -461,9 +459,6 @@ class Article(object):
         """
         # since we've not found a good candidate we're should help this
         if self.dom is not None and len(self.dom):
-            # cleanup by removing the should_drop we spotted.
-            drop_nodes_with_parents(self._should_drop)
-
             dom = prep_article(self.dom)
             dom = build_base_document(dom, self.fragment)
             return self._remove_orphans(dom.get_element_by_id("readabilityBody"))
