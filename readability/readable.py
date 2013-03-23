@@ -361,17 +361,17 @@ def is_bad_link(node):
 class Article(object):
     """Parsed readable object"""
 
-    def __init__(self, html, url=None, fragment=True):
-        """Create the Article we're going to use.
-
-        :param html: The string of html we're going to parse.
-        :param url: The url so we can adjust the links to still work.
-        :param fragment: Should we return a <div> fragment or
-            a full <html> doc.
+    def __init__(self, html, url=None, return_fragment=True):
         """
-        logger.debug('Url: ' + str(url))
-        self.orig = OriginalDocument(html, url=url)
-        self.fragment = fragment
+        Create the Article we're going to use.
+
+        :param html: The string of HTML we're going to parse.
+        :param url: The url so we can adjust the links to still work.
+        :param return_fragment: Should we return a <div> fragment or
+            a full <html> document.
+        """
+        self._original_document = OriginalDocument(html, url=url)
+        self._return_fragment = return_fragment
 
     def __str__(self):
         return tostring(self._readable())
@@ -383,7 +383,7 @@ class Article(object):
     def dom(self):
         """Parsed lxml tree (Document Object Model) of the given html."""
         try:
-            document = self.orig.html
+            document = self._original_document.html
             # cleaning doesn't return, just wipes in place
             html_cleaner(document)
             return leaf_div_elements_into_paragraphs(document)
@@ -439,7 +439,7 @@ class Article(object):
         logger.debug('Begin final prep of article')
         updated_winner.node = prep_article(updated_winner.node)
         if updated_winner.node is not None:
-            dom = build_base_document(updated_winner.node, self.fragment)
+            dom = build_base_document(updated_winner.node, self._return_fragment)
         else:
             logger.warning('Had candidates but failed to find a cleaned winning DOM.')
             dom = self._handle_no_candidates()
@@ -460,11 +460,11 @@ class Article(object):
         # since we've not found a good candidate we're should help this
         if self.dom is not None and len(self.dom):
             dom = prep_article(self.dom)
-            dom = build_base_document(dom, self.fragment)
+            dom = build_base_document(dom, self._return_fragment)
             return self._remove_orphans(dom.get_element_by_id("readabilityBody"))
         else:
             logger.warning("No document to use.")
-            return build_error_document(self.fragment)
+            return build_error_document(self._return_fragment)
 
 
 def leaf_div_elements_into_paragraphs(document):
