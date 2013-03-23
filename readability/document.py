@@ -87,10 +87,10 @@ class OriginalDocument(object):
 
     def __unicode__(self):
         """Renders the document as a string."""
-        return tounicode(self.html)
+        return tounicode(self.dom)
 
     @cached_property
-    def html(self):
+    def dom(self):
         """Parsed HTML document from the input."""
         html = self._html
         if not isinstance(html, unicode):
@@ -105,12 +105,12 @@ class OriginalDocument(object):
     @cached_property
     def links(self):
         """Links within the document."""
-        return self.html.findall(".//a")
+        return self.dom.findall(".//a")
 
     @cached_property
     def title(self):
         """Title attribute of the parsed document."""
-        title_element = self.html.find(".//title")
+        title_element = self.dom.find(".//title")
         if title_element is None or title_element.text is None:
             return ""
         else:

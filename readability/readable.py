@@ -383,10 +383,10 @@ class Article(object):
     def dom(self):
         """Parsed lxml tree (Document Object Model) of the given html."""
         try:
-            document = self._original_document.html
+            dom = self._original_document.dom
             # cleaning doesn't return, just wipes in place
-            html_cleaner(document)
-            return leaf_div_elements_into_paragraphs(document)
+            html_cleaner(dom)
+            return leaf_div_elements_into_paragraphs(dom)
         except ValueError:
             return None
 

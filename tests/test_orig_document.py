@@ -45,7 +45,7 @@ class TestOriginalDocument(unittest.TestCase):
     def test_no_br_allowed(self):
         """We convert all <br/> tags to <p> tags"""
         doc = OriginalDocument(load_snippet('document_min.html'))
-        self.assertIsNone(doc.html.find('.//br'))
+        self.assertIsNone(doc.dom.find('.//br'))
 
     def test_empty_title(self):
         """We convert all <br/> tags to <p> tags"""
