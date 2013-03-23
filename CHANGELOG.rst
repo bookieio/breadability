@@ -2,8 +2,8 @@
 
 Changelog for readability
 ==========================
-- Added property ``Article.readable_annotated_text`` for gettng DOM
-  with same semantic tags (<em>, <strong>, ...).
+- Added property ``Article.main_text`` for gettng DOM with same
+  semantic tags (<em>, <strong>, ...).
 - Join node with 1 child of the same type. From
   ``<div><div>...</div></div>`` we get ``<div>...</div>``.
 - Don't change <div> to <p> if it contains <p> elements.

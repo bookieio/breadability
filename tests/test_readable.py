@@ -287,28 +287,28 @@ class TestSiblings(unittest.TestCase):
         raise NotImplementedError()
 
 
-class TestAnnotatedText(unittest.TestCase):
+class TestMainText(unittest.TestCase):
     def test_empty(self):
         article = Article("")
-        dom = article.readable_annotated_text
+        dom = article.main_text
         self.assertEqual(tounicode(dom),
             '<div id="readabilityBody" class="parsing-error"/>')
 
     def test_no_annotations(self):
         article = Article("<div><p>This is text with no annotations</p></div>")
-        dom = article.readable_annotated_text
+        dom = article.main_text
         self.assertEqual(tounicode(dom),
             '<div id="readabilityBody"><p>This is text with no annotations</p></div>')
 
     def test_one_annotation(self):
         article = Article("<div><p>This is text with <del>no</del> annotations</p></div>")
-        dom = article.readable_annotated_text
+        dom = article.main_text
         self.assertEqual(tounicode(dom),
             '<div id="readabilityBody"><p>This is text with <del>no</del> annotations</p></div>')
 
     def test_simple_document(self):
         article = Article(load_snippet("annotated_1.html"))
-        dom = article.readable_annotated_text
+        dom = article.main_text
 
         self.assertIn("Paragraph is more better", dom.text_content())
         self.assertIn("This is not crap so readability me :)", dom.text_content())

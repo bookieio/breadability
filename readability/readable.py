@@ -402,7 +402,7 @@ class Article(object):
         return candidates
 
     @cached_property
-    def readable_annotated_text(self):
+    def main_text(self):
         dom = deepcopy(self.readable_dom)
         for node in dom.get_element_by_id("readabilityBody").iterdescendants():
             if node.tag not in ANNOTATION_TAGS:
