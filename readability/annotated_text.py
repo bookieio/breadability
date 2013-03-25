@@ -3,6 +3,7 @@
 from __future__ import absolute_import
 from __future__ import division, print_function, unicode_literals
 
+from itertools import groupby
 from lxml.sax import saxify, ContentHandler
 from .utils import is_blank, normalize_whitespace
 
@@ -60,22 +61,10 @@ class AnnotatedTextHandler(ContentHandler):
     def _process_paragraph(self, paragraph):
         current_paragraph = []
 
-        current_text = ""
-        last_annotation = None
-        for text, annotation in paragraph:
-            if last_annotation != annotation and not is_blank(current_text):
-                current_text = normalize_whitespace(current_text.strip())
-                pair = (current_text, last_annotation)
-                current_paragraph.append(pair)
-                current_text = ""
-
-            current_text += text
-            last_annotation = annotation
-
-        if not is_blank(current_text):
-            current_text = normalize_whitespace(current_text.strip())
-            pair = (current_text, last_annotation)
-            current_paragraph.append(pair)
+        for annotation, items in groupby(paragraph, key=lambda i: i[1]):
+            text = "".join(i[0] for i in items)
+            text = normalize_whitespace(text.strip())
+            current_paragraph.append((text, annotation))
 
         return tuple(current_paragraph)
 
