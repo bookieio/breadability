@@ -6,7 +6,7 @@ from __future__ import division, print_function, unicode_literals
 from collections import defaultdict
 from readability._py3k import to_unicode, to_bytes
 from readability.document import (OriginalDocument, determine_encoding,
-    replace_multi_br_to_paragraphs)
+    convert_breaks_to_paragraphs)
 from .compat import unittest
 from .utils import load_snippet
 
@@ -14,9 +14,16 @@ from .utils import load_snippet
 class TestOriginalDocument(unittest.TestCase):
     """Verify we can process html into a document to work off of."""
 
-    def test_replace_multi_br_to_paragraphs(self):
-        returned = replace_multi_br_to_paragraphs(
+    def test_convert_br_tags_to_paragraphs(self):
+        returned = convert_breaks_to_paragraphs(
             "<div>HI<br><br>How are you?<br><br> \t \n  <br>Fine\n I guess</div>")
+
+        self.assertEqual(returned,
+            "<div>HI</p><p>How are you?</p><p>Fine\n I guess</div>")
+
+    def test_convert_hr_tags_to_paragraphs(self):
+        returned = convert_breaks_to_paragraphs(
+            "<div>HI<br><br>How are you?<hr/> \t \n  <br>Fine\n I guess</div>")
 
         self.assertEqual(returned,
             "<div>HI</p><p>How are you?</p><p>Fine\n I guess</div>")

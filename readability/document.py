@@ -43,12 +43,25 @@ def determine_encoding(page):
     return encoding
 
 
-MULTIPLE_BR_TAGS_PATTERN = re.compile(to_unicode(r"(?:<br[^>]*>\s*){2,}"), re.IGNORECASE)
-def replace_multi_br_to_paragraphs(html):
-    """Converts multiple <br> tags into paragraphs."""
-    logger.debug("Replacing multiple <br/> to <p>")
+BREAK_TAGS_PATTERN = re.compile(to_unicode(r"(?:<\s*[bh]r[^>]*>\s*)+"), re.IGNORECASE)
+def convert_breaks_to_paragraphs(html):
+    """
+    Converts <hr> tag and multiple <br> tags into paragraph.
+    """
+    logger.debug("Converting multiple <br> & <hr> tags into <p>.")
 
-    return MULTIPLE_BR_TAGS_PATTERN.sub(to_unicode("</p><p>"), html)
+    return BREAK_TAGS_PATTERN.sub(_replace_break_tags, html)
+
+
+def _replace_break_tags(match):
+    tags = match.group()
+
+    if to_unicode("<hr") in tags:
+        return to_unicode("</p><p>")
+    elif tags.count(to_unicode("<br")) > 1:
+        return to_unicode("</p><p>")
+    else:
+        return tags
 
 
 UTF8_PARSER = HTMLParser(encoding="utf8")
@@ -97,7 +110,7 @@ class OriginalDocument(object):
             encoding = determine_encoding(html)
             html = html.decode(encoding)
 
-        html = replace_multi_br_to_paragraphs(html)
+        html = convert_breaks_to_paragraphs(html)
         document = build_document(html, self._url)
 
         return document
