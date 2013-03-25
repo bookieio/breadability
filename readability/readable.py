@@ -13,6 +13,7 @@ from lxml.etree import tounicode, tostring
 from lxml.html import fragment_fromstring, fromstring
 
 from .document import OriginalDocument
+from .annotated_text import AnnotatedTextHandler
 from .scoring import (score_candidates, get_link_density, get_class_weight,
     is_unlikely_node)
 from .utils import cached_property
@@ -404,12 +405,8 @@ class Article(object):
 
     @cached_property
     def main_text(self):
-        dom = deepcopy(self.readable_dom)
-        for node in dom.get_element_by_id("readabilityBody").iterdescendants():
-            if node.tag not in ANNOTATION_TAGS:
-                node.drop_tag()
-
-        return dom
+        dom = deepcopy(self.readable_dom).get_element_by_id("readabilityBody")
+        return AnnotatedTextHandler.parse(dom)
 
     @cached_property
     def readable(self):

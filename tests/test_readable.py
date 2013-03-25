@@ -290,27 +290,46 @@ class TestSiblings(unittest.TestCase):
 class TestMainText(unittest.TestCase):
     def test_empty(self):
         article = Article("")
-        dom = article.main_text
-        self.assertEqual(tounicode(dom),
-            '<div id="readabilityBody" class="parsing-error"/>')
+        annotated_text = article.main_text
+
+        self.assertEqual(annotated_text, [])
 
     def test_no_annotations(self):
         article = Article("<div><p>This is text with no annotations</p></div>")
-        dom = article.main_text
-        self.assertEqual(tounicode(dom),
-            '<div id="readabilityBody"><p>This is text with no annotations</p></div>')
+        annotated_text = article.main_text
+
+        self.assertEqual(annotated_text,
+            [(("This is text with no annotations", None),)])
 
     def test_one_annotation(self):
-        article = Article("<div><p>This is text with <del>no</del> annotations</p></div>")
-        dom = article.main_text
-        self.assertEqual(tounicode(dom),
-            '<div id="readabilityBody"><p>This is text with <del>no</del> annotations</p></div>')
+        article = Article("<div><p>This is text\r\twith <del>no</del> annotations</p></div>")
+        annotated_text = article.main_text
 
-    def test_simple_document(self):
-        article = Article(load_snippet("annotated_1.html"))
-        dom = article.main_text
+        expected = [(
+            ("This is text\nwith", None),
+            ("no", ("del",)),
+            ("annotations", None),
+        )]
+        self.assertEqual(annotated_text, expected)
 
-        self.assertIn("Paragraph is more better", dom.text_content())
-        self.assertIn("This is not crap so readability me :)", dom.text_content())
+    def test_simple_snippet(self):
+        snippet = Article(load_snippet("annotated_1.html"))
+        annotated_text = snippet.main_text
 
-        self.assertNotIn("not so good", dom.text_content())
+        expected = [
+            (
+                ("Paragraph is more", None),
+                ("better", ("em",)),
+                (".\nThis text is very", None),
+                ("pretty", ("strong",)),
+                ("'cause she's girl.", None),
+            ),
+            (
+                ("This is not", None),
+                ("crap", ("big",)),
+                ("so", None),
+                ("readability", ("dfn",)),
+                ("me :)", None),
+            )
+        ]
+        self.assertEqual(annotated_text, expected)
