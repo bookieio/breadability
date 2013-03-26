@@ -216,20 +216,16 @@ class TestScoringNodes(unittest.TestCase):
 
     def test_we_get_candidates(self):
         """Processing candidates should get us a list of nodes to try out."""
-        # we'll start out using our first real test document
-        test_nodes = []
-        doc = document_fromstring(load_article('ars.001.html'))
-        for node in doc.iter('p', 'td', 'pre'):
-            test_nodes.append(node)
-
+        doc = document_fromstring(load_article("ars.001.html"))
+        test_nodes = tuple(doc.iter("p", "td", "pre"))
         candidates = score_candidates(test_nodes)
 
-        # this might change as we tweak our algorithm, but if it does change,
+        # this might change as we tweak our algorithm, but if it does,
         # it signifies we need to look at what we changed.
-        self.assertEqual(len(candidates.keys()), 6)
+        self.assertEqual(len(candidates.keys()), 37)
 
         # one of these should have a decent score
-        scores = sorted([c.content_score for c in candidates.values()])
+        scores = sorted(c.content_score for c in candidates.values())
         self.assertTrue(scores[-1] > 100)
 
     def test_bonus_score_per_100_chars_in_p(self):

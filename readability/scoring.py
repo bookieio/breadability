@@ -192,6 +192,10 @@ def score_candidates(nodes):
         logger.debug("Giving parent bonus points: %f", candidates[parent].content_score)
         # the grand node gets half
         candidates[grand].content_score += content_score / 2.0
+
+        if node not in candidates:
+            candidates[node] = ScoredNode(node)
+        candidates[node].content_score += content_score
         logger.debug("Giving grand bonus points: %f", candidates[grand].content_score)
 
     for candidate in candidates.values():

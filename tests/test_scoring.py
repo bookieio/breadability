@@ -248,7 +248,7 @@ class TestScoreCandidates(unittest.TestCase):
 
     def test_simple_candidate_set(self):
         """Tests a simple case of two candidate nodes"""
-        doc = """
+        html = """
             <html>
             <body>
                 <div class="content">
@@ -262,18 +262,16 @@ class TestScoreCandidates(unittest.TestCase):
             </body>
             </html>
         """
-        d_elem = document_fromstring(doc)
-        divs = d_elem.findall(".//div")
-        f_elem = divs[0]
-        s_elem = divs[1]
+        dom = document_fromstring(html)
+        div_nodes = dom.findall(".//div")
 
-        res = score_candidates([f_elem, s_elem])
-        ordered = sorted([c for c in res.values()],
-                          key=attrgetter('content_score'),
-                          reverse=True)
+        candidates = score_candidates(div_nodes)
+        ordered = sorted((c for c in candidates.values()), reverse=True,
+            key=attrgetter("content_score"))
 
-        # the body element should have a higher score
-        self.assertTrue(ordered[0].node.tag == 'body')
-
-        # the html element is the outer should come in second
-        self.assertTrue(ordered[1].node.tag == 'html')
+        self.assertEqual(ordered[0].node.tag, "div")
+        self.assertEqual(ordered[0].node.attrib["class"], "content")
+        self.assertEqual(ordered[1].node.tag, "body")
+        self.assertEqual(ordered[2].node.tag, "html")
+        self.assertEqual(ordered[3].node.tag, "div")
+        self.assertEqual(ordered[3].node.attrib["class"], "footer")
