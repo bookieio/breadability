@@ -16,7 +16,7 @@ from .document import OriginalDocument
 from .annotated_text import AnnotatedTextHandler
 from .scoring import (score_candidates, get_link_density, get_class_weight,
     is_unlikely_node)
-from .utils import cached_property
+from .utils import cached_property, shrink_text
 
 
 html_cleaner = Cleaner(scripts=True, javascript=True, comments=True,
@@ -162,49 +162,33 @@ def check_siblings(candidate_node, candidate_list):
 def clean_document(node):
     """Cleans up the final document we return as the readable article."""
     if node is None or len(node) == 0:
-        return
+        return None
 
     logger.debug("Cleaning document.")
-    clean_list = ["object"]
     to_drop = []
 
     for n in node.iter():
-        logger.debug("Cleaning iter node: %s %r", n.tag, n.attrib)
+        logger.debug("Cleaning node: %s %r", n.tag, n.attrib)
         # clean out any in-line style properties
         if "style" in n.attrib:
             n.set("style", "")
 
-        # remove all of the following tags
-        # Clean a node of all elements of type "tag".
-        # (Unless it's a youtube/vimeo video. People love movies.)
-        is_embed = bool(n.tag in ("object", "embed"))
-        if n.tag in clean_list:
-            allow = False
+        # remove embended objects unless it's wanted video
+        if n.tag in ("object", "embed") and not ok_embedded_video(n):
+            logger.debug("Dropping node %s %r", n.tag, n.attrib)
+            to_drop.append(n)
 
-            # Allow youtube and vimeo videos through as people usually
-            # want to see those.
-            if is_embed:
-                if ok_embedded_video(n):
-                    allow = True
-
-            if not allow:
-                logger.debug("Dropping Node %s %r", n.tag, n.attrib)
-                to_drop.append(n)
-
+        # clean headings with bad css or high link density
         if n.tag in ("h1", "h2", "h3", "h4"):
-            # clean headings
-            # if the heading has no css weight or a high link density,
-            # remove it
             if get_class_weight(n) < 0 or get_link_density(n) > 0.33:
                 logger.debug("Dropping <%s>, it's insignificant", n.tag)
                 to_drop.append(n)
 
-        # clean out extra <p>
-        if n.tag == "p":
-            # if the p has no children and has no content...well then down
-            # with it.
-            if not n.getchildren() and len(n.text_content()) < 5:
-                logger.debug("Dropping extra <p>")
+        # drop block element without content and children
+        if n.tag in ("div", "p"):
+            text_content = shrink_text(n.text_content())
+            if len(text_content) < 5 and not n.getchildren():
+                logger.debug("Dropping %s %r without content.", n.tag, n.attrib)
                 to_drop.append(n)
 
         # finally try out the conditional cleaning of the target node
