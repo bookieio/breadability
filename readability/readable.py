@@ -227,6 +227,7 @@ def clean_document(node):
 def drop_nodes_with_parents(nodes):
     for node in nodes:
         if node.getparent() is not None:
+            logger.debug("Droping node with parent %s %r", node.tag, node.attrib)
             node.drop_tree()
 
 

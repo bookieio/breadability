@@ -139,24 +139,24 @@ def score_candidates(nodes):
     candidates = {}
 
     for node in nodes:
-        logger.debug("Scoring Node")
+        logger.debug("Scoring candidate %s %r", node.tag, node.attrib)
 
         # if the node has no parent it knows of
         # then it ends up creating a body & html tag to parent the html fragment
         parent = node.getparent()
         if parent is None:
-            logger.debug("Skipping node - parent node is none.")
+            logger.debug("Skipping candidate - parent node is 'None'.")
             continue
 
         grand = parent.getparent()
         if grand is None:
-            logger.debug("Skipping node - grand parent node is none.")
+            logger.debug("Skipping candidate - grand parent node is 'None'.")
             continue
 
         # if paragraph is < `MIN_HIT_LENTH` characters don't even count it
         inner_text = node.text_content().strip()
         if len(inner_text) < MIN_HIT_LENTH:
-            logger.debug("Skipping candidate because inner text is shorter than %d characters.", MIN_HIT_LENTH)
+            logger.debug("Skipping candidate - inner text < %d characters.", MIN_HIT_LENTH)
             continue
 
         # initialize readability data for the parent
@@ -174,29 +174,33 @@ def score_candidates(nodes):
             # add 0.25 points for any commas within this paragraph
             commas_count = inner_text.count(",")
             content_score += commas_count * 0.25
-            logger.debug("Bonus points for commas: %d", commas_count)
+            logger.debug("Bonus points for %d commas.", commas_count)
 
             # subtract 0.5 points for each double quote within this paragraph
             double_quotes_count = inner_text.count('"')
             content_score += double_quotes_count * -0.5
-            logger.debug("Penalty points for double-quotes: %d", double_quotes_count)
+            logger.debug("Penalty points for %d double-quotes.", double_quotes_count)
 
             # for every 100 characters in this paragraph, add another point
             # up to 3 points
             length_points = len(inner_text) / 100
             content_score += min(length_points, 3.0)
-            logger.debug("Length/content points: %d : %f", length_points, content_score)
+            logger.debug("Bonus points for length of text: %f", length_points)
 
         # add the score to the parent
+        logger.debug("Bonus points for parent %s %r with score %f: %f",
+            parent.tag, parent.attrib, candidates[parent].content_score,
+            content_score)
         candidates[parent].content_score += content_score
-        logger.debug("Giving parent bonus points: %f", candidates[parent].content_score)
         # the grand node gets half
+        logger.debug("Bonus points for grand %s %r with score %f: %f",
+            grand.tag, grand.attrib, candidates[grand].content_score,
+            content_score / 2.0)
         candidates[grand].content_score += content_score / 2.0
 
         if node not in candidates:
             candidates[node] = ScoredNode(node)
         candidates[node].content_score += content_score
-        logger.debug("Giving grand bonus points: %f", candidates[grand].content_score)
 
     for candidate in candidates.values():
         adjustment = 1.0 - get_link_density(candidate.node)
