@@ -71,12 +71,17 @@ def generate_hash_id(node):
 
 def get_link_density(node, node_text=None):
     """
-    Generates a value for the number of links in the node.
+    Computes the ratio for text in given node and text in links
+    contained in the node. It is computed from number of
+    characters in the texts.
 
-    :param node: pared elementree node
-    :param node_text: if we already have the text_content() make
-        this easier on us.
+    :parameter Element node:
+        HTML element in which links density is computed.
+    :parameter string node_text:
+        Text content of given node if it was obtained before.
     :returns float:
+        Returns value of computed 0 <= density <= 1, where 0 means
+        no links and 1 means that node contains only links.
     """
     if node_text is None:
         node_text = node.text_content()
