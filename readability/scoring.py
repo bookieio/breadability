@@ -183,8 +183,8 @@ def score_candidates(nodes):
 
             # for every 100 characters in this paragraph, add another point
             # up to 3 points
-            length_points = len(inner_text) // 100
-            content_score += min(length_points, 3)
+            length_points = len(inner_text) / 100
+            content_score += min(length_points, 3.0)
             logger.debug("Length/content points: %d : %f", length_points, content_score)
 
         # add the score to the parent
@@ -195,9 +195,10 @@ def score_candidates(nodes):
         logger.debug("Giving grand bonus points: %f", candidates[grand].content_score)
 
     for candidate in candidates.values():
-        adjustment = 1 - get_link_density(candidate.node)
-        logger.debug("Getting link density adjustment: %f * %f", candidate.content_score, adjustment)
-        candidate.content_score = candidate.content_score * adjustment
+        adjustment = 1.0 - get_link_density(candidate.node)
+        candidate.content_score *= adjustment
+        logger.debug("Link density adjustment for %s %r: %f",
+            candidate.node.tag, candidate.node.attrib, adjustment)
 
     return candidates
 

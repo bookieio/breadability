@@ -233,33 +233,32 @@ class TestScoringNodes(unittest.TestCase):
         self.assertTrue(scores[-1] > 100)
 
     def test_bonus_score_per_100_chars_in_p(self):
-        """Nodes get 1pt per 100 characters up to 3 max points"""
-        def build_doc(length):
-            div = '<div id="content" class=""><p>{0}</p></div>'
-            document_str = '<html><body>{0}</body></html>'
-            content = 'c' * length
-            test_div = div.format(content)
-            doc = document_fromstring(document_str.format(test_div))
-            test_nodes = []
-            for node in doc.iter('p'):
-                test_nodes.append(node)
+        """Nodes get 1 point per 100 characters up to max. 3 points."""
+        def build_candidates(length):
+            html = "<p>%s</p>" % ("c" * length)
+            node = fragment_fromstring(html)
 
-            return test_nodes
+            return [node]
 
-        test_nodes = build_doc(400)
+        test_nodes = build_candidates(50)
         candidates = score_candidates(test_nodes)
-        pscore_400 = max([c.content_score for c in candidates.values()])
+        pscore_50 = max(c.content_score for c in candidates.values())
 
-        test_nodes = build_doc(100)
+        test_nodes = build_candidates(100)
         candidates = score_candidates(test_nodes)
-        pscore_100 = max([c.content_score for c in candidates.values()])
+        pscore_100 = max(c.content_score for c in candidates.values())
 
-        test_nodes = build_doc(50)
+        test_nodes = build_candidates(300)
         candidates = score_candidates(test_nodes)
-        pscore_50 = max([c.content_score for c in candidates.values()])
+        pscore_300 = max(c.content_score for c in candidates.values())
 
-        self.assertEqual(pscore_100, pscore_50 + 1)
-        self.assertEqual(pscore_400, pscore_50 + 3)
+        test_nodes = build_candidates(400)
+        candidates = score_candidates(test_nodes)
+        pscore_400 = max(c.content_score for c in candidates.values())
+
+        self.assertAlmostEqual(pscore_50 + 0.5, pscore_100)
+        self.assertAlmostEqual(pscore_100 + 2.0, pscore_300)
+        self.assertAlmostEqual(pscore_300, pscore_400)
 
 
 class TestLinkDensityScoring(unittest.TestCase):
