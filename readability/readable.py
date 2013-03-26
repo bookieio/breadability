@@ -165,14 +165,8 @@ def clean_document(node):
         return
 
     logger.debug("Cleaning document.")
-    clean_list = ["object", "h1"]
+    clean_list = ["object"]
     to_drop = []
-
-    # If there is only one h2, they are probably using it as a header and
-    # not a subheader, so remove it since we already have a header.
-    if len(node.findall(".//h2")) == 1:
-        logger.debug("Adding H2 to list of nodes to clean.")
-        clean_list.append("h2")
 
     for n in node.iter():
         logger.debug("Cleaning iter node: %s %r", n.tag, n.attrib)

@@ -100,7 +100,7 @@ class TestLinkDensity(unittest.TestCase):
     def test_several_links(self):
         """This doc has a 3 links with the majority of content."""
         doc = Article(load_snippet('document_absolute_url.html'))
-        self.assertAlmostEqual(get_link_density(doc.readable_dom), 22/24)
+        self.assertAlmostEqual(get_link_density(doc.readable_dom), 22/37)
 
 
 class TestClassWeight(unittest.TestCase):
