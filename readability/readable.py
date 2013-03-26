@@ -107,11 +107,11 @@ def document_from_fragment(fragment, return_fragment):
 
 
 def check_siblings(candidate_node, candidate_list):
-    """Look through siblings for content that might also be related.
-
+    """
+    Looks through siblings for content that might also be related.
     Things like preambles, content split by ads that we removed, etc.
     """
-    candidate_css = candidate_node.node.get('class')
+    candidate_css = candidate_node.node.get("class")
     potential_target = candidate_node.content_score * 0.2
     sibling_target_score = potential_target if potential_target > 10 else 10
     parent = candidate_node.node.getparent()
@@ -122,22 +122,20 @@ def check_siblings(candidate_node, candidate_list):
         content_bonus = 0
 
         if sibling is candidate_node.node:
-            logger.debug('Sibling is the node so append')
             append = True
 
         # Give a bonus if sibling nodes and top candidates have the example
         # same class name
-        if candidate_css and sibling.get('class') == candidate_css:
+        if candidate_css and sibling.get("class") == candidate_css:
             content_bonus += candidate_node.content_score * 0.2
 
         if sibling in candidate_list:
-            adjusted_score = candidate_list[sibling].content_score + \
-                content_bonus
+            adjusted_score = candidate_list[sibling].content_score + content_bonus
 
             if adjusted_score >= sibling_target_score:
                 append = True
 
-        if sibling.tag == 'p':
+        if sibling.tag == "p":
             link_density = get_link_density(sibling)
             content = sibling.text_content()
             content_length = len(content)
@@ -149,12 +147,12 @@ def check_siblings(candidate_node, candidate_list):
                     append = True
 
         if append:
-            logger.debug('Sibling being appended')
-            if sibling.tag not in ('div', 'p'):
+            logger.debug("Sibling appended: %s %r", sibling.tag, sibling.attrib)
+            if sibling.tag not in ("div", "p"):
                 # We have a node that isn't a common block level element, like
                 # a form or td tag. Turn it into a div so it doesn't get
                 # filtered out later by accident.
-                sibling.tag = 'div'
+                sibling.tag = "div"
 
             candidate_node.node.append(sibling)
 
@@ -162,30 +160,30 @@ def check_siblings(candidate_node, candidate_list):
 
 
 def clean_document(node):
-    """Clean up the final document we return as the readable article"""
+    """Cleans up the final document we return as the readable article."""
     if node is None or len(node) == 0:
         return
 
-    logger.debug("Processing doc")
-    clean_list = ['object', 'h1']
+    logger.debug("Cleaning document.")
+    clean_list = ["object", "h1"]
     to_drop = []
 
     # If there is only one h2, they are probably using it as a header and
     # not a subheader, so remove it since we already have a header.
-    if len(node.findall('.//h2')) == 1:
-        logger.debug('Adding H2 to list of nodes to clean.')
-        clean_list.append('h2')
+    if len(node.findall(".//h2")) == 1:
+        logger.debug("Adding H2 to list of nodes to clean.")
+        clean_list.append("h2")
 
     for n in node.iter():
         logger.debug("Cleaning iter node: %s %r", n.tag, n.attrib)
         # clean out any in-line style properties
-        if 'style' in n.attrib:
-            n.set('style', '')
+        if "style" in n.attrib:
+            n.set("style", "")
 
         # remove all of the following tags
         # Clean a node of all elements of type "tag".
         # (Unless it's a youtube/vimeo video. People love movies.)
-        is_embed = bool(n.tag in ('object', 'embed'))
+        is_embed = bool(n.tag in ("object", "embed"))
         if n.tag in clean_list:
             allow = False
 
@@ -196,23 +194,23 @@ def clean_document(node):
                     allow = True
 
             if not allow:
-                logger.debug("Dropping Node")
+                logger.debug("Dropping Node %s %r", n.tag, n.attrib)
                 to_drop.append(n)
 
-        if n.tag in ('h1', 'h2', 'h3', 'h4'):
+        if n.tag in ("h1", "h2", "h3", "h4"):
             # clean headings
             # if the heading has no css weight or a high link density,
             # remove it
-            if get_class_weight(n) < 0 or get_link_density(n) > .33:
-                logger.debug("Dropping <hX>, it's insignificant")
+            if get_class_weight(n) < 0 or get_link_density(n) > 0.33:
+                logger.debug("Dropping <%s>, it's insignificant", n.tag)
                 to_drop.append(n)
 
         # clean out extra <p>
-        if n.tag == 'p':
+        if n.tag == "p":
             # if the p has no children and has no content...well then down
             # with it.
             if not n.getchildren() and len(n.text_content()) < 5:
-                logger.debug('Dropping extra <p>')
+                logger.debug("Dropping extra <p>")
                 to_drop.append(n)
 
         # finally try out the conditional cleaning of the target node
@@ -434,7 +432,6 @@ class Article(object):
         # for extra content
         winner = best_candidates[0]
         updated_winner = check_siblings(winner, self.candidates)
-        logger.debug('Begin final prep of article')
         updated_winner.node = prep_article(updated_winner.node)
         if updated_winner.node is not None:
             dom = build_base_document(updated_winner.node, self._return_fragment)
