@@ -8,7 +8,6 @@ import re
 from operator import attrgetter
 from lxml.html import document_fromstring
 from lxml.html import fragment_fromstring
-from readability._py3k import to_unicode
 from readability.readable import Article
 from readability.scoring import check_node_attributes
 from readability.scoring import get_class_weight
@@ -91,20 +90,17 @@ class TestLinkDensity(unittest.TestCase):
 
     def test_empty_node(self):
         """An empty node doesn't have much of a link density"""
-        empty_div = to_unicode("<div></div>")
-        doc = Article(empty_div)
-        assert 0 == get_link_density(doc.readable_dom), "Link density is nadda"
+        doc = Article("<div></div>")
+        self.assertEqual(get_link_density(doc.readable_dom), 0.0)
 
     def test_small_doc_no_links(self):
         doc = Article(load_snippet('document_min.html'))
-        assert 0 == get_link_density(doc.readable_dom), "Still no link density"
+        self.assertEqual(get_link_density(doc.readable_dom), 0.0)
 
     def test_several_links(self):
         """This doc has a 3 links with the majority of content."""
         doc = Article(load_snippet('document_absolute_url.html'))
-        self.assertAlmostEqual(
-                get_link_density(doc.readable_dom), 0.349,
-                places=3)
+        self.assertAlmostEqual(get_link_density(doc.readable_dom), 22/24)
 
 
 class TestClassWeight(unittest.TestCase):
@@ -112,9 +108,7 @@ class TestClassWeight(unittest.TestCase):
 
     def test_no_matches_zero(self):
         """If you don't have the attribute then you get a weight of 0"""
-        empty_div = to_unicode("<div></div>")
-        node = fragment_fromstring(empty_div)
-
+        node = fragment_fromstring("<div></div>")
         self.assertEqual(get_class_weight(node), 0)
 
     def test_id_hits(self):

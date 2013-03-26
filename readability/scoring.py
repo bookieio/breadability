@@ -3,6 +3,7 @@
 """Handle dealing with scoring nodes and content for our parsing."""
 
 from __future__ import absolute_import
+from __future__ import division, print_function
 
 import re
 import logging
@@ -10,6 +11,7 @@ import logging
 from hashlib import md5
 from lxml.etree import tostring
 from ._py3k import to_bytes
+from .utils import normalize_whitespace
 
 
 # A series of sets of attributes we check to help in determining if a node is
@@ -76,10 +78,20 @@ def get_link_density(node, node_text=None):
         this easier on us.
     :returns float:
     """
-    link_length = sum(len(a.text_content()) or 0 for a in node.findall(".//a"))
-    text_length = len(node_text if node_text else node.text_content())
+    if node_text is None:
+        node_text = node.text_content()
+    node_text = normalize_whitespace(node_text.strip())
 
-    return float(link_length) / max(text_length, 1)
+    text_length = len(node_text)
+    if text_length == 0:
+        return 0.0
+
+    links_length = sum(map(_get_normalized_text_length, node.findall(".//a")))
+    return links_length / text_length
+
+
+def _get_normalized_text_length(node):
+    return len(normalize_whitespace(node.text_content().strip()))
 
 
 def get_class_weight(node):
