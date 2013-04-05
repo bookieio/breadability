@@ -5,7 +5,8 @@ from __future__ import division, print_function, unicode_literals
 
 from itertools import groupby
 from lxml.sax import saxify, ContentHandler
-from .utils import is_blank, normalize_whitespace
+from .utils import is_blank, shrink_text
+from ._py3k import to_unicode
 
 
 _SEMANTIC_TAGS = frozenset((
@@ -39,13 +40,16 @@ class AnnotatedTextHandler(ContentHandler):
         namespace, name = name
 
         if name in _SEMANTIC_TAGS:
-            self._dom_path.append(name)
+            self._dom_path.append(to_unicode(name))
 
     def endElementNS(self, name, qname):
         namespace, name = name
 
         if name == "p" and self._paragraph:
             self._append_paragraph(self._paragraph)
+        elif name in ("ol", "ul", "pre") and self._paragraph:
+            self._append_paragraph(self._paragraph)
+            self._dom_path.pop()
         elif name in _SEMANTIC_TAGS:
             self._dom_path.pop()
 
@@ -62,9 +66,14 @@ class AnnotatedTextHandler(ContentHandler):
         current_paragraph = []
 
         for annotation, items in groupby(paragraph, key=lambda i: i[1]):
-            text = "".join(i[0] for i in items)
-            text = normalize_whitespace(text.strip())
-            current_paragraph.append((text, annotation))
+            if annotation and "li" in annotation:
+                for text, _ in items:
+                    text = shrink_text(text)
+                    current_paragraph.append((text, annotation))
+            else:
+                text = "".join(i[0] for i in items)
+                text = shrink_text(text)
+                current_paragraph.append((text, annotation))
 
         return tuple(current_paragraph)
 
@@ -73,7 +82,7 @@ class AnnotatedTextHandler(ContentHandler):
             return
 
         if self._dom_path:
-            pair = (content, tuple(frozenset(self._dom_path)))
+            pair = (content, tuple(sorted(frozenset(self._dom_path))))
         else:
             pair = (content, None)
 

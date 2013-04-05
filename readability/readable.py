@@ -179,10 +179,13 @@ def clean_document(node):
             to_drop.append(n)
 
         # clean headings with bad css or high link density
-        if n.tag in ("h1", "h2", "h3", "h4"):
-            if get_class_weight(n) < 0 or get_link_density(n) > 0.33:
+        if n.tag in ("h1", "h2", "h3", "h4") and get_class_weight(n) < 0:
                 logger.debug("Dropping <%s>, it's insignificant", n.tag)
                 to_drop.append(n)
+
+        if n.tag in ("h3", "h4") and get_link_density(n) > 0.33:
+            logger.debug("Dropping <%s>, it's insignificant", n.tag)
+            to_drop.append(n)
 
         # drop block element without content and children
         if n.tag in ("div", "p"):
@@ -302,10 +305,10 @@ def find_candidates(document):
 
     for node in document.iter():
         if is_unlikely_node(node):
-            logger.debug("We should drop unlikely: %s", str(node))
+            logger.debug("We should drop unlikely: %s %r", node.tag, node.attrib)
             should_remove.add(node)
         elif is_bad_link(node):
-            logger.debug("We should drop bad link: %s", str(node))
+            logger.debug("We should drop bad link: %s %r", node.tag, node.attrib)
             should_remove.add(node)
         elif node.tag in SCORABLE_TAGS:
             nodes_to_score.add(node)

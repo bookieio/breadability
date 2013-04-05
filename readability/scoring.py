@@ -19,16 +19,15 @@ from .utils import normalize_whitespace
 CLS_UNLIKELY = re.compile(
     "combx|comment|community|disqus|extra|foot|header|menu|remark|rss|shoutbox|"
     "sidebar|sponsor|ad-break|agegate|pagination|pager|perma|popup|tweet|"
-    "twitter",
+    "twitter|social|breadcrumb",
     re.IGNORECASE
 )
 CLS_MAYBE = re.compile(
-    "and|article|body|column|main|shadow",
+    "and|article|body|column|main|shadow|entry",
     re.IGNORECASE
 )
 CLS_WEIGHT_POSITIVE = re.compile(
-    "article|body|content|entry|hentry|main|page|pagination|post|text|blog|"
-    "story",
+    "article|body|content|entry|main|page|pagination|post|text|blog|story",
     re.IGNORECASE
 )
 CLS_WEIGHT_NEGATIVE = re.compile(
@@ -139,7 +138,7 @@ def score_candidates(nodes):
     candidates = {}
 
     for node in nodes:
-        logger.debug("Scoring candidate %s %r", node.tag, node.attrib)
+        logger.debug("* Scoring candidate %s %r", node.tag, node.attrib)
 
         # if the node has no parent it knows of
         # then it ends up creating a body & html tag to parent the html fragment
@@ -242,8 +241,8 @@ class ScoredNode(object):
         return generate_hash_id(self.node)
 
     def __repr__(self):
-        return "<ScoredNode: {0}, {1:0.1F} {2}>".format(
-            self.hash_id,
-            self.content_score,
-            self.node
+        return "<ScoredNode {0} {1}: {2:0.1F}>".format(
+            self.node.tag,
+            self.node.attrib,
+            self.content_score
         )

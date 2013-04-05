@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="cs-CZ" prefix="og: http://ogp.me/ns#">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<title>Automatické zabezpečení | Zdroják</title>
+	<link rel="apple-touch-icon" href="http://www.zdrojak.cz/wp-content/themes/zdrojak/img/touch-icon-iphone.png"/>
+	<link rel="apple-touch-icon" sizes="72x72" href="http://www.zdrojak.cz/wp-content/themes/zdrojak/img/touch-icon-ipad.png"/>
+	<link rel="apple-touch-icon" sizes="114x114"
+	      href="http://www.zdrojak.cz/wp-content/themes/zdrojak/img/touch-icon-iphone-retina.png"/>
+	<link rel="apple-touch-icon" sizes="144x144"
+	      href="http://www.zdrojak.cz/wp-content/themes/zdrojak/img/touch-icon-ipad-retina.png"/>
+	<link rel="apple-touch-icon" sizes="512x512"
+	      href="http://www.zdrojak.cz/wp-content/themes/zdrojak/img/apple-touch-icon-itunes.png"/>
+	<meta name="apple-mobile-web-app-title" content="Zdrojak.cz"/>
+	<link rel="profile" href="http://gmpg.org/xfn/11"/>
+	<link rel="pingback" href="http://www.zdrojak.cz/xmlrpc.php"/>
+
+<!-- This site is optimized with the Yoast WordPress SEO plugin v1.4.4 - http://yoast.com/wordpress/seo/ -->
+<meta name="description" content="Nespoléhejte se na to, že do kódu nezapomenete na všechna místa připsat ošetření dat. Snažte se aplikaci navrhnout tak, aby se na nic zapomenout nedalo. Za cenu o něco složitějšího jádra bude veškerý kód, který ho používá, obvykle taky mnohem jednodušší."/>
+<link rel="canonical" href="http://www.zdrojak.cz/clanky/automaticke-zabezpeceni/" />
+<meta property='og:locale' content='cs_CZ'/>
+<meta property='og:title' content='Automatické zabezpečení - Zdroják'/>
+<meta property='og:description' content='Nespoléhejte se na to, že do kódu nezapomenete na všechna místa připsat ošetření dat. Snažte se aplikaci navrhnout tak, aby se na nic zapomenout nedalo. Za cenu o něco složitějšího jádra bude veškerý kód, který ho používá, obvykle taky mnohem jednodušší.'/>
+<meta property='og:url' content='http://www.zdrojak.cz/clanky/automaticke-zabezpeceni/'/>
+<meta property='og:site_name' content='Zdroják'/>
+<meta property='og:type' content='article'/>
+<meta property='og:image' content='http://www.zdrojak.cz/wp-content/uploads/2008/11/security-122617975844093.png'/>
+<!-- / Yoast WordPress SEO plugin. -->
+
+<link rel="alternate" type="application/rss+xml" title="Zdroják &raquo; RSS zdroj" href="http://www.zdrojak.cz/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Zdroják &raquo; RSS komentářů" href="http://www.zdrojak.cz/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Zdroják &raquo; RSS komentářů pro Automatické zabezpečení" href="http://www.zdrojak.cz/clanky/automaticke-zabezpeceni/feed/" />
+<link rel='stylesheet' id='admin-bar-css'  href='http://www.zdrojak.cz/wp-includes/css/admin-bar.min.css?ver=3.5.1' type='text/css' media='all' />
+<link rel='stylesheet' id='kindle-css-css'  href='http://www.zdrojak.cz/wp-content/plugins/omSocialButtons/kindle/kindle.css?ver=3.5.1' type='text/css' media='all' />
+<link rel='stylesheet' id='twentytwelve-style-css'  href='http://www.zdrojak.cz/wp-content/themes/zdrojak/style.css?ver=5f54643' type='text/css' media='all' />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=3.5.1'></script>
+<meta name="generator" content="WordPress 3.5.1" />
+<!-- Google Plus -->
+<script type="text/javascript">
+    window.___gcfg = {lang: 'cs'};    (function () {
+        var po = document.createElement('script');
+        po.type = 'text/javascript';
+        po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(po, s);
+    })();
+</script>
+<!-- Google Plus -->
+	<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+<style type="text/css" media="print">#wpadminbar { display:none; }</style>
+<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #e6e6e6; }
+</style>
+	<link rel="shortcut icon" href="/favicon.ico"/>
+	<link rel="author" href="/humans.txt"/>
+</head>
+<body class="single single-post postid-3773 single-format-standard admin-bar no-customize-support custom-background">
+<div id="page" class="hfeed site">
+
+
+	<div class="site-top">
+	<div class="wrapper">
+</div>	<div id="main" class="wrapper">
+	<div id="primary" class="site-content">
+		<div id="content" role="main">
+
+			<article id="post-3773" class="post-3773 post type-post status-publish format-standard hentry category-ruzne tag-bezpecnost tag-ruzne full">
+		<header class="entry-header">
+		<h1 class="entry-title">Automatické zabezpečení</h1>
+	</header>
+
+	<div class="entry-content">
+<p>Úroveň zabezpečení aplikace bych rozdělil do tří úrovní:</p>
+<ol>
+<li>Aplikace zabezpečená není, neošetřuje uživatelské vstupy ani své výstupy.</li>
+<li>Aplikace se o zabezpečení snaží, ale takovým způsobem, že na ně lze zapomenout.</li>
+<li>Aplikace se o zabezpečení stará sama, prakticky se nedá udělat chyba.</li>
+</ol>
+<p>Jak se tyto úrovně projevují v jednotlivých oblastech?</p>
+<h2><a href="http://php.vrana.cz/cross-site-scripting.php">XSS</a></h2>
+<p>Druhou úroveň představuje ruční ošetřování pomocí <a href="http://www.php.net/manual/en/function.htmlspecialchars.php"><kbd>htmlspecialchars</kbd></a>. Třetí úroveň zdánlivě reprezentuje automatické ošetřování v šablonách, např. v <a href="http://doc.nette.org/cs/templating"><strong>Nette Latte</strong></a>. Proč píšu zdánlivě? Problém je v tom, že ošetření se dá obvykle snadno zakázat, např. v Latte pomocí <code>{!$var}</code>. Viděl jsem šablony plné vykřičníků i na místech, kde být neměly. Autor to vysvětlil tak, že psaní <code>{$var}</code> někde způsobovalo problémy, které po přidání vykřičníku zmizely, tak je začal psát všude.</p>
+<pre class="brush: php">&lt;?php
+$safeHtml = $texy-&gt;process($content_texy);
+$content = Html::el()-&gt;setHtml($safeHtml);
+// v šabloně pak můžeme použít {$content}
+?&gt;</pre>
+<p>Ideální by bylo, když by už samotná metoda <code>process()</code> vracela instanci  <code>Html</code>.</p>
+<div class="social-buttons"><div class="wrapper">	<!-- Facebook -->
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) return;
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=556615607691233";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));</script>
+	<!-- Facebook -->
+
+<div class="facebook">
+	<div class="fb-like"
+		 data-href="http://www.zdrojak.cz/clanky/automaticke-zabezpeceni/" data-width="450" data-layout="button_count"></div>
+</div><div class="twitter">
+	<a href="https://twitter.com/share" class="twitter-share-button" data-via="zdrojak" data-url="http://www.zdrojak.cz/clanky/automaticke-zabezpeceni/" data-lang="en" data-text="Automatické zabezpečení"></a>
+	<script>!function (d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (!d.getElementById(id)) {
+				js = d.createElement(s);
+				js.id = id;
+				js.src = "//platform.twitter.com/widgets.js";
+				fjs.parentNode.insertBefore(js, fjs);
+			}
+		}(document, "script", "twitter-wjs");</script>
+</div><div class="google">
+	<div class="g-plusone"
+		 data-href="http://www.zdrojak.cz/clanky/automaticke-zabezpeceni/" data-width="300" data-size="medium"></div>
+</div><div class="kindle">
+	<div class="kindleWidget kindleLight">
+		<img src="https://d1xnn692s7u6t6.cloudfront.net/black-15.png"/><span>Kindle</span>
+	</div>
+</div>
+</div></div>	<a name="bottom"></a>
+		</div>
+
+</article>
+
+
+</div>
+<tr id="tr-comment-23965" class="comment byuser comment-author-okbob even thread-odd thread-alt depth-1 recent new">
+	<td class="author"><img alt='' src='/wp-content/uploads/avatars/2005/01/okbob.png' class='avatar avatar-16 photo' height='16' width='16' />okbob</td>
+	<th class="comment-title"><a href="http://www.zdrojak.cz/clanky/automaticke-zabezpeceni/?show=comments#comment-23965">trochu jiný přístup</a></th>
+	<td class="comments-date">
+		<time datetime="2013-01-30T09:29:35+00:00">30.1.2013 v 07:29</time>
+	</td>
+</tr><tr id="tr-comment-23966" class="comment odd alt depth-2 recent new">
+	<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />Aleš Roubíček</td>
+	<th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/automaticke-zabezpeceni/?show=comments#comment-23966">Re: trochu jiný přístup</a></th>
+	<td class="comments-date">
+		<time datetime="2013-01-30T09:37:35+00:00">30.1.2013 v 07:37</time>
+	</td>
+</tr><tr id="tr-comment-23967" class="comment even depth-3 recent new">
+	<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />Futrál</td>
+	<th class="comment-title"><span class="line"></span><span class="line"></span><a href="http://www.zdrojak.cz/clanky/automaticke-zabezpeceni/?show=comments#comment-23967">Re: trochu jiný přístup</a></th>
+	<td class="comments-date">
+		<time datetime="2013-01-30T11:23:28+00:00">30.1.2013 v 09:23</time>
+	</td>
+</tr></div>
+</div>
+<tr id="tr-comment-23968" class="comment odd alt depth-2 recent new">
+	<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />Futrál</td>
+	<th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/automaticke-zabezpeceni/?show=comments#comment-23968">Re: trochu jiný přístup</a></th>
+	<td class="comments-date">
+		<time datetime="2013-01-30T11:24:59+00:00">30.1.2013 v 09:24</time>
+	</td>
+</tr></div>
+</div>
+<tr id="tr-comment-23969" class="comment even thread-even depth-1 recent new">
+	<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />Monty</td>
+	<th class="comment-title"><a href="http://www.zdrojak.cz/clanky/automaticke-zabezpeceni/?show=comments#comment-23969">Jaké ošetření sloupce?</a></th>
+	<td class="comments-date">
+		<time datetime="2013-01-30T14:30:19+00:00">30.1.2013 ve 12:30</time>
+	</td>
+</tr><tr id="tr-comment-23971" class="comment byuser comment-author-jakub-vrana bypostauthor odd alt depth-2 recent new">
+	<td class="author"><img alt='' src='/wp-content/uploads/avatars/2004/12/jakubvrana.jpg' class='avatar avatar-16 photo' height='16' width='16' />Jakub Vrána</td>
+	<th class="comment-title"><span class="line"></span><a href="http://www.zdrojak.cz/clanky/automaticke-zabezpeceni/?show=comments#comment-23971">Re: Jaké ošetření sloupce?</a></th>
+	<td class="comments-date">
+		<time datetime="2013-01-30T20:14:25+00:00">30.1.2013 ve 18:14</time>
+	</td>
+</tr></div>
+</div>
+<tr id="tr-comment-23973" class="comment even thread-odd thread-alt depth-1 recent new">
+	<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />bene</td>
+	<th class="comment-title"><a href="http://www.zdrojak.cz/clanky/automaticke-zabezpeceni/?show=comments#comment-23973">Re: Automatické zabezpečení</a></th>
+	<td class="comments-date">
+		<time datetime="2013-01-31T08:58:47+00:00">31.1.2013 v 06:58</time>
+	</td>
+</tr></div>
+<tr id="tr-comment-23974" class="comment odd alt thread-even depth-1 recent new">
+	<td class="author"><img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=16' class='avatar avatar-16 photo avatar-default' height='16' width='16' />5o</td>
+	<th class="comment-title"><a href="http://www.zdrojak.cz/clanky/automaticke-zabezpeceni/?show=comments#comment-23974">ACL assertion</a></th>
+	<td class="comments-date">
+		<time datetime="2013-01-31T12:04:27+00:00">31.1.2013 v 10:04</time>
+	</td>
+</tr></div>
+			</table>
+		</div>
+
+			<div class="comments-actions">
+							<a class="btn add-comment" href="?show=comments#respond">Přidat komentář</a>
+										<a class="btn btn-primary show-comments" href="?show=comments#comments">Zobrazit komentáře</a>
+					</div>
+	</div>				<nav class="nav-single no-print">
+					<h3 class="assistive-text">Navigace pro příspěvky</h3>
+            <span class="nav-previous">
+							<a href="http://www.zdrojak.cz/clanky/tvorba-moderniho-eshopu-kategorie-a-parametricke-hledani/" rel="next"><i class="icon-left"></i>Tvorba moderního eshopu: kategorie a parametrické hledání</a>            </span>
+            <span class="nav-next">
+	             <a href="http://www.zdrojak.cz/clanky/bezpecny-sandboxovany-iframe/" rel="prev">Bezpečný sandboxovaný iframe<i class="icon-right"></i></a>             </span>
+				</nav>
+
+				<div class="visible-print">Zdroj: http://www.zdrojak.cz/?p=3773</div>
+
+
+		</div>
+
+	</div>
+
+
+			<div id="secondary" class="widget-area" role="complementary">
+						<aside id="recent_category_posts-0" class="with-thumb widget widget_recent_entries">			<h3 class="widget-title">Mobilní vývoj</h3>							<div class="thumbnail">
+					<img width="180" height="180" src="http://www.zdrojak.cz/wp-content/uploads/2013/02/develcz.jpg" class="attachment- wp-post-image" alt="Mobilní vývoj" title="Mobilní vývoj" />				</div>
+						<ul>
+									<li><a href="http://www.zdrojak.cz/clanky/reportaz-z-devel-cz-konference-2013/" title="Reportáž z Devel.cz konference 2013">Reportáž z Devel.cz konference 2013</a></li>
+									<li><a href="http://www.zdrojak.cz/clanky/webapi-firefox-os/" title="Prohlédněte si možnosti WebAPI ve Firefox OS">Prohlédněte si možnosti WebAPI ve Firefox OS</a></li>
+									<li><a href="http://www.zdrojak.cz/clanky/nova-vyvojarska-konzole-v-google-play/" title="Nová Vývojářská konzole v Google Play">Nová Vývojářská konzole v Google Play</a></li>
+							</ul>
+			</aside>					<aside id="recent-posts-0" class="widget widget_recent_entries">		<h3 class="widget-title">Nejnovější příspěvky</h3>		<ul>
+					<li>
+				<a href="http://www.zdrojak.cz/clanky/mloc-js-staticke-typovani/" title="Typické! O maďarské konferenci mloc.js a statickém typování při vývoji webových aplikací">Typické! O maďarské konferenci mloc.js a statickém typování při vývoji webových aplikací</a>
+						</li>
+					<li>
+				<a href="http://www.zdrojak.cz/clanky/poslete-zdrojak-do-kindlu-novinky/" title="Pošlete Zdroják do Kindlu a další jarní novinky">Pošlete Zdroják do Kindlu a další jarní novinky</a>
+						</li>
+					<li>
+				<a href="http://www.zdrojak.cz/clanky/formulare-v-html5-a-nove-atributy/" title="Formuláře v HTML5 a nové atributy">Formuláře v HTML5 a nové atributy</a>
+						</li>
+					<li>
+				<a href="http://www.zdrojak.cz/clanky/modularni-webove-aplikace-s-minimem-rucni-prace/" title="Modulární webové aplikace s minimem ruční práce">Modulární webové aplikace s minimem ruční práce</a>
+						</li>
+					<li>
+				<a href="http://www.zdrojak.cz/clanky/zapier-propojovani-api/" title="Zapier &#8211; dejte propojování API ten správný šmrnc">Zapier &#8211; dejte propojování API ten správný šmrnc</a>
+						</li>
+				</ul>
+		</aside><aside id="related_posts-0" class="widget widget_related_posts"><h3 class="widget-title">Související články</h3><ul><li><a href="http://www.zdrojak.cz/clanky/do-hlubin-implementaci-javascriptu-1-dil-uvod/" rel="bookmark">Do hlubin implementací JavaScriptu: 1. díl &#8211; úvod</a></li><li><a href="http://www.zdrojak.cz/clanky/uvodni-analyza-pro-moderni-e-shop/" rel="bookmark">Úvodní analýza pro moderní e-shop</a></li><li><a href="http://www.zdrojak.cz/clanky/django-databazovy-model/" rel="bookmark">Django: Databázový model</a></li><li><a href="http://www.zdrojak.cz/clanky/dojo-toolkit-pokrocile-techniky/" rel="bookmark">Dojo Toolkit: pokročilé techniky</a></li><li><a href="http://www.zdrojak.cz/clanky/uvod-do-architektury-mvc/" rel="bookmark">Úvod do architektury MVC</a></li></ul></aside><aside id="recent-comments-0" class="widget widget_recent_comments"><h3 class="widget-title">Nejnovější komentáře</h3><ul id="recentcomments"><li class="recentcomments">Martin Kozák u <a href="http://www.zdrojak.cz/clanky/mloc-js-staticke-typovani/?show=comments#comment-24239">Typické! O maďarské konferenci mloc.js a statickém typování při vývoji webových aplikací</a></li><li class="recentcomments">maras u <a href="http://www.zdrojak.cz/clanky/mloc-js-staticke-typovani/?show=comments#comment-24238">Typické! O maďarské konferenci mloc.js a statickém typování při vývoji webových aplikací</a></li><li class="recentcomments">Ladislav Thon u <a href="http://www.zdrojak.cz/clanky/mloc-js-staticke-typovani/?show=comments#comment-24237">Typické! O maďarské konferenci mloc.js a statickém typování při vývoji webových aplikací</a></li><li class="recentcomments">satai u <a href="http://www.zdrojak.cz/clanky/mloc-js-staticke-typovani/?show=comments#comment-24236">Typické! O maďarské konferenci mloc.js a statickém typování při vývoji webových aplikací</a></li><li class="recentcomments">Ladislav Thon u <a href="http://www.zdrojak.cz/clanky/mloc-js-staticke-typovani/?show=comments#comment-24235">Typické! O maďarské konferenci mloc.js a statickém typování při vývoji webových aplikací</a></li></ul></aside>		</div><!-- #secondary -->
+	</div>
+<div id="bottom" class="site-bottom no-print">
+	<div class="wrapper">
+		<aside class="follow">
+	<h3>Sledujte</h3>
+
+	<div class="content">
+		<ul class="menu">
+			<li>
+				<a href="/feed" class="rss">
+					<i class="icon-rss"></i>
+					<span class="assistive-text">RSS</span>
+				</a>
+			</li>
+			<li>
+				<a href="/mail" class="mail" title="Zpravodaj">
+					<i class="icon-mail"></i>
+					<span class="assistive-text">Zpravodaj</span>
+				</a>
+			</li>
+			<li>
+				<a target="_blank" href="https://twitter.com/zdrojak" title="@zdrojak" class="twitter">
+					<i class="icon-twitter"></i>
+					<span class="assistive-text">Twitter @zdrojak</span>
+				</a>
+			</li>
+			<li>
+				<a target="_blank" href="https://plus.google.com/101725826130888424314/posts" class="googleplus">
+					<i class="icon-gplus"></i>
+					<span class="assistive-text">Google + Zdroják</span>
+				</a>
+			</li>
+		</ul>
+	</div>
+</aside>	</div>
+</div>
+
+
+</div>
+
+<script type='text/javascript' src='http://www.zdrojak.cz/wp-includes/js/admin-bar.min.js?ver=3.5.1'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+(function k(){window.$SendToKindle&&window.$SendToKindle.Widget?$SendToKindle.Widget.init({"title":".entry-title","published":".entry-date","content":".post","exclude":".no-kindle"}):setTimeout(k,500);})();
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://d1xnn692s7u6t6.cloudfront.net/widget.js'></script>
+<script type='text/javascript' src='http://www.zdrojak.cz/wp-content/themes/zdrojak/js/zdrojak.min.js?ver=5f54643'></script>
+
+	<div id="webstats">
+		<script src="http://c1.navrcholu.cz/code?site=72;t=t1x1" type="text/javascript"></script>
+		<noscript>
+			<div>
+				<img src="http://c1.navrcholu.cz/hit?site=72;t=t1x1;ref=;jss=0" width="1" height="1" alt=""/>
+			</div>
+		</noscript>
+
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-30960355-1']);
+			_gaq.push(['_trackPageview']);
+
+			(function () {
+				var ga = document.createElement('script');
+				ga.type = 'text/javascript';
+				ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0];
+				s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+	</div>
+<!-- d0e88e1c2777b950889c170b9b92adf8 -->
+</body>
+</html>
