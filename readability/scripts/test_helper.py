@@ -23,7 +23,7 @@ from __future__ import division, print_function, unicode_literals
 from os import mkdir
 from os.path import join, dirname, pardir, exists as path_exists
 from docopt import docopt
-from .._version import VERSION
+from .. import __version__
 from .._py3k import to_unicode, urllib
 
 
@@ -74,7 +74,7 @@ class TestArticle(unittest.TestCase):
 
 
 def parse_args():
-    return docopt(__doc__, version=VERSION)
+    return docopt(__doc__, version=__version__)
 
 
 def make_test_directory(name):

@@ -32,12 +32,12 @@ import webbrowser
 
 from tempfile import NamedTemporaryFile
 from docopt import docopt
-from .._version import VERSION
+from .. import __version__
 from ..readable import Article
 
 
 def parse_args():
-    return docopt(__doc__, version=VERSION)
+    return docopt(__doc__, version=__version__)
 
 
 def main():
