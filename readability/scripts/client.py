@@ -62,7 +62,7 @@ def main():
         with open(resource, "r") as file:
             content = file.read()
 
-    document = Article(content, url=url, fragment=args["--fragment"])
+    document = Article(content, url=url, return_fragment=args["--fragment"])
     if args["--browser"]:
         html_file = NamedTemporaryFile(mode="w", suffix=".html", delete=False)
 
