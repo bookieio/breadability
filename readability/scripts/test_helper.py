@@ -24,7 +24,7 @@ from os import mkdir
 from os.path import join, dirname, pardir, exists as path_exists
 from docopt import docopt
 from .. import __version__
-from .._py3k import to_unicode, urllib
+from .._compat import to_unicode, urllib
 
 
 TEST_PATH = join(

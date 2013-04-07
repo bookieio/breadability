@@ -10,7 +10,7 @@ import logging
 
 from hashlib import md5
 from lxml.etree import tostring
-from ._py3k import to_bytes
+from ._compat import to_bytes
 from .utils import normalize_whitespace
 
 

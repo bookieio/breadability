@@ -4,7 +4,7 @@ from __future__ import absolute_import
 from __future__ import division, print_function, unicode_literals
 
 from collections import defaultdict
-from readability._py3k import to_unicode, to_bytes
+from readability._compat import to_unicode, to_bytes
 from readability.document import (OriginalDocument, determine_encoding,
     convert_breaks_to_paragraphs)
 from .compat import unittest

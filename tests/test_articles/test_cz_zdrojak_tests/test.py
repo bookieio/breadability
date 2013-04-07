@@ -5,7 +5,7 @@ from __future__ import division, print_function, unicode_literals
 
 from os.path import join, dirname
 from readability.readable import Article
-from readability._py3k import unicode
+from readability._compat import unicode
 from ...compat import unittest
 
 

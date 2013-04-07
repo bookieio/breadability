@@ -6,7 +6,7 @@ from __future__ import division, print_function, unicode_literals
 from lxml.etree import tounicode
 from lxml.html import document_fromstring
 from lxml.html import fragment_fromstring
-from readability._py3k import to_unicode
+from readability._compat import to_unicode
 from readability.readable import Article
 from readability.readable import get_class_weight
 from readability.readable import get_link_density

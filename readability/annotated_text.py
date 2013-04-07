@@ -6,7 +6,7 @@ from __future__ import division, print_function, unicode_literals
 from itertools import groupby
 from lxml.sax import saxify, ContentHandler
 from .utils import is_blank, shrink_text
-from ._py3k import to_unicode
+from ._compat import to_unicode
 
 
 _SEMANTIC_TAGS = frozenset((
