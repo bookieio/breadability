@@ -20,6 +20,7 @@ This is a pretty straight port of the JS here:
 - http://www.minvolai.com/blog/decruft-arc90s-readability-in-python/
 
 Some other ports:
+
 - http://www.unixuser.org/~euske/python/webstemmer/#extract
 - https://github.com/al3xandru/readability.py
 - https://github.com/rcarmo/soup-strainer
