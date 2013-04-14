@@ -17,6 +17,22 @@ but oh well I did try)
 This is a pretty straight port of the JS here:
 
 - http://code.google.com/p/arc90labs-readability/source/browse/trunk/js/readability.js#82
+- http://www.minvolai.com/blog/decruft-arc90s-readability-in-python/
+
+Some other ports:
+- http://www.unixuser.org/~euske/python/webstemmer/#extract
+- https://github.com/al3xandru/readability.py
+- https://github.com/rcarmo/soup-strainer
+- https://github.com/bcampbell/decruft
+- https://github.com/gfxmonk/python-readability
+- https://github.com/srid/readability
+- https://github.com/dcramer/decruft
+- https://github.com/reorx/readability
+- https://github.com/mote/python-readability
+- https://github.com/predatell/python-readability-lxml
+- https://github.com/Harshavardhana/boilerpipy
+- https://github.com/raptium/hitomi
+- https://github.com/kingwkb/readability
 
 
 Installation
