@@ -241,6 +241,9 @@ class ScoredNode(object):
         return generate_hash_id(self.node)
 
     def __repr__(self):
+        if self.node is None:
+            return "<NullScoredNode with score {2:0.1F}>" % self.content_score
+
         return "<ScoredNode {0} {1}: {2:0.1F}>".format(
             self.node.tag,
             self.node.attrib,
