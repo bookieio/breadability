@@ -27,13 +27,18 @@ from __future__ import division, print_function, unicode_literals
 
 import logging
 import locale
-import urllib
 import webbrowser
 
 from tempfile import NamedTemporaryFile
 from docopt import docopt
 from .. import __version__
+from .._compat import urllib
 from ..readable import Article
+
+
+HEADERS = {
+    "User-Agent": "Readability (Readable content parser) Version/%s" % __version__,
+}
 
 
 def parse_args():
@@ -55,7 +60,8 @@ def main():
     if resource.startswith("http://") or resource.startswith("https://"):
         url = resource
 
-        response = urllib.urlopen(url)
+        request = urllib.Request(url, headers=HEADERS)
+        response = urllib.urlopen(request)
         content = response.read()
         response.close()
     else:
