@@ -5,6 +5,7 @@ from setuptools import setup, find_packages
 from readability import __version__
 
 
+VERSION_SUFFIX = "%d.%d" % sys.version_info[:2]
 CURRENT_DIRECTORY = abspath(dirname(__file__))
 
 
@@ -71,8 +72,10 @@ setup(
     test_suite="tests.run_tests.run",
     entry_points={
         "console_scripts": [
-            "readability=readability.scripts.client:main",
-            "readability_test=readability.scripts.test_helper:main",
+            "readability = readability.scripts.client:main",
+            "readability-%s = readability.scripts.client:main" % VERSION_SUFFIX,
+            "readability_test = readability.scripts.test_helper:main",
+            "readability_test-%s = readability.scripts.test_helper:main" % VERSION_SUFFIX,
         ]
     }
 )
