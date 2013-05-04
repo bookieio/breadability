@@ -70,14 +70,13 @@ def main():
 
     document = Article(content, url=url, return_fragment=args["--fragment"])
     if args["--browser"]:
-        html_file = NamedTemporaryFile(mode="w", suffix=".html", delete=False)
+        html_file = NamedTemporaryFile(mode="wb", suffix=".html", delete=False)
 
         content = document.readable.encode("utf8")
         html_file.write(content)
+        html_file.close()
 
         webbrowser.open(html_file.name)
-
-        html_file.close()
     else:
         encoding = locale.getpreferredencoding()
         content = document.readable.encode(encoding)
