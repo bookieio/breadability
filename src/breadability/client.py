@@ -13,6 +13,10 @@ from breadability.logconfig import LNODE
 from breadability.logconfig import set_logging_level
 from breadability.readable import Article
 
+class AppURLopener(urllib.FancyURLopener):
+	version = "Mozilla/5.0 (X11; U; Linux i686) Gecko/20100101 Firefox/20.0"
+
+urllib._urlopener = AppURLopener()
 
 LOGLEVEL = 'WARNING'
 USER_AGENT = 'breadability /{version} ({url})'.format(
