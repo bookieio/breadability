@@ -6,6 +6,14 @@
 News
 ====
 
+0.1.12
+-------
+
+* Release date: July 28th 2013*
+
+* Add a user agent to requests.
+
+
 0.1.11
 -------
 
