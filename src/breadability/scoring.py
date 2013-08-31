@@ -54,7 +54,9 @@ def get_link_density(node, node_text=None):
 
     """
     link_length = sum([len(a.text_content()) or 0
-        for a in node.findall(".//a")])
+                      for a in node.findall(".//a")])
+    link_length = max(link_length -
+                      sum([50 for img in node.findall(".//img")]), 0)
     if node_text:
         text_length = len(node_text)
     else:
