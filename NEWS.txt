@@ -6,6 +6,15 @@
 News
 ====
 
+0.1.13
+------
+
+* Release date: Aug 31th 2013*
+
+* Give images in content boy a better chance of survival
+* Add tests
+
+
 0.1.12
 -------
 
