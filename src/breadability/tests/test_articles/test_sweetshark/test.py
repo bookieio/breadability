@@ -8,7 +8,7 @@ except ImportError:
 from breadability.readable import Article
 
 
-class TestAntipopeBlog(unittest.TestCase):
+class TestSweetsharkBlog(unittest.TestCase):
     """Test the scoring and parsing of the Blog Post"""
 
     def setUp(self):
