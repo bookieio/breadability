@@ -8,10 +8,11 @@ except ImportError:
 from breadability.readable import Article
 
 
-class TestAntipopeBlog(unittest.TestCase):
+class TestBusinessInsiderArticle(unittest.TestCase):
     """Test the scoring and parsing of the Blog Post"""
 
     def setUp(self):
+
         """Load up the article for us"""
         article_path = os.path.join(os.path.dirname(__file__), 'article.html')
         self.article = open(article_path).read()
@@ -25,17 +26,8 @@ class TestAntipopeBlog(unittest.TestCase):
         doc = Article(self.article)
         self.assertTrue('id="readabilityBody"' in doc.readable)
 
-    def test_comments_cleaned(self):
+    def test_images_preserved(self):
         """The div with the comments should be removed."""
         doc = Article(self.article)
-        self.assertTrue('class="comments"' not in doc.readable)
-
-    def test_beta_removed(self):
-        """The id=beta element should be removed
-
-        It's link heavy and causing a lot of garbage content. This should be
-        removed.
-
-        """
-        doc = Article(self.article)
-        self.assertTrue('id="beta"' not in doc.readable)
+        self.assertTrue('bharath-kumar-a-co-founder-at-pugmarksme-suggests-working-on-a-sunday-late-night.jpg' in doc.readable)
+        self.assertTrue('bryan-guido-hassin-a-university-professor-and-startup-junkie-uses-airplane-days.jpg' in doc.readable)
