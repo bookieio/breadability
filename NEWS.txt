@@ -6,6 +6,12 @@
 News
 ====
 
+0.1.14
+-------
+* Release date: Nov 7th 2013
+
+* Update sibling append to only happen when sibling doesn't already exist.
+
 0.1.13
 ------
 
