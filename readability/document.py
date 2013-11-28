@@ -8,7 +8,7 @@ import re
 import logging
 import charade
 
-from lxml.etree import tostring, tounicode, XMLSyntaxError
+from lxml.etree import tounicode, XMLSyntaxError
 from lxml.html import document_fromstring, HTMLParser
 
 from ._compat import unicode, to_bytes, to_unicode, unicode_compatible

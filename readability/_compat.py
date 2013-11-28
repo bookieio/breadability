@@ -56,7 +56,6 @@ def to_bytes(object):
         return to_bytes(repr(object))
 
 
-
 def to_unicode(object):
     try:
         if isinstance(object, unicode):

@@ -65,7 +65,6 @@ class TestReadableDocument(unittest.TestCase):
         self.assertEqual(doc.readable_dom.tag, 'div')
         self.assertEqual(doc.readable_dom.get('id'), 'readabilityBody')
 
-
     def test_no_content(self):
         """Without content we supply an empty unparsed doc."""
         doc = Article('')
