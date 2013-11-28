@@ -2,6 +2,7 @@
 
 Changelog for readability
 ==========================
+- Added User-Agent string into HTTP requests.
 - Added property ``Article.main_text`` for getting text annotated with
   semantic HTML tags (<em>, <strong>, ...).
 - Join node with 1 child of the same type. From

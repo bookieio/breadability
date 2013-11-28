@@ -37,7 +37,7 @@ from ..readable import Article
 
 
 HEADERS = {
-    "User-Agent": "Readability (Readable content parser) Version/%s" % __version__,
+    "User-Agent": "Readability (Readable content parser; https://github.com/miso-belica/readability.py) Version/%s" % __version__,
 }
 
 
