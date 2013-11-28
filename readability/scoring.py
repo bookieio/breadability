@@ -52,6 +52,7 @@ def check_node_attributes(pattern, node, *attributes):
 
     return False
 
+
 def generate_hash_id(node):
     """
     Generates a hash_id for the node in question.
@@ -60,7 +61,7 @@ def generate_hash_id(node):
     """
     try:
         content = tostring(node)
-    except Exception as e:
+    except Exception:
         logger.exception("Generating of hash failed")
         content = to_bytes(repr(node))
 
