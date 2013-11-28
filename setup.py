@@ -41,8 +41,10 @@ setup(
         "HTML",
         "content",
     ],
-    author="Michal Belica",
-    author_email="miso.belica@gmail.com",
+    author="Rick Harding",
+    author_email="rharding@mitechie.com",
+    maintainer="Michal Belica",
+    maintainer_email="miso.belica@gmail.com",
     url="https://github.com/miso-belica/readability.py",
     license="BSD",
     classifiers=[
