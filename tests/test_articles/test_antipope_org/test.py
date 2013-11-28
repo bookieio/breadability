@@ -13,7 +13,6 @@ class TestAntipopeBlog(unittest.TestCase):
     """Test the scoring and parsing of the Blog Post"""
 
     def setUp(self):
-
         """Load up the article for us"""
         article_path = os.path.join(os.path.dirname(__file__), 'article.html')
         self.article = open(article_path).read()
