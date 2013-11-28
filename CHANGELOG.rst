@@ -2,6 +2,7 @@
 
 Changelog for readability
 ==========================
+- Treat images a little differently so they get more inclusion.
 - Added User-Agent string into HTTP requests.
 - Added property ``Article.main_text`` for getting text annotated with
   semantic HTML tags (<em>, <strong>, ...).
