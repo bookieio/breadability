@@ -51,8 +51,7 @@ Tests
 -----
 .. code-block:: bash
 
-    $ nosetests --with-coverage --cover-package=readability --cover-erase tests
-    $ nosetests-3.3 --with-coverage --cover-package=readability --cover-erase tests
+    $ nosetests-2.6 tests && nosetests-3.2 tests && nosetests-2.7 tests && nosetests-3.3 tests
 
 
 Usage
