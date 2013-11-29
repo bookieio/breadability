@@ -1,0 +1,3 @@
+Rick Harding (original author)
+Michal Belica (current maintainer)
+nhnifong

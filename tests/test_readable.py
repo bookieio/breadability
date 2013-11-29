@@ -1,21 +1,21 @@
+# -*- coding: utf8 -*-
+
+from __future__ import absolute_import
+from __future__ import division, print_function, unicode_literals
+
 from lxml.etree import tounicode
 from lxml.html import document_fromstring
 from lxml.html import fragment_fromstring
-try:
-    # Python < 2.7
-    import unittest2 as unittest
-except ImportError:
-    import unittest
-
-from breadability.readable import Article
-from breadability.readable import get_class_weight
-from breadability.readable import get_link_density
-from breadability.readable import is_bad_link
-from breadability.readable import score_candidates
-from breadability.readable import transform_misused_divs_into_paragraphs
-from breadability.scoring import ScoredNode
-from breadability.tests import load_snippet
-from breadability.tests import load_article
+from readability._compat import to_unicode
+from readability.readable import Article
+from readability.readable import get_class_weight
+from readability.readable import get_link_density
+from readability.readable import is_bad_link
+from readability.readable import score_candidates
+from readability.readable import leaf_div_elements_into_paragraphs
+from readability.scoring import ScoredNode
+from .compat import unittest
+from .utils import load_snippet, load_article
 
 
 class TestReadableDocument(unittest.TestCase):
@@ -25,12 +25,12 @@ class TestReadableDocument(unittest.TestCase):
         """We get back an element tree from our original doc"""
         doc = Article(load_snippet('document_min.html'))
         # We get back the document as a div tag currently by default.
-        self.assertEqual(doc._readable.tag, 'div')
+        self.assertEqual(doc.readable_dom.tag, 'div')
 
     def test_doc_no_scripts_styles(self):
         """Step #1 remove all scripts from the document"""
         doc = Article(load_snippet('document_scripts.html'))
-        readable = doc._readable
+        readable = doc.readable_dom
         self.assertEqual(readable.findall(".//script"), [])
         self.assertEqual(readable.findall(".//style"), [])
         self.assertEqual(readable.findall(".//link"), [])
@@ -42,8 +42,8 @@ class TestReadableDocument(unittest.TestCase):
 
         """
         doc = Article(load_snippet('document_min.html'))
-        self.assertEqual(doc._readable.tag, 'div')
-        self.assertEqual(doc._readable.get('id'), 'readabilityBody')
+        self.assertEqual(doc.readable_dom.tag, 'div')
+        self.assertEqual(doc.readable_dom.get('id'), 'readabilityBody')
 
     def test_body_doesnt_exist(self):
         """If we can't find a body, then we create one.
@@ -52,8 +52,8 @@ class TestReadableDocument(unittest.TestCase):
 
         """
         doc = Article(load_snippet('document_no_body.html'))
-        self.assertEqual(doc._readable.tag, 'div')
-        self.assertEqual(doc._readable.get('id'), 'readabilityBody')
+        self.assertEqual(doc.readable_dom.tag, 'div')
+        self.assertEqual(doc.readable_dom.get('id'), 'readabilityBody')
 
     def test_bare_content(self):
         """If the document is just pure content, no html tags we should be ok
@@ -62,16 +62,16 @@ class TestReadableDocument(unittest.TestCase):
 
         """
         doc = Article(load_snippet('document_only_content.html'))
-        self.assertEqual(doc._readable.tag, 'div')
-        self.assertEqual(doc._readable.get('id'), 'readabilityBody')
+        self.assertEqual(doc.readable_dom.tag, 'div')
+        self.assertEqual(doc.readable_dom.get('id'), 'readabilityBody')
 
 
     def test_no_content(self):
         """Without content we supply an empty unparsed doc."""
         doc = Article('')
-        self.assertEqual(doc._readable.tag, 'div')
-        self.assertEqual(doc._readable.get('id'), 'readabilityBody')
-        self.assertEqual(doc._readable.get('class'), 'parsing-error')
+        self.assertEqual(doc.readable_dom.tag, 'div')
+        self.assertEqual(doc.readable_dom.get('id'), 'readabilityBody')
+        self.assertEqual(doc.readable_dom.get('class'), 'parsing-error')
 
 
 class TestCleaning(unittest.TestCase):
@@ -80,7 +80,7 @@ class TestCleaning(unittest.TestCase):
     def test_unlikely_hits(self):
         """Verify we wipe out things from our unlikely list."""
         doc = Article(load_snippet('test_readable_unlikely.html'))
-        readable = doc._readable
+        readable = doc.readable_dom
         must_not_appear = ['comment', 'community', 'disqus', 'extra', 'foot',
                 'header', 'menu', 'remark', 'rss', 'shoutbox', 'sidebar',
                 'sponsor', 'ad-break', 'agegate', 'pagination' '', 'pager',
@@ -119,8 +119,8 @@ class TestCleaning(unittest.TestCase):
         test_doc = document_fromstring(test_html)
         self.assertEqual(
             tounicode(
-                transform_misused_divs_into_paragraphs(test_doc)),
-            u"<html><body><p>simple</p></body></html>"
+                leaf_div_elements_into_paragraphs(test_doc)),
+            to_unicode("<html><body><p>simple</p></body></html>")
         )
 
         test_html2 = ('<html><body><div>simple<a href="">link</a>'
@@ -128,8 +128,18 @@ class TestCleaning(unittest.TestCase):
         test_doc2 = document_fromstring(test_html2)
         self.assertEqual(
             tounicode(
-                transform_misused_divs_into_paragraphs(test_doc2)),
-                u'<html><body><p>simple<a href="">link</a></p></body></html>'
+                leaf_div_elements_into_paragraphs(test_doc2)),
+                to_unicode('<html><body><p>simple<a href="">link</a></p></body></html>')
+        )
+
+    def test_dont_transform_div_with_div(self):
+        """Verify that only child <div> element is replaced by <p>."""
+        dom = document_fromstring(
+            "<html><body><div>text<div>child</div>aftertext</div></body></html>")
+
+        self.assertEqual(
+            tounicode(leaf_div_elements_into_paragraphs(dom)),
+            to_unicode("<html><body><div>text<p>child</p>aftertext</div></body></html>")
         )
 
     def test_bad_links(self):
@@ -173,7 +183,7 @@ class TestCandidateNodes(unittest.TestCase):
 
     def test_article_enables_candidate_access(self):
         """Candidates are accessible after document processing."""
-        doc = Article(load_article('ars/ars.001.html'))
+        doc = Article(load_article('ars.001.html'))
         self.assertTrue(hasattr(doc, 'candidates'))
 
 
@@ -206,51 +216,45 @@ class TestScoringNodes(unittest.TestCase):
 
     def test_we_get_candidates(self):
         """Processing candidates should get us a list of nodes to try out."""
-        # we'll start out using our first real test document
-        test_nodes = []
-        doc = document_fromstring(load_article('ars/ars.001.html'))
-        for node in doc.getiterator():
-            if node.tag in ['p', 'td', 'pre']:
-                test_nodes.append(node)
-
+        doc = document_fromstring(load_article("ars.001.html"))
+        test_nodes = tuple(doc.iter("p", "td", "pre"))
         candidates = score_candidates(test_nodes)
 
-        # this might change as we tweak our algorithm, but if it does change,
+        # this might change as we tweak our algorithm, but if it does,
         # it signifies we need to look at what we changed.
-        self.assertEqual(len(candidates.keys()), 6)
+        self.assertEqual(len(candidates.keys()), 37)
 
         # one of these should have a decent score
-        scores = sorted([c.content_score for c in candidates.values()])
+        scores = sorted(c.content_score for c in candidates.values())
         self.assertTrue(scores[-1] > 100)
 
     def test_bonus_score_per_100_chars_in_p(self):
-        """Nodes get 1pt per 100 characters up to 3 max points"""
-        def build_doc(length):
-            div = '<div id="content" class=""><p>{0}</p></div>'
-            document_str = '<html><body>{0}</body></html>'
-            content = 'c' * length
-            test_div = div.format(content)
-            doc = document_fromstring(document_str.format(test_div))
-            test_nodes = []
-            for node in doc.getiterator():
-                if node.tag == 'p':
-                    test_nodes.append(node)
-            return test_nodes
+        """Nodes get 1 point per 100 characters up to max. 3 points."""
+        def build_candidates(length):
+            html = "<p>%s</p>" % ("c" * length)
+            node = fragment_fromstring(html)
 
-        test_nodes = build_doc(400)
+            return [node]
+
+        test_nodes = build_candidates(50)
         candidates = score_candidates(test_nodes)
-        pscore_400 = max([c.content_score for c in candidates.values()])
+        pscore_50 = max(c.content_score for c in candidates.values())
 
-        test_nodes = build_doc(100)
+        test_nodes = build_candidates(100)
         candidates = score_candidates(test_nodes)
-        pscore_100 = max([c.content_score for c in candidates.values()])
+        pscore_100 = max(c.content_score for c in candidates.values())
 
-        test_nodes = build_doc(50)
+        test_nodes = build_candidates(300)
         candidates = score_candidates(test_nodes)
-        pscore_50 = max([c.content_score for c in candidates.values()])
+        pscore_300 = max(c.content_score for c in candidates.values())
 
-        self.assertEqual(pscore_100, pscore_50 + 1)
-        self.assertEqual(pscore_400, pscore_50 + 3)
+        test_nodes = build_candidates(400)
+        candidates = score_candidates(test_nodes)
+        pscore_400 = max(c.content_score for c in candidates.values())
+
+        self.assertAlmostEqual(pscore_50 + 0.5, pscore_100)
+        self.assertAlmostEqual(pscore_100 + 2.0, pscore_300)
+        self.assertAlmostEqual(pscore_300, pscore_400)
 
 
 class TestLinkDensityScoring(unittest.TestCase):
@@ -258,24 +262,69 @@ class TestLinkDensityScoring(unittest.TestCase):
 
     def test_link_density(self):
         """Test that we get a link density"""
-        doc = document_fromstring(load_article('ars/ars.001.html'))
-        for node in doc.getiterator():
-            if node.tag in ['p', 'td', 'pre']:
-                density = get_link_density(node)
+        doc = document_fromstring(load_article('ars.001.html'))
+        for node in doc.iter('p', 'td', 'pre'):
+            density = get_link_density(node)
 
-                # the density must be between 0, 1
-                self.assertTrue(density >= 0.0 and density <= 1.0)
+            # the density must be between 0, 1
+            self.assertTrue(density >= 0.0 and density <= 1.0)
 
 
 class TestSiblings(unittest.TestCase):
     """Siblings will be included if their content is related."""
 
+    @unittest.skip("Not implemented yet.")
     def test_bad_siblings_not_counted(self):
-        """"""
+        raise NotImplementedError()
 
-        assert True, "TBD"
-
+    @unittest.skip("Not implemented yet.")
     def test_good_siblings_counted(self):
-        """"""
+        raise NotImplementedError()
 
-        assert True, "TBD"
+
+class TestMainText(unittest.TestCase):
+    def test_empty(self):
+        article = Article("")
+        annotated_text = article.main_text
+
+        self.assertEqual(annotated_text, [])
+
+    def test_no_annotations(self):
+        article = Article("<div><p>This is text with no annotations</p></div>")
+        annotated_text = article.main_text
+
+        self.assertEqual(annotated_text,
+            [(("This is text with no annotations", None),)])
+
+    def test_one_annotation(self):
+        article = Article("<div><p>This is text\r\twith <del>no</del> annotations</p></div>")
+        annotated_text = article.main_text
+
+        expected = [(
+            ("This is text\nwith", None),
+            ("no", ("del",)),
+            ("annotations", None),
+        )]
+        self.assertEqual(annotated_text, expected)
+
+    def test_simple_snippet(self):
+        snippet = Article(load_snippet("annotated_1.html"))
+        annotated_text = snippet.main_text
+
+        expected = [
+            (
+                ("Paragraph is more", None),
+                ("better", ("em",)),
+                (".\nThis text is very", None),
+                ("pretty", ("strong",)),
+                ("'cause she's girl.", None),
+            ),
+            (
+                ("This is not", None),
+                ("crap", ("big",)),
+                ("so", None),
+                ("readability", ("dfn",)),
+                ("me :)", None),
+            )
+        ]
+        self.assertEqual(annotated_text, expected)

@@ -1,21 +1,50 @@
+# -*- coding: utf8 -*-
+
+from __future__ import absolute_import
+from __future__ import division, print_function, unicode_literals
+
 import re
+
+from operator import attrgetter
 from lxml.html import document_fromstring
 from lxml.html import fragment_fromstring
-from operator import attrgetter
-try:
-    # Python < 2.7
-    import unittest2 as unittest
-except ImportError:
-    import unittest
+from readability.readable import Article
+from readability.scoring import check_node_attributes
+from readability.scoring import get_class_weight
+from readability.scoring import ScoredNode
+from readability.scoring import score_candidates
+from readability.scoring import generate_hash_id
+from readability.readable import get_link_density
+from readability.readable import is_unlikely_node
+from .compat import unittest
+from .utils import load_snippet
 
-from breadability.readable import Article
-from breadability.scoring import check_node_attr
-from breadability.scoring import get_class_weight
-from breadability.scoring import ScoredNode
-from breadability.scoring import score_candidates
-from breadability.readable import get_link_density
-from breadability.readable import is_unlikely_node
-from breadability.tests import load_snippet
+
+class TestHashId(unittest.TestCase):
+    def test_generate_hash(self):
+        dom = fragment_fromstring("<div>ľščťžýáí</div>")
+        generate_hash_id(dom)
+
+    def test_hash_from_id_on_exception(self):
+        generate_hash_id(None)
+
+    def test_different_hashes(self):
+        dom = fragment_fromstring("<div>ľščťžýáí</div>")
+        hash_dom = generate_hash_id(dom)
+        hash_none = generate_hash_id(None)
+
+        self.assertNotEqual(hash_dom, hash_none)
+
+    def test_equal_hashes(self):
+        dom1 = fragment_fromstring("<div>ľščťžýáí</div>")
+        dom2 = fragment_fromstring("<div>ľščťžýáí</div>")
+        hash_dom1 = generate_hash_id(dom1)
+        hash_dom2 = generate_hash_id(dom2)
+        self.assertEqual(hash_dom1, hash_dom2)
+
+        hash_none1 = generate_hash_id(None)
+        hash_none2 = generate_hash_id(None)
+        self.assertEqual(hash_none1, hash_none2)
 
 
 class TestCheckNodeAttr(unittest.TestCase):
@@ -27,33 +56,33 @@ class TestCheckNodeAttr(unittest.TestCase):
     """
     def test_has_class(self):
         """Verify that a node has a class in our set."""
-        test_re = re.compile('test1|test2', re.I)
+        test_pattern = re.compile('test1|test2', re.I)
         test_node = fragment_fromstring('<div/>')
         test_node.set('class', 'test2 comment')
 
-        self.assertTrue(check_node_attr(test_node, 'class', test_re))
+        self.assertTrue(check_node_attributes(test_pattern, test_node, 'class'))
 
     def test_has_id(self):
         """Verify that a node has an id in our set."""
-        test_re = re.compile('test1|test2', re.I)
+        test_pattern = re.compile('test1|test2', re.I)
         test_node = fragment_fromstring('<div/>')
         test_node.set('id', 'test2')
 
-        self.assertTrue(check_node_attr(test_node, 'id', test_re))
+        self.assertTrue(check_node_attributes(test_pattern, test_node, 'id'))
 
     def test_lacks_class(self):
         """Verify that a node does not have a class in our set."""
-        test_re = re.compile('test1|test2', re.I)
+        test_pattern = re.compile('test1|test2', re.I)
         test_node = fragment_fromstring('<div/>')
         test_node.set('class', 'test4 comment')
-        self.assertFalse(check_node_attr(test_node, 'class', test_re))
+        self.assertFalse(check_node_attributes(test_pattern, test_node, 'class'))
 
     def test_lacks_id(self):
         """Verify that a node does not have an id in our set."""
-        test_re = re.compile('test1|test2', re.I)
+        test_pattern = re.compile('test1|test2', re.I)
         test_node = fragment_fromstring('<div/>')
         test_node.set('id', 'test4')
-        self.assertFalse(check_node_attr(test_node, 'id', test_re))
+        self.assertFalse(check_node_attributes(test_pattern, test_node, 'id'))
 
 
 class TestLinkDensity(unittest.TestCase):
@@ -61,20 +90,17 @@ class TestLinkDensity(unittest.TestCase):
 
     def test_empty_node(self):
         """An empty node doesn't have much of a link density"""
-        empty_div = u"<div></div>"
-        doc = Article(empty_div)
-        assert 0 == get_link_density(doc._readable), "Link density is nadda"
+        doc = Article("<div></div>")
+        self.assertEqual(get_link_density(doc.readable_dom), 0.0)
 
     def test_small_doc_no_links(self):
         doc = Article(load_snippet('document_min.html'))
-        assert 0 == get_link_density(doc._readable), "Still no link density"
+        self.assertEqual(get_link_density(doc.readable_dom), 0.0)
 
     def test_several_links(self):
         """This doc has a 3 links with the majority of content."""
         doc = Article(load_snippet('document_absolute_url.html'))
-        self.assertAlmostEqual(
-                get_link_density(doc._readable), 0.349,
-                places=3)
+        self.assertAlmostEqual(get_link_density(doc.readable_dom), 22/37)
 
 
 class TestClassWeight(unittest.TestCase):
@@ -82,9 +108,7 @@ class TestClassWeight(unittest.TestCase):
 
     def test_no_matches_zero(self):
         """If you don't have the attribute then you get a weight of 0"""
-        empty_div = u"<div></div>"
-        node = fragment_fromstring(empty_div)
-
+        node = fragment_fromstring("<div></div>")
         self.assertEqual(get_class_weight(node), 0)
 
     def test_id_hits(self):
@@ -224,7 +248,7 @@ class TestScoreCandidates(unittest.TestCase):
 
     def test_simple_candidate_set(self):
         """Tests a simple case of two candidate nodes"""
-        doc = """
+        html = """
             <html>
             <body>
                 <div class="content">
@@ -238,18 +262,16 @@ class TestScoreCandidates(unittest.TestCase):
             </body>
             </html>
         """
-        d_elem = document_fromstring(doc)
-        divs = d_elem.findall(".//div")
-        f_elem = divs[0]
-        s_elem = divs[1]
+        dom = document_fromstring(html)
+        div_nodes = dom.findall(".//div")
 
-        res = score_candidates([f_elem, s_elem])
-        ordered = sorted([c for c in res.values()],
-                          key=attrgetter('content_score'),
-                          reverse=True)
+        candidates = score_candidates(div_nodes)
+        ordered = sorted((c for c in candidates.values()), reverse=True,
+            key=attrgetter("content_score"))
 
-        # the body element should have a higher score
-        self.assertTrue(ordered[0].node.tag == 'body')
-
-        # the html element is the outer should come in second
-        self.assertTrue(ordered[1].node.tag == 'html')
+        self.assertEqual(ordered[0].node.tag, "div")
+        self.assertEqual(ordered[0].node.attrib["class"], "content")
+        self.assertEqual(ordered[1].node.tag, "body")
+        self.assertEqual(ordered[2].node.tag, "html")
+        self.assertEqual(ordered[3].node.tag, "div")
+        self.assertEqual(ordered[3].node.attrib["class"], "footer")

@@ -1,59 +1,81 @@
-from setuptools import setup, find_packages
 import sys
-import os
 
-here = os.path.abspath(os.path.dirname(__file__))
-README = open(os.path.join(here, 'README.rst')).read()
-NEWS = open(os.path.join(here, 'NEWS.txt')).read()
+from os.path import abspath, dirname, join
+from setuptools import setup, find_packages
+from readability import __version__
 
-version = '0.1.14'
+
+VERSION_SUFFIX = "%d.%d" % sys.version_info[:2]
+CURRENT_DIRECTORY = abspath(dirname(__file__))
+
+
+with open(join(CURRENT_DIRECTORY, "README.rst")) as readme:
+    with open(join(CURRENT_DIRECTORY, "CHANGELOG.rst")) as changelog:
+        long_description = "%s\n\n%s" % (readme.read(), changelog.read())
+
+
 install_requires = [
-    # List your project dependencies here.
-    # For more details, see:
-    # http://packages.python.org/distribute/setuptools.html#declaring-dependencies
-    'chardet',
-    'lxml',
+    "docopt>=0.6.1,<0.7",
+    "charade",
+    "lxml>=2.0",
 ]
 tests_require = [
-    'coverage',
-    'nose',
-    'pep8',
-    'pylint',
+    "coverage",
+    "nose",
 ]
 
 
 if sys.version_info < (2, 7):
-    # Require argparse since it's not in the stdlib yet.
-    install_requires.append('argparse')
-    install_requires.append('unittest2')
+    install_requires.append("unittest2")
+
 
 setup(
-    name='breadability',
-    version=version,
-    description="Redone port of Readability API in Python",
-    long_description=README + '\n\n' + NEWS,
-    classifiers=[
-        # Get strings from
-        # http://pypi.python.org/pypi?%3Aaction=list_classifiers
+    name="readability",
+    version=__version__,
+    description="Port of Readability HTML parser in Python",
+    long_description=long_description,
+    keywords=[
+        "readability",
+        "readable",
+        "parsing",
+        "HTML",
+        "content",
     ],
-    keywords='readable parsing html content bookie',
-    author='Rick Harding',
-    author_email='rharding@mitechie.com',
-    url='http://docs.bmark.us',
-    license='BSD',
-    packages=find_packages('src'),
-    package_dir={'': 'src'},
+    author="Michal Belica",
+    author_email="miso.belica@gmail.com",
+    url="https://github.com/miso-belica/readability.py",
+    license="BSD",
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: BSD License",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 2.6",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.2",
+        "Programming Language :: Python :: 3.3",
+        "Programming Language :: Python :: Implementation :: CPython",
+        "Topic :: Internet :: WWW/HTTP",
+        "Topic :: Software Development :: Pre-processors",
+        "Topic :: Text Processing :: Filters",
+        "Topic :: Text Processing :: Markup :: HTML",
+
+    ],
+    packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
     install_requires=install_requires,
     tests_require=tests_require,
-    extras_require={
-        'test': tests_require
-    },
+    test_suite="tests.run_tests.run",
     entry_points={
-        'console_scripts': [
-            'breadability=breadability:client.main',
-            'breadability_newtest=breadability:newtest.main',
+        "console_scripts": [
+            "readability = readability.scripts.client:main",
+            "readability-%s = readability.scripts.client:main" % VERSION_SUFFIX,
+            "readability_test = readability.scripts.test_helper:main",
+            "readability_test-%s = readability.scripts.test_helper:main" % VERSION_SUFFIX,
         ]
     }
 )

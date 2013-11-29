@@ -1,11 +1,12 @@
-import os
-try:
-    # Python < 2.7
-    import unittest2 as unittest
-except ImportError:
-    import unittest
+# -*- coding: utf8 -*-
 
-from breadability.readable import Article
+from __future__ import absolute_import
+from __future__ import division, print_function, unicode_literals
+
+import os
+
+from readability.readable import Article
+from ...compat import unittest
 
 
 class TestAntipopeBlog(unittest.TestCase):
