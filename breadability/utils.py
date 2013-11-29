@@ -6,6 +6,9 @@ from __future__ import division, print_function, unicode_literals
 import re
 
 
+MULTIPLE_WHITESPACE_PATTERN = re.compile(r"\s+", re.UNICODE)
+
+
 def is_blank(text):
     """
     Returns ``True`` if string contains only whitespace characters
@@ -18,7 +21,6 @@ def shrink_text(text):
     return normalize_whitespace(text.strip())
 
 
-MULTIPLE_WHITESPACE_PATTERN = re.compile(r"\s+", re.UNICODE)
 def normalize_whitespace(text):
     """
     Translates multiple whitespace into single space character.

@@ -29,10 +29,10 @@ if sys.version_info < (2, 7):
     install_requires.append("unittest2")
 
 console_script_targets = [
-    "readability = readability.scripts.client:main",
-    "readability-{0} = readability.scripts.client:main",
-    "readability_test = readability.scripts.test_helper:main",
-    "readability_test-{0} = readability.scripts.test_helper:main",
+    "breadability = breadability.scripts.client:main",
+    "breadability-{0} = breadability.scripts.client:main",
+    "breadability_test = breadability.scripts.test_helper:main",
+    "breadability_test-{0} = breadability.scripts.test_helper:main",
 ]
 console_script_targets = [
     target.format(VERSION_SUFFIX) for target in console_script_targets
@@ -40,21 +40,22 @@ console_script_targets = [
 
 
 setup(
-    name="readability",
+    name="breadability",
     version=VERSION,
     description="Port of Readability HTML parser in Python",
     long_description=long_description,
     keywords=[
+        "bookie",
+        "breadability",
+        "content",
+        "HTML",
+        "parsing",
         "readability",
         "readable",
-        "parsing",
-        "HTML",
-        "content",
-        "bookie",
     ],
     author="Rick Harding",
     author_email="rharding@mitechie.com",
-    url="https://github.com/bookieio/b readability",
+    url="https://github.com/bookieio/breadability",
     license="BSD",
     classifiers=[
         "Development Status :: 5 - Production/Stable",

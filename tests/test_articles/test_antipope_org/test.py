@@ -5,7 +5,7 @@ from __future__ import division, print_function, unicode_literals
 
 import os
 
-from readability.readable import Article
+from breadability.readable import Article
 from ...compat import unittest
 
 

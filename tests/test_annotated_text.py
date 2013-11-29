@@ -1,11 +1,15 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import
-from __future__ import division, print_function, unicode_literals
+from __future__ import (
+    absolute_import,
+    division,
+    print_function,
+    unicode_literals
+)
 
 from lxml.html import fragment_fromstring, document_fromstring
-from readability.readable import Article
-from readability.annotated_text import AnnotatedTextHandler
+from breadability.readable import Article
+from breadability.annotated_text import AnnotatedTextHandler
 from .compat import unittest
 from .utils import load_snippet, load_article
 

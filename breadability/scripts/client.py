@@ -4,9 +4,9 @@
 A fast python port of arc90's readability tool
 
 Usage:
-    readability [options] <resource>
-    readability --version
-    readability --help
+    breadability [options] <resource>
+    breadability --version
+    breadability --help
 
 Arguments:
   <resource>      URL or file path to process in readable form.
@@ -50,7 +50,7 @@ def parse_args():
 
 def main():
     args = parse_args()
-    logger = logging.getLogger("readability")
+    logger = logging.getLogger("breadability")
 
     if args["--verbose"]:
         logger.setLevel(logging.DEBUG)

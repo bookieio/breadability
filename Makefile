@@ -34,8 +34,8 @@ clean_venv:
 	rm -rf bin include lib local man share
 
 .PHONY: develop
-develop: lib/python*/site-packages/readability.egg-link
-lib/python*/site-packages/readability.egg-link:
+develop: lib/python*/site-packages/breadability.egg-link
+lib/python*/site-packages/breadability.egg-link:
 	$(PY) setup.py develop
 
 

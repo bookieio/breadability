@@ -6,14 +6,16 @@ from __future__ import division, print_function, unicode_literals
 from lxml.etree import tounicode
 from lxml.html import document_fromstring
 from lxml.html import fragment_fromstring
-from readability._compat import to_unicode
-from readability.readable import Article
-from readability.readable import get_class_weight
-from readability.readable import get_link_density
-from readability.readable import is_bad_link
-from readability.readable import score_candidates
-from readability.readable import leaf_div_elements_into_paragraphs
-from readability.scoring import ScoredNode
+from breadability._compat import to_unicode
+from breadability.readable import (
+    Article,
+    get_class_weight,
+    get_link_density,
+    is_bad_link,
+    leaf_div_elements_into_paragraphs,
+    score_candidates,
+)
+from breadability.scoring import ScoredNode
 from .compat import unittest
 from .utils import load_snippet, load_article
 
@@ -65,7 +67,6 @@ class TestReadableDocument(unittest.TestCase):
         self.assertEqual(doc.readable_dom.tag, 'div')
         self.assertEqual(doc.readable_dom.get('id'), 'readabilityBody')
 
-
     def test_no_content(self):
         """Without content we supply an empty unparsed doc."""
         doc = Article('')
@@ -81,10 +82,11 @@ class TestCleaning(unittest.TestCase):
         """Verify we wipe out things from our unlikely list."""
         doc = Article(load_snippet('test_readable_unlikely.html'))
         readable = doc.readable_dom
-        must_not_appear = ['comment', 'community', 'disqus', 'extra', 'foot',
-                'header', 'menu', 'remark', 'rss', 'shoutbox', 'sidebar',
-                'sponsor', 'ad-break', 'agegate', 'pagination' '', 'pager',
-                'popup', 'tweet', 'twitter', 'imgBlogpostPermalink']
+        must_not_appear = [
+            'comment', 'community', 'disqus', 'extra', 'foot',
+            'header', 'menu', 'remark', 'rss', 'shoutbox', 'sidebar',
+            'sponsor', 'ad-break', 'agegate', 'pagination' '', 'pager',
+            'popup', 'tweet', 'twitter', 'imgBlogpostPermalink']
 
         want_to_appear = ['and', 'article', 'body', 'column', 'main', 'shadow']
 
@@ -127,9 +129,8 @@ class TestCleaning(unittest.TestCase):
                       '</div></body></html>')
         test_doc2 = document_fromstring(test_html2)
         self.assertEqual(
-            tounicode(
-                leaf_div_elements_into_paragraphs(test_doc2)),
-                to_unicode('<html><body><p>simple<a href="">link</a></p></body></html>')
+            tounicode(leaf_div_elements_into_paragraphs(test_doc2)),
+            to_unicode('<html><body><p>simple<a href="">link</a></p></body></html>')
         )
 
     def test_dont_transform_div_with_div(self):

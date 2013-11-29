@@ -13,12 +13,17 @@ from lxml.html import fragment_fromstring, fromstring
 
 from .document import OriginalDocument
 from .annotated_text import AnnotatedTextHandler
-from .scoring import (score_candidates, get_link_density, get_class_weight,
-    is_unlikely_node)
+from .scoring import (
+    get_class_weight,
+    get_link_density,
+    is_unlikely_node,
+    score_candidates,
+)
 from .utils import cached_property, shrink_text
 
 
-html_cleaner = Cleaner(scripts=True, javascript=True, comments=True,
+html_cleaner = Cleaner(
+    scripts=True, javascript=True, comments=True,
     style=True, links=True, meta=False, add_nofollow=False,
     page_structure=False, processing_instructions=True,
     embedded=False, frames=False, forms=False,
@@ -44,7 +49,7 @@ NULL_DOCUMENT = """
 </html>
 """
 
-logger = logging.getLogger("readability")
+logger = logging.getLogger("breadability")
 
 
 def ok_embedded_video(node):
@@ -129,7 +134,8 @@ def check_siblings(candidate_node, candidate_list):
             content_bonus += candidate_node.content_score * 0.2
 
         if sibling in candidate_list:
-            adjusted_score = candidate_list[sibling].content_score + content_bonus
+            adjusted_score = \
+                candidate_list[sibling].content_score + content_bonus
 
             if adjusted_score >= sibling_target_score:
                 append = True
@@ -146,7 +152,8 @@ def check_siblings(candidate_node, candidate_list):
                     append = True
 
         if append:
-            logger.debug("Sibling appended: %s %r", sibling.tag, sibling.attrib)
+            logger.debug(
+                "Sibling appended: %s %r", sibling.tag, sibling.attrib)
             if sibling.tag not in ("div", "p"):
                 # We have a node that isn't a common block level element, like
                 # a form or td tag. Turn it into a div so it doesn't get
@@ -191,7 +198,8 @@ def clean_document(node):
         if n.tag in ("div", "p"):
             text_content = shrink_text(n.text_content())
             if len(text_content) < 5 and not n.getchildren():
-                logger.debug("Dropping %s %r without content.", n.tag, n.attrib)
+                logger.debug(
+                    "Dropping %s %r without content.", n.tag, n.attrib)
                 to_drop.append(n)
 
         # finally try out the conditional cleaning of the target node
@@ -206,7 +214,8 @@ def clean_document(node):
 def drop_nodes_with_parents(nodes):
     for node in nodes:
         if node.getparent() is not None:
-            logger.debug("Droping node with parent %s %r", node.tag, node.attrib)
+            logger.debug(
+                "Droping node with parent %s %r", node.tag, node.attrib)
             node.drop_tree()
 
 
@@ -231,7 +240,8 @@ def clean_conditionally(node):
 
     commas_count = node.text_content().count(',')
     if commas_count < 10:
-        logger.debug("There are %d commas so we're processing more.", commas_count)
+        logger.debug(
+            "There are %d commas so we're processing more.", commas_count)
 
         # If there are not very many commas, and the number of
         # non-paragraph elements is more than paragraphs or other ominous
@@ -267,7 +277,8 @@ def clean_conditionally(node):
             logger.debug('Conditional drop: weight big but link heavy')
             remove_node = True
         elif (embed == 1 and content_length < 75) or embed > 1:
-            logger.debug('Conditional drop: embed w/o much content or many embed')
+            logger.debug(
+                'Conditional drop: embed w/o much content or many embed')
             remove_node = True
 
         if remove_node:
@@ -305,10 +316,12 @@ def find_candidates(document):
 
     for node in document.iter():
         if is_unlikely_node(node):
-            logger.debug("We should drop unlikely: %s %r", node.tag, node.attrib)
+            logger.debug(
+                "We should drop unlikely: %s %r", node.tag, node.attrib)
             should_remove.add(node)
         elif is_bad_link(node):
-            logger.debug("We should drop bad link: %s %r", node.tag, node.attrib)
+            logger.debug(
+                "We should drop bad link: %s %r", node.tag, node.attrib)
             should_remove.add(node)
         elif node.tag in SCORABLE_TAGS:
             nodes_to_score.add(node)
@@ -403,7 +416,8 @@ class Article(object):
             return self._handle_no_candidates()
 
         # right now we return the highest scoring candidate content
-        best_candidates = sorted((c for c in self.candidates.values()),
+        best_candidates = sorted(
+            (c for c in self.candidates.values()),
             key=attrgetter("content_score"), reverse=True)
 
         printer = PrettyPrinter(indent=2)
@@ -415,9 +429,11 @@ class Article(object):
         updated_winner = check_siblings(winner, self.candidates)
         updated_winner.node = prep_article(updated_winner.node)
         if updated_winner.node is not None:
-            dom = build_base_document(updated_winner.node, self._return_fragment)
+            dom = build_base_document(
+                updated_winner.node, self._return_fragment)
         else:
-            logger.warning('Had candidates but failed to find a cleaned winning DOM.')
+            logger.warning(
+                'Had candidates but failed to find a cleaned winning DOM.')
             dom = self._handle_no_candidates()
 
         return self._remove_orphans(dom.get_element_by_id("readabilityBody"))
@@ -437,7 +453,8 @@ class Article(object):
         if self.dom is not None and len(self.dom):
             dom = prep_article(self.dom)
             dom = build_base_document(dom, self._return_fragment)
-            return self._remove_orphans(dom.get_element_by_id("readabilityBody"))
+            return self._remove_orphans(
+                dom.get_element_by_id("readabilityBody"))
         else:
             logger.warning("No document to use.")
             return build_error_document(self._return_fragment)
@@ -454,7 +471,8 @@ def leaf_div_elements_into_paragraphs(document):
     for element in document.iter(tag="div"):
         child_tags = tuple(n.tag for n in element.getchildren())
         if "div" not in child_tags and "p" not in child_tags:
-            logger.debug("Changing leaf block element <%s> into <p>", element.tag)
+            logger.debug(
+                "Changing leaf block element <%s> into <p>", element.tag)
             element.tag = "p"
 
     return document

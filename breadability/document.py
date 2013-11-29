@@ -15,7 +15,7 @@ from ._compat import unicode, to_bytes, to_unicode, unicode_compatible
 from .utils import cached_property
 
 
-logger = logging.getLogger("readability")
+logger = logging.getLogger("breadability")
 
 
 TAG_MARK_PATTERN = re.compile(to_bytes(r"</?[^>]*>\s*"))

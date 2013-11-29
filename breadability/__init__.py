@@ -8,4 +8,4 @@ from __future__ import (
 )
 import pkg_resources
 
-__version__ = pkg_resources.get_distribution("readability").version
+__version__ = pkg_resources.get_distribution("breadability").version
