@@ -5,7 +5,7 @@ try:
 except ImportError:
     import unittest
 
-from breadability.readable import Article
+from readability.readable import Article
 
 
 class TestBusinessInsiderArticle(unittest.TestCase):
