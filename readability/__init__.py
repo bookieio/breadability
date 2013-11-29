@@ -1,7 +1,11 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import
-from __future__ import division, print_function, unicode_literals
+from __future__ import (
+    absolute_import,
+    division,
+    print_function,
+    unicode_literals
+)
+import pkg_resources
 
-
-__version__ = "0.1.14"
+__version__ = pkg_resources.get_distribution("readability").version

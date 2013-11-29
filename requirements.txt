@@ -1,5 +1,8 @@
-docopt>=0.6.1,<0.7
 charade
-lxml
 coverage
+docopt>=0.6.1,<0.7
+lxml
 nose
+nose-selecttests
+pep8
+pylint

@@ -2,8 +2,8 @@ import sys
 
 from os.path import abspath, dirname, join
 from setuptools import setup, find_packages
-from readability import __version__
 
+VERSION = "0.1.14"
 
 VERSION_SUFFIX = "%d.%d" % sys.version_info[:2]
 CURRENT_DIRECTORY = abspath(dirname(__file__))
@@ -28,10 +28,20 @@ tests_require = [
 if sys.version_info < (2, 7):
     install_requires.append("unittest2")
 
+console_script_targets = [
+    "readability = readability.scripts.client:main",
+    "readability-{} = readability.scripts.client:main",
+    "readability_test = readability.scripts.test_helper:main",
+    "readability_test-{} = readability.scripts.test_helper:main",
+]
+console_script_targets = [
+    target.format(VERSION_SUFFIX) for target in console_script_targets
+]
+
 
 setup(
     name="readability",
-    version=__version__,
+    version=VERSION,
     description="Port of Readability HTML parser in Python",
     long_description=long_description,
     keywords=[
@@ -40,10 +50,11 @@ setup(
         "parsing",
         "HTML",
         "content",
+        "bookie",
     ],
-    author="Michal Belica",
-    author_email="miso.belica@gmail.com",
-    url="https://github.com/miso-belica/readability.py",
+    author="Rick Harding",
+    author_email="rharding@mitechie.com",
+    url="https://github.com/bookieio/b readability",
     license="BSD",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -62,7 +73,6 @@ setup(
         "Topic :: Software Development :: Pre-processors",
         "Topic :: Text Processing :: Filters",
         "Topic :: Text Processing :: Markup :: HTML",
-
     ],
     packages=find_packages(),
     include_package_data=True,
@@ -71,11 +81,6 @@ setup(
     tests_require=tests_require,
     test_suite="tests.run_tests.run",
     entry_points={
-        "console_scripts": [
-            "readability = readability.scripts.client:main",
-            "readability-%s = readability.scripts.client:main" % VERSION_SUFFIX,
-            "readability_test = readability.scripts.test_helper:main",
-            "readability_test-%s = readability.scripts.test_helper:main" % VERSION_SUFFIX,
-        ]
+        "console_scripts": console_script_targets,
     }
 )

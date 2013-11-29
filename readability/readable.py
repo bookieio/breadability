@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import
 
-import re
 import logging
 
 from copy import deepcopy
@@ -154,7 +153,8 @@ def check_siblings(candidate_node, candidate_list):
                 # filtered out later by accident.
                 sibling.tag = "div"
 
-            candidate_node.node.append(sibling)
+            if candidate_node.node != sibling:
+                candidate_node.node.append(sibling)
 
     return candidate_node
 
