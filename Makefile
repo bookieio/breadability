@@ -62,4 +62,4 @@ upload:
 
 .PHONY: version_update
 version_update:
-	$(EDITOR) setup.py NEWS.txt
+	$(EDITOR) setup.py CHANGELOG.rst

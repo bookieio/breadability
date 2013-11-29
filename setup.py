@@ -30,9 +30,9 @@ if sys.version_info < (2, 7):
 
 console_script_targets = [
     "readability = readability.scripts.client:main",
-    "readability-{} = readability.scripts.client:main",
+    "readability-{0} = readability.scripts.client:main",
     "readability_test = readability.scripts.test_helper:main",
-    "readability_test-{} = readability.scripts.test_helper:main",
+    "readability_test-{0} = readability.scripts.test_helper:main",
 ]
 console_script_targets = [
     target.format(VERSION_SUFFIX) for target in console_script_targets
