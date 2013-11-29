@@ -1,5 +1,5 @@
-breadability - another readability Python port
-=================================================
+breadability - another readability Python (v2.6-v3.3) port
+===========================================================
 .. image:: https://api.travis-ci.org/bookieio/breadability.png?branch=master
    :target: https://travis-ci.org/bookieio/breadability.py
 
