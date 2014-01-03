@@ -30,6 +30,9 @@ logger = logging.getLogger("breadability")
 
 
 TAG_MARK_PATTERN = re.compile(to_bytes(r"</?[^>]*>\s*"))
+UTF8_PARSER = HTMLParser(encoding="utf8")
+
+
 def determine_encoding(page):
     encoding = "utf8"
     text = TAG_MARK_PATTERN.sub(to_bytes(" "), page)
@@ -54,7 +57,12 @@ def determine_encoding(page):
     return encoding
 
 
-BREAK_TAGS_PATTERN = re.compile(to_unicode(r"(?:<\s*[bh]r[^>]*>\s*)+"), re.IGNORECASE)
+BREAK_TAGS_PATTERN = re.compile(
+    to_unicode(r"(?:<\s*[bh]r[^>]*>\s*)+"),
+    re.IGNORECASE
+)
+
+
 def convert_breaks_to_paragraphs(html):
     """
     Converts <hr> tag and multiple <br> tags into paragraph.
@@ -75,7 +83,6 @@ def _replace_break_tags(match):
         return tags
 
 
-UTF8_PARSER = HTMLParser(encoding="utf8")
 def build_document(html_content, base_href=None):
     """Requires that the `html_content` not be None"""
     assert html_content is not None

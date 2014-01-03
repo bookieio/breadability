@@ -49,6 +49,13 @@ clean_all: clean_venv
     fi
 
 
+bin/flake8: venv
+	bin/pip install flake8
+
+lint: bin/flake8
+	flake8 breadability
+
+
 # ###########
 # Deploy
 # ###########

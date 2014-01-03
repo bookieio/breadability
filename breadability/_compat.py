@@ -19,9 +19,13 @@ string_types = (bytes, unicode,)
 
 
 try:
+    # Assert to hush pyflakes about the unused import. This is a _compat
+    # module and we expect this to aid in other code importing urllib.
     import urllib2 as urllib
+    assert urllib
 except ImportError:
     import urllib.request as urllib
+    assert urllib
 
 
 def unicode_compatible(cls):
