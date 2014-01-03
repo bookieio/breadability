@@ -29,6 +29,14 @@ class TestReadableDocument(unittest.TestCase):
         # We get back the document as a div tag currently by default.
         self.assertEqual(doc.readable_dom.tag, 'div')
 
+    def test_title_loads(self):
+        """Verify we can fetch the title of the parsed article"""
+        doc = Article(load_snippet('document_min.html'))
+        self.assertEqual(
+            doc._original_document.title,
+            'Min Document Title'
+        )
+
     def test_doc_no_scripts_styles(self):
         """Step #1 remove all scripts from the document"""
         doc = Article(load_snippet('document_scripts.html'))
@@ -129,18 +137,26 @@ class TestCleaning(unittest.TestCase):
                       '</div></body></html>')
         test_doc2 = document_fromstring(test_html2)
         self.assertEqual(
-            tounicode(leaf_div_elements_into_paragraphs(test_doc2)),
-            to_unicode('<html><body><p>simple<a href="">link</a></p></body></html>')
+            tounicode(
+                leaf_div_elements_into_paragraphs(test_doc2)),
+            to_unicode(
+                '<html><body><p>simple<a href="">link</a></p></body></html>')
         )
 
     def test_dont_transform_div_with_div(self):
         """Verify that only child <div> element is replaced by <p>."""
         dom = document_fromstring(
-            "<html><body><div>text<div>child</div>aftertext</div></body></html>")
+            "<html><body><div>text<div>child</div>"
+            "aftertext</div></body></html>"
+        )
 
         self.assertEqual(
-            tounicode(leaf_div_elements_into_paragraphs(dom)),
-            to_unicode("<html><body><div>text<p>child</p>aftertext</div></body></html>")
+            tounicode(
+                leaf_div_elements_into_paragraphs(dom)),
+            to_unicode(
+                "<html><body><div>text<p>child</p>"
+                "aftertext</div></body></html>"
+            )
         )
 
     def test_bad_links(self):
