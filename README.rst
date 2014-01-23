@@ -19,7 +19,9 @@ This is a pretty straight port of the JS here:
 - http://code.google.com/p/arc90labs-readability/source/browse/trunk/js/readability.js#82
 - http://www.minvolai.com/blog/decruft-arc90s-readability-in-python/
 
-Some other ports:
+
+Alternatives
+------------
 
 - https://github.com/codelucas/newspaper
 - https://github.com/grangier/python-goose
