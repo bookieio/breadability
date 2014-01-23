@@ -3,6 +3,16 @@
 Changelog for readability
 ==========================
 
+0.1.17 (Jan 22nd 2014)
+----------------------
+
+- More log quieting down to INFO vs WARN
+
+0.1.16 (Jan 22nd 2014)
+----------------------
+
+- Clean up logging output at warning when it's not a true warning
+
 0.1.15 (Nov 29th 2013)
 -----------------------
 

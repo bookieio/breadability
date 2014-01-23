@@ -3,7 +3,7 @@ import sys
 from os.path import abspath, dirname, join
 from setuptools import setup, find_packages
 
-VERSION = "0.1.15"
+VERSION = "0.1.17"
 
 VERSION_SUFFIX = "%d.%d" % sys.version_info[:2]
 CURRENT_DIRECTORY = abspath(dirname(__file__))

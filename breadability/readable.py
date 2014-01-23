@@ -412,7 +412,7 @@ class Article(object):
     def _readable(self):
         """The readable parsed article"""
         if not self.candidates:
-            logger.warning("No candidates found in document.")
+            logger.info("No candidates found in document.")
             return self._handle_no_candidates()
 
         # right now we return the highest scoring candidate content
@@ -432,7 +432,7 @@ class Article(object):
             dom = build_base_document(
                 updated_winner.node, self._return_fragment)
         else:
-            logger.warning(
+            logger.info(
                 'Had candidates but failed to find a cleaned winning DOM.')
             dom = self._handle_no_candidates()
 
@@ -456,7 +456,7 @@ class Article(object):
             return self._remove_orphans(
                 dom.get_element_by_id("readabilityBody"))
         else:
-            logger.warning("No document to use.")
+            logger.info("No document to use.")
             return build_error_document(self._return_fragment)
 
 
