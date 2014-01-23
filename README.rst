@@ -21,6 +21,7 @@ This is a pretty straight port of the JS here:
 
 Some other ports:
 
+- https://github.com/codelucas/newspaper
 - https://github.com/grangier/python-goose
 - https://github.com/aidanf/BTE
 - http://www.unixuser.org/~euske/python/webstemmer/#extract
