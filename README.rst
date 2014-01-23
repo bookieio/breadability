@@ -19,8 +19,12 @@ This is a pretty straight port of the JS here:
 - http://code.google.com/p/arc90labs-readability/source/browse/trunk/js/readability.js#82
 - http://www.minvolai.com/blog/decruft-arc90s-readability-in-python/
 
-Some other ports:
 
+Alternatives
+------------
+
+- https://github.com/codelucas/newspaper
+- https://github.com/grangier/python-goose
 - https://github.com/aidanf/BTE
 - http://www.unixuser.org/~euske/python/webstemmer/#extract
 - https://github.com/al3xandru/readability.py
@@ -51,8 +55,7 @@ Tests
 -----
 .. code-block:: bash
 
-    $ nosetests --with-coverage --cover-package=breadability --cover-erase tests
-    $ nosetests-3.3 --with-coverage --cover-package=breadability --cover-erase tests
+    $ nosetests-2.6 tests && nosetests-3.2 tests && nosetests-2.7 tests && nosetests-3.3 tests
 
 
 Usage

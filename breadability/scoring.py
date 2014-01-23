@@ -91,15 +91,11 @@ def get_link_density(node, node_text=None):
     if text_length == 0:
         return 0.0
 
-    link_length = sum(
-        [len(a.text_content()) or 0 for a in node.findall(".//a")]
-    )
-
-    # For each img, give 50 bonus chars worth of length.
+    links_length = sum(map(_get_normalized_text_length, node.findall(".//a")))
+    # Give 50 bonus chars worth of length for each img.
     # Tweaking this 50 down a notch should help if we hit false positives.
-    links_length = max(
-        link_length - sum([50 for img in node.findall(".//img")]), 0
-    )
+    img_bonuses = 50 * len(node.findall(".//img"))
+    links_length = max(0, links_length - img_bonuses)
 
     return links_length / text_length
 

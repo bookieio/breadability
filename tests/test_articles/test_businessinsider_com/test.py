@@ -8,17 +8,17 @@ from breadability.readable import Article
 from ...compat import unittest
 
 
-class TestSweetsharkBlog(unittest.TestCase):
+class TestArticle(unittest.TestCase):
     """
     Test the scoring and parsing of the article from URL below:
-    http://sweetshark.livejournal.com/11564.html
+    http://www.businessinsider.com/tech-ceos-favorite-productivity-hacks-2013-8
     """
 
     def setUp(self):
         """Load up the article for us"""
         article_path = join(dirname(__file__), "article.html")
         with open(article_path, "rb") as file:
-            self.document = Article(file.read(), "http://sweetshark.livejournal.com/11564.html")
+            self.document = Article(file.read(), "http://www.businessinsider.com/tech-ceos-favorite-productivity-hacks-2013-8")
 
     def tearDown(self):
         """Drop the article"""
@@ -28,6 +28,12 @@ class TestSweetsharkBlog(unittest.TestCase):
         """Verify we can parse the document."""
         self.assertIn('id="readabilityBody"', self.document.readable)
 
-    def test_content_after_video(self):
+    def test_images_preserved(self):
         """The div with the comments should be removed."""
-        self.assertIn('Stay hungry, Stay foolish', self.document.readable)
+        images = [
+            'bharath-kumar-a-co-founder-at-pugmarksme-suggests-working-on-a-sunday-late-night.jpg',
+            'bryan-guido-hassin-a-university-professor-and-startup-junkie-uses-airplane-days.jpg',
+        ]
+
+        for image in images:
+            self.assertIn(image, self.document.readable, image)

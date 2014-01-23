@@ -1,37 +1,28 @@
 .. :changelog:
 
-Changelog for readability
+Changelog for breadability
 ==========================
 
 0.1.17 (Jan 22nd 2014)
 ----------------------
-
 - More log quieting down to INFO vs WARN
 
 0.1.16 (Jan 22nd 2014)
 ----------------------
-
 - Clean up logging output at warning when it's not a true warning
 
 0.1.15 (Nov 29th 2013)
 -----------------------
-
-Merge changes from 0.1.14 of breadability with the fork
-https://github.com/miso-belica/readability.py and tweaking to return to the
-name breadability.
-
-
-From the fork
-~~~~~~~~~~~~~~
-- Added property ``Article.main_text`` for getting text annotated with
+- Merge changes from 0.1.14 of breadability with the fork https://github.com/miso-belica/readability.py and tweaking to return to the name breadability.
+- Fork: Added property ``Article.main_text`` for getting text annotated with
   semantic HTML tags (<em>, <strong>, ...).
-- Join node with 1 child of the same type. From
+- Fork: Join node with 1 child of the same type. From
   ``<div><div>...</div></div>`` we get ``<div>...</div>``.
-- Don't change <div> to <p> if it contains <p> elements.
-- Renamed test generation helper 'readability_newtest' -> 'readability_test'.
-- Renamed package to readability. (Renamed back)
-- Added support for Python >= 3.2.
-- Py3k compatible package 'charade' is used instead of 'chardet'.
+- Fork: Don't change <div> to <p> if it contains <p> elements.
+- Fork: Renamed test generation helper 'readability_newtest' -> 'readability_test'.
+- Fork: Renamed package to readability. (Renamed back)
+- Fork: Added support for Python >= 3.2.
+- Fork: Py3k compatible package 'charade' is used instead of 'chardet'.
 
 0.1.14 (Nov 7th 2013)
 ----------------------
