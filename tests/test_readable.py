@@ -6,14 +6,16 @@ from __future__ import division, print_function, unicode_literals
 from lxml.etree import tounicode
 from lxml.html import document_fromstring
 from lxml.html import fragment_fromstring
-from readability._compat import to_unicode
-from readability.readable import Article
-from readability.readable import get_class_weight
-from readability.readable import get_link_density
-from readability.readable import is_bad_link
-from readability.readable import score_candidates
-from readability.readable import leaf_div_elements_into_paragraphs
-from readability.scoring import ScoredNode
+from breadability._compat import to_unicode
+from breadability.readable import (
+    Article,
+    get_class_weight,
+    get_link_density,
+    is_bad_link,
+    leaf_div_elements_into_paragraphs,
+    score_candidates,
+)
+from breadability.scoring import ScoredNode
 from .compat import unittest
 from .utils import load_snippet, load_article
 
@@ -26,6 +28,14 @@ class TestReadableDocument(unittest.TestCase):
         doc = Article(load_snippet('document_min.html'))
         # We get back the document as a div tag currently by default.
         self.assertEqual(doc.readable_dom.tag, 'div')
+
+    def test_title_loads(self):
+        """Verify we can fetch the title of the parsed article"""
+        doc = Article(load_snippet('document_min.html'))
+        self.assertEqual(
+            doc._original_document.title,
+            'Min Document Title'
+        )
 
     def test_doc_no_scripts_styles(self):
         """Step #1 remove all scripts from the document"""
@@ -80,10 +90,11 @@ class TestCleaning(unittest.TestCase):
         """Verify we wipe out things from our unlikely list."""
         doc = Article(load_snippet('test_readable_unlikely.html'))
         readable = doc.readable_dom
-        must_not_appear = ['comment', 'community', 'disqus', 'extra', 'foot',
-                'header', 'menu', 'remark', 'rss', 'shoutbox', 'sidebar',
-                'sponsor', 'ad-break', 'agegate', 'pagination' '', 'pager',
-                'popup', 'tweet', 'twitter', 'imgBlogpostPermalink']
+        must_not_appear = [
+            'comment', 'community', 'disqus', 'extra', 'foot',
+            'header', 'menu', 'remark', 'rss', 'shoutbox', 'sidebar',
+            'sponsor', 'ad-break', 'agegate', 'pagination' '', 'pager',
+            'popup', 'tweet', 'twitter', 'imgBlogpostPermalink']
 
         want_to_appear = ['and', 'article', 'body', 'column', 'main', 'shadow']
 
@@ -128,17 +139,24 @@ class TestCleaning(unittest.TestCase):
         self.assertEqual(
             tounicode(
                 leaf_div_elements_into_paragraphs(test_doc2)),
-                to_unicode('<html><body><p>simple<a href="">link</a></p></body></html>')
+            to_unicode(
+                '<html><body><p>simple<a href="">link</a></p></body></html>')
         )
 
     def test_dont_transform_div_with_div(self):
         """Verify that only child <div> element is replaced by <p>."""
         dom = document_fromstring(
-            "<html><body><div>text<div>child</div>aftertext</div></body></html>")
+            "<html><body><div>text<div>child</div>"
+            "aftertext</div></body></html>"
+        )
 
         self.assertEqual(
-            tounicode(leaf_div_elements_into_paragraphs(dom)),
-            to_unicode("<html><body><div>text<p>child</p>aftertext</div></body></html>")
+            tounicode(
+                leaf_div_elements_into_paragraphs(dom)),
+            to_unicode(
+                "<html><body><div>text<p>child</p>"
+                "aftertext</div></body></html>"
+            )
         )
 
     def test_bad_links(self):

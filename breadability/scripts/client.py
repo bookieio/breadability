@@ -4,9 +4,9 @@
 A fast python port of arc90's readability tool
 
 Usage:
-    readability [options] <resource>
-    readability --version
-    readability --help
+    breadability [options] <resource>
+    breadability --version
+    breadability --help
 
 Arguments:
   <resource>      URL or file path to process in readable form.
@@ -37,7 +37,10 @@ from ..readable import Article
 
 
 HEADERS = {
-    "User-Agent": "Readability (Readable content parser; https://github.com/miso-belica/readability.py) Version/%s" % __version__,
+    "User-Agent": 'breadability/{version} ({url})'.format(
+        url="https://github.com/bookieio/breadability",
+        version=__version__
+    )
 }
 
 
@@ -47,7 +50,7 @@ def parse_args():
 
 def main():
     args = parse_args()
-    logger = logging.getLogger("readability")
+    logger = logging.getLogger("breadability")
 
     if args["--verbose"]:
         logger.setLevel(logging.DEBUG)

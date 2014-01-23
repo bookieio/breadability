@@ -4,11 +4,11 @@ from __future__ import absolute_import
 from __future__ import division, print_function, unicode_literals
 
 from os.path import join, dirname
-from readability.readable import Article
+from breadability.readable import Article
 from ...compat import unittest
 
 
-class TestArticle(unittest.TestCase):
+class TestSweetsharkBlog(unittest.TestCase):
     """
     Test the scoring and parsing of the article from URL below:
     http://sweetshark.livejournal.com/11564.html

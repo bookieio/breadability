@@ -1,12 +1,12 @@
 # -*- coding: utf8 -*-
 
 """
-Helper to generate a new set of article test files for readability.
+Helper to generate a new set of article test files for breadability.
 
 Usage:
-    readability_test --name <name> <url>
-    readability_test --version
-    readability_test --help
+    breadability_test --name <name> <url>
+    breadability_test --version
+    breadability_test --help
 
 Arguments:
   <url>                   The url of content to fetch for the article.html
@@ -39,7 +39,7 @@ from __future__ import absolute_import
 from __future__ import division, print_function, unicode_literals
 
 from os.path import join, dirname
-from readability.readable import Article
+from breadability.readable import Article
 from ...compat import unittest
 
 

@@ -1,14 +1,18 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import
-from __future__ import division, print_function, unicode_literals
+from __future__ import (
+    absolute_import,
+    division,
+    print_function,
+    unicode_literals
+)
 
 import os
 
 from operator import attrgetter
-from readability.readable import Article
-from readability.readable import check_siblings
-from readability.readable import prep_article
+from breadability.readable import Article
+from breadability.readable import check_siblings
+from breadability.readable import prep_article
 from ...compat import unittest
 
 
@@ -57,7 +61,8 @@ class TestArticle(unittest.TestCase):
         for node in doc._should_drop:
             self.assertFalse(node == found.node)
 
-        by_score = sorted([c for c in doc.candidates.values()],
+        by_score = sorted(
+            [c for c in doc.candidates.values()],
             key=attrgetter('content_score'), reverse=True)
         self.assertTrue(by_score[0].node == found.node)
 

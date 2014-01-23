@@ -1,19 +1,41 @@
 .. :changelog:
 
-Changelog for readability
+Changelog for breadability
 ==========================
-- Sibling node is appended only when sibling doesn't already exist.
-- Treat images a little differently so they get more inclusion.
-- Added User-Agent string into HTTP requests.
-- Added property ``Article.main_text`` for getting text annotated with
+
+0.1.17 (Jan 22nd 2014)
+----------------------
+- More log quieting down to INFO vs WARN
+
+0.1.16 (Jan 22nd 2014)
+----------------------
+- Clean up logging output at warning when it's not a true warning
+
+0.1.15 (Nov 29th 2013)
+-----------------------
+- Merge changes from 0.1.14 of breadability with the fork https://github.com/miso-belica/readability.py and tweaking to return to the name breadability.
+- Fork: Added property ``Article.main_text`` for getting text annotated with
   semantic HTML tags (<em>, <strong>, ...).
-- Join node with 1 child of the same type. From
+- Fork: Join node with 1 child of the same type. From
   ``<div><div>...</div></div>`` we get ``<div>...</div>``.
-- Don't change <div> to <p> if it contains <p> elements.
-- Renamed test generation helper 'readability_newtest' -> 'readability_test'.
-- Renamed package to readability.
-- Added support for Python >= 3.2.
-- Py3k compatible package 'charade' is used instead of 'chardet'.
+- Fork: Don't change <div> to <p> if it contains <p> elements.
+- Fork: Renamed test generation helper 'readability_newtest' -> 'readability_test'.
+- Fork: Renamed package to readability. (Renamed back)
+- Fork: Added support for Python >= 3.2.
+- Fork: Py3k compatible package 'charade' is used instead of 'chardet'.
+
+0.1.14 (Nov 7th 2013)
+----------------------
+- Update sibling append to only happen when sibling doesn't already exist.
+
+0.1.13 (Aug 31st 2013)
+-----------------------
+- Give images in content boy a better chance of survival
+- Add tests
+
+0.1.12 (July 28th 2013)
+-----------------------
+- Add a user agent to requests.
 
 0.1.11 (Dec 12th 2012)
 -----------------------

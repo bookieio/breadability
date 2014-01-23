@@ -4,7 +4,7 @@ from __future__ import absolute_import
 from __future__ import division, print_function, unicode_literals
 
 from os.path import join, dirname
-from readability.readable import Article
+from breadability.readable import Article
 from ...compat import unittest
 
 

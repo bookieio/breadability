@@ -8,14 +8,18 @@ import re
 from operator import attrgetter
 from lxml.html import document_fromstring
 from lxml.html import fragment_fromstring
-from readability.readable import Article
-from readability.scoring import check_node_attributes
-from readability.scoring import get_class_weight
-from readability.scoring import ScoredNode
-from readability.scoring import score_candidates
-from readability.scoring import generate_hash_id
-from readability.readable import get_link_density
-from readability.readable import is_unlikely_node
+from breadability.readable import Article
+from breadability.scoring import (
+    check_node_attributes,
+    generate_hash_id,
+    get_class_weight,
+    score_candidates,
+    ScoredNode,
+)
+from breadability.readable import (
+    get_link_density,
+    is_unlikely_node,
+)
 from .compat import unittest
 from .utils import load_snippet
 
@@ -60,7 +64,8 @@ class TestCheckNodeAttr(unittest.TestCase):
         test_node = fragment_fromstring('<div/>')
         test_node.set('class', 'test2 comment')
 
-        self.assertTrue(check_node_attributes(test_pattern, test_node, 'class'))
+        self.assertTrue(
+            check_node_attributes(test_pattern, test_node, 'class'))
 
     def test_has_id(self):
         """Verify that a node has an id in our set."""
@@ -75,7 +80,8 @@ class TestCheckNodeAttr(unittest.TestCase):
         test_pattern = re.compile('test1|test2', re.I)
         test_node = fragment_fromstring('<div/>')
         test_node.set('class', 'test4 comment')
-        self.assertFalse(check_node_attributes(test_pattern, test_node, 'class'))
+        self.assertFalse(
+            check_node_attributes(test_pattern, test_node, 'class'))
 
     def test_lacks_id(self):
         """Verify that a node does not have an id in our set."""
@@ -266,7 +272,8 @@ class TestScoreCandidates(unittest.TestCase):
         div_nodes = dom.findall(".//div")
 
         candidates = score_candidates(div_nodes)
-        ordered = sorted((c for c in candidates.values()), reverse=True,
+        ordered = sorted(
+            (c for c in candidates.values()), reverse=True,
             key=attrgetter("content_score"))
 
         self.assertEqual(ordered[0].node.tag, "div")

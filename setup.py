@@ -2,8 +2,8 @@ import sys
 
 from os.path import abspath, dirname, join
 from setuptools import setup, find_packages
-from readability import __version__
 
+VERSION = "0.1.17"
 
 VERSION_SUFFIX = "%d.%d" % sys.version_info[:2]
 CURRENT_DIRECTORY = abspath(dirname(__file__))
@@ -28,24 +28,34 @@ tests_require = [
 if sys.version_info < (2, 7):
     install_requires.append("unittest2")
 
+console_script_targets = [
+    "breadability = breadability.scripts.client:main",
+    "breadability-{0} = breadability.scripts.client:main",
+    "breadability_test = breadability.scripts.test_helper:main",
+    "breadability_test-{0} = breadability.scripts.test_helper:main",
+]
+console_script_targets = [
+    target.format(VERSION_SUFFIX) for target in console_script_targets
+]
+
 
 setup(
-    name="readability",
-    version=__version__,
+    name="breadability",
+    version=VERSION,
     description="Port of Readability HTML parser in Python",
     long_description=long_description,
     keywords=[
+        "bookie",
+        "breadability",
+        "content",
+        "HTML",
+        "parsing",
         "readability",
         "readable",
-        "parsing",
-        "HTML",
-        "content",
     ],
     author="Rick Harding",
     author_email="rharding@mitechie.com",
-    maintainer="Michal Belica",
-    maintainer_email="miso.belica@gmail.com",
-    url="https://github.com/miso-belica/readability.py",
+    url="https://github.com/bookieio/breadability",
     license="BSD",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -64,7 +74,6 @@ setup(
         "Topic :: Software Development :: Pre-processors",
         "Topic :: Text Processing :: Filters",
         "Topic :: Text Processing :: Markup :: HTML",
-
     ],
     packages=find_packages(),
     include_package_data=True,
@@ -73,11 +82,6 @@ setup(
     tests_require=tests_require,
     test_suite="tests.run_tests.run",
     entry_points={
-        "console_scripts": [
-            "readability = readability.scripts.client:main",
-            "readability-%s = readability.scripts.client:main" % VERSION_SUFFIX,
-            "readability_test = readability.scripts.test_helper:main",
-            "readability_test-%s = readability.scripts.test_helper:main" % VERSION_SUFFIX,
-        ]
+        "console_scripts": console_script_targets,
     }
 )
