@@ -20,8 +20,11 @@ install_requires = [
     "lxml>=2.0",
 ]
 tests_require = [
+    "nose-selecttests",
     "coverage",
+    "pylint",
     "nose",
+    "pep8",
 ]
 
 
