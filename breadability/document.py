@@ -88,7 +88,7 @@ def build_document(html_content, base_href=None):
     assert html_content is not None
 
     if isinstance(html_content, unicode):
-        html_content = html_content.encode("utf8", "replace")
+        html_content = html_content.encode("utf8", "ignore")
 
     try:
         document = document_fromstring(html_content, parser=UTF8_PARSER)
@@ -126,7 +126,7 @@ class OriginalDocument(object):
         html = self._html
         if not isinstance(html, unicode):
             encoding = determine_encoding(html)
-            html = html.decode(encoding)
+            html = html.decode(encoding, "ignore")
 
         html = convert_breaks_to_paragraphs(html)
         document = build_document(html, self._url)
