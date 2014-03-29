@@ -96,7 +96,7 @@ def make_test_files(directory_path, url):
         "source_url": to_unicode(url)
     }
 
-    test_file = join(directory_path, "test.py")
+    test_file = join(directory_path, "test_article.py")
     with open(test_file, "w") as file:
         file.write(data)
 
