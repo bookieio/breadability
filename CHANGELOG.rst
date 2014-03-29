@@ -12,7 +12,7 @@ Changelog for breadability
 - Clean up logging output at warning when it's not a true warning
 
 0.1.15 (Nov 29th 2013)
------------------------
+----------------------
 - Merge changes from 0.1.14 of breadability with the fork https://github.com/miso-belica/readability.py and tweaking to return to the name breadability.
 - Fork: Added property ``Article.main_text`` for getting text annotated with
   semantic HTML tags (<em>, <strong>, ...).
@@ -25,11 +25,11 @@ Changelog for breadability
 - Fork: Py3k compatible package 'charade' is used instead of 'chardet'.
 
 0.1.14 (Nov 7th 2013)
-----------------------
+---------------------
 - Update sibling append to only happen when sibling doesn't already exist.
 
 0.1.13 (Aug 31st 2013)
------------------------
+----------------------
 - Give images in content boy a better chance of survival
 - Add tests
 
@@ -38,7 +38,7 @@ Changelog for breadability
 - Add a user agent to requests.
 
 0.1.11 (Dec 12th 2012)
------------------------
+----------------------
 - Add argparse to the install requires for python < 2.7
 
 0.1.10 (Sept 13th 2012)
@@ -46,12 +46,12 @@ Changelog for breadability
 - Updated scoring bonus and penalty with , and " characters.
 
 0.1.9 (Aug 27nd 2012)
-----------------------
+---------------------
 - In case of an issue dealing with candidates we need to act like we didn't
   find any candidates for the article content. #10
 
 0.1.8 (Aug 27nd 2012)
-----------------------
+---------------------
 - Add code/tests for an empty document.
 - Fixes #9 to handle xml parsing issues.
 
@@ -80,7 +80,7 @@ Changelog for breadability
 - Update parser to properly clean after winner doc node is chosen.
 
 0.1.2 (May 28th 2012)
-----------------------
+---------------------
 - Bugfix: #4 issue with logic of the 100char bonus points in scoring
 - Garden with PyLint/PEP8
 - Add a bunch of tests to readable/scoring code.
