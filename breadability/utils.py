@@ -5,6 +5,18 @@ from __future__ import division, print_function, unicode_literals
 
 import re
 
+try:
+    from contextlib import ignored
+except ImportError:
+    from contextlib import contextmanager
+
+    @contextmanager
+    def ignored(*exceptions):
+        try:
+            yield
+        except tuple(exceptions):
+            pass
+
 
 MULTIPLE_WHITESPACE_PATTERN = re.compile(r"\s+", re.UNICODE)
 

@@ -27,7 +27,7 @@ bin/python:
 
 .PHONY: deps
 deps: venv
-	pip install -r requirements.txt
+	$(PIP) install -r requirements.txt
 
 .PHONY: clean_venv
 clean_venv:
