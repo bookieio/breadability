@@ -3,6 +3,10 @@
 Changelog for breadability
 ==========================
 
+0.1.18 (?? ?? 2014)
+----------------------
+- Improved decoding of the page into Unicode.
+
 0.1.17 (Jan 22nd 2014)
 ----------------------
 - More log quieting down to INFO vs WARN

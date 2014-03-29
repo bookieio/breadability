@@ -4,10 +4,10 @@ from __future__ import absolute_import
 from __future__ import division, print_function, unicode_literals
 
 from collections import defaultdict
-from breadability._compat import to_unicode, to_bytes
+from breadability._compat import to_unicode, to_bytes, unicode
 from breadability.document import (
     convert_breaks_to_paragraphs,
-    determine_encoding,
+    decode_html,
     OriginalDocument,
 )
 from .compat import unittest
@@ -84,13 +84,11 @@ class TestOriginalDocument(unittest.TestCase):
 
     def test_encoding(self):
         text = "ľščťžýáíéäúňôůě".encode("iso-8859-2")
-        determine_encoding(text)
+        html = decode_html(text)
+        self.assertEqual(type(html), unicode)
 
     def test_encoding_short(self):
-        text = "ľščťžýáíé".encode("iso-8859-2")
-        encoding = determine_encoding(text)
-        self.assertEqual(encoding, "utf8")
-
         text = to_bytes("ľščťžýáíé")
-        encoding = determine_encoding(text)
-        self.assertEqual(encoding, "utf8")
+        html = decode_html(text)
+        self.assertEqual(type(html), unicode)
+        self.assertEqual(html, "ľščťžýáíé")

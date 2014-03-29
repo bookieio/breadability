@@ -23,7 +23,7 @@ from ._compat import (
     unicode,
     unicode_compatible,
 )
-from .utils import cached_property
+from .utils import cached_property, ignored
 
 
 logger = logging.getLogger("breadability")
@@ -31,30 +31,46 @@ logger = logging.getLogger("breadability")
 
 TAG_MARK_PATTERN = re.compile(to_bytes(r"</?[^>]*>\s*"))
 UTF8_PARSER = HTMLParser(encoding="utf8")
+CHARSET_META_TAG_PATTERN = re.compile(
+    br"""<meta[^>]+charset=["']?([^'"/>\s]+)""",
+    re.IGNORECASE
+)
 
 
-def determine_encoding(page):
-    encoding = "utf8"
-    text = TAG_MARK_PATTERN.sub(to_bytes(" "), page)
+def decode_html(html):
+    """
+    Converts bytes stream containing an HTML page into Unicode.
+    Tries to guess character encoding from meta tag of by "charade" library.
+    """
+    if isinstance(html, unicode):
+        return html
 
-    # don't venture to guess
-    if not text.strip() or len(text) < 10:
-        return encoding
+    match = CHARSET_META_TAG_PATTERN.search(html)
+    if match:
+        declared_encoding = match.group(1).decode("ASCII")
+        # proceed unknown encoding as if it wasn't found at all
+        with ignored(LookupError):
+            return html.decode(declared_encoding, "ignore")
 
-    # try enforce UTF-8
-    diff = text.decode(encoding, "ignore").encode(encoding)
+    # try to enforce UTF-8 firstly
+    with ignored(UnicodeDecodeError):
+        return html.decode("utf8")
+
+    text = TAG_MARK_PATTERN.sub(to_bytes(" "), html)
+    diff = text.decode("utf8", "ignore").encode("utf8")
     sizes = len(diff), len(text)
 
-    # 99% of UTF-8
+    # 99% of text is UTF-8
     if abs(len(text) - len(diff)) < max(sizes) * 0.01:
-        return encoding
+        return html.decode("utf8", "ignore")
 
     # try detect encoding
+    encoding = "utf8"
     encoding_detector = charade.detect(text)
     if encoding_detector["encoding"]:
         encoding = encoding_detector["encoding"]
 
-    return encoding
+    return html.decode(encoding, "ignore")
 
 
 BREAK_TAGS_PATTERN = re.compile(
@@ -88,7 +104,7 @@ def build_document(html_content, base_href=None):
     assert html_content is not None
 
     if isinstance(html_content, unicode):
-        html_content = html_content.encode("utf8", "replace")
+        html_content = html_content.encode("utf8", "xmlcharrefreplace")
 
     try:
         document = document_fromstring(html_content, parser=UTF8_PARSER)
@@ -125,8 +141,7 @@ class OriginalDocument(object):
         """Parsed HTML document from the input."""
         html = self._html
         if not isinstance(html, unicode):
-            encoding = determine_encoding(html)
-            html = html.decode(encoding)
+            html = decode_html(html)
 
         html = convert_breaks_to_paragraphs(html)
         document = build_document(html, self._url)
