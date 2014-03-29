@@ -171,11 +171,10 @@ def clean_document(node):
     if node is None or len(node) == 0:
         return None
 
-    logger.debug("Cleaning document.")
+    logger.debug("\n\n-------------- CLEANING DOCUMENT -----------------")
     to_drop = []
 
     for n in node.iter():
-        logger.debug("Cleaning node: %s %r", n.tag, n.attrib)
         # clean out any in-line style properties
         if "style" in n.attrib:
             n.set("style", "")
@@ -187,8 +186,8 @@ def clean_document(node):
 
         # clean headings with bad css or high link density
         if n.tag in ("h1", "h2", "h3", "h4") and get_class_weight(n) < 0:
-                logger.debug("Dropping <%s>, it's insignificant", n.tag)
-                to_drop.append(n)
+            logger.debug("Dropping <%s>, it's insignificant", n.tag)
+            to_drop.append(n)
 
         if n.tag in ("h3", "h4") and get_link_density(n) > 0.33:
             logger.debug("Dropping <%s>, it's insignificant", n.tag)
@@ -213,20 +212,22 @@ def clean_document(node):
 
 def drop_nodes_with_parents(nodes):
     for node in nodes:
-        if node.getparent() is not None:
-            logger.debug(
-                "Droping node with parent %s %r", node.tag, node.attrib)
-            node.drop_tree()
+        if node.getparent() is None:
+            continue
+
+        node.drop_tree()
+        logger.debug(
+            "Dropped node with parent %s %r %s",
+            node.tag,
+            node.attrib,
+            node.text_content()[:50]
+        )
 
 
 def clean_conditionally(node):
     """Remove the clean_el if it looks like bad content based on rules."""
-    logger.debug('Cleaning conditionally node: %s %r', node.tag, node.attrib)
-
     if node.tag not in ('form', 'table', 'ul', 'div', 'p'):
-        # this is not the tag you're looking for
-        logger.debug('Node cleared: %s %r', node.tag, node.attrib)
-        return
+        return  # this is not the tag we are looking for
 
     weight = get_class_weight(node)
     # content_score = LOOK up the content score for this node we found
@@ -271,7 +272,7 @@ def clean_conditionally(node):
             logger.debug('Conditional drop: len < 25 and 0/>2 images')
             remove_node = True
         elif weight < 25 and link_density > 0.2:
-            logger.debug('Conditional drop: weight small and link is dense')
+            logger.debug('Conditional drop: weight small (%f) and link is dense (%f)', weight, link_density)
             remove_node = True
         elif weight >= 25 and link_density > 0.5:
             logger.debug('Conditional drop: weight big but link heavy')
@@ -282,14 +283,11 @@ def clean_conditionally(node):
             remove_node = True
 
         if remove_node:
-            logger.debug('Node will be removed')
-        else:
-            logger.debug('Node cleared: %s %r', node.tag, node.attrib)
+            logger.debug('Node will be removed: %s %r %s', node.tag, node.attrib, node.text_content()[:30])
+
         return remove_node
 
-    # nope, don't remove anything
-    logger.debug('Node Cleared final.')
-    return False
+    return False  # nope, don't remove anything
 
 
 def prep_article(doc):
