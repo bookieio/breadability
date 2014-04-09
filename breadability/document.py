@@ -6,7 +6,7 @@ from __future__ import absolute_import
 
 import re
 import logging
-import charade
+import chardet
 
 from lxml.etree import (
     tounicode,
@@ -43,7 +43,7 @@ CHARSET_META_TAG_PATTERN = re.compile(
 def decode_html(html):
     """
     Converts bytes stream containing an HTML page into Unicode.
-    Tries to guess character encoding from meta tag of by "charade" library.
+    Tries to guess character encoding from meta tag of by "chardet" library.
     """
     if isinstance(html, unicode):
         return html
@@ -69,7 +69,7 @@ def decode_html(html):
 
     # try detect encoding
     encoding = "utf8"
-    encoding_detector = charade.detect(text)
+    encoding_detector = chardet.detect(text)
     if encoding_detector["encoding"]:
         encoding = encoding_detector["encoding"]
 
