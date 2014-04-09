@@ -1,5 +1,5 @@
 docopt>=0.6.1,<0.7
-charade
+chardet
 lxml
 
 nose-selecttests
