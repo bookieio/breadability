@@ -3,17 +3,21 @@ WD := $(shell pwd)
 PY := bin/python
 PIP := bin/pip
 PEP8 := bin/pep8
-NOSE := bin/nosetests
+PYTEST := bin/py.test
 
 # ###########
 # Tests rule!
 # ###########
 .PHONY: test
-test: venv develop $(NOSE)
-	$(NOSE) -s tests
+test: venv develop $(PYTEST)
+	$(PYTEST) -q --tb native -s tests
 
-$(NOSE):
-	$(PIP) install nose nose-selecttests pep8 pylint coverage
+.PHONY: test-coverage
+test-coverage: venv develop $(PYTEST)
+	$(PYTEST) -q --cov breadability tests
+
+$(PYTEST):
+	$(PIP) install -r requirements.txt
 
 # #######
 # INSTALL
@@ -42,8 +46,8 @@ lib/python*/site-packages/breadability.egg-link:
 # ###########
 # Development
 # ###########
-.PHONY: clean_all
-clean_all: clean_venv
+.PHONY: clean-all
+clean-all: clean_venv
 	if [ -d dist ]; then \
 		rm -r dist; \
     fi
