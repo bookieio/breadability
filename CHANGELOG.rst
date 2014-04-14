@@ -3,12 +3,16 @@
 Changelog for breadability
 ==========================
 
+0.1.20 (April 13th 2014)
+-------------------------
+- Don't include tests in sdist builds.
+
 0.1.19 (April 13th 2014)
-----------------------
+--------------------------
 - Replace charade with chardet for easier packaging.
 
 0.1.18 (April 6th 2014)
-----------------------
+------------------------
 - Improved decoding of the page into Unicode.
 
 0.1.17 (Jan 22nd 2014)

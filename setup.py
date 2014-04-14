@@ -1,9 +1,13 @@
 import sys
 
-from os.path import abspath, dirname, join
-from setuptools import setup, find_packages
+from os.path import (
+    abspath,
+    dirname,
+    join,
+)
+from setuptools import setup
 
-VERSION = "0.1.19"
+VERSION = "0.1.20"
 
 VERSION_SUFFIX = "%d.%d" % sys.version_info[:2]
 CURRENT_DIRECTORY = abspath(dirname(__file__))
@@ -78,7 +82,7 @@ setup(
         "Topic :: Text Processing :: Filters",
         "Topic :: Text Processing :: Markup :: HTML",
     ],
-    packages=find_packages(),
+    packages=['breadability'],
     include_package_data=True,
     zip_safe=False,
     install_requires=install_requires,
