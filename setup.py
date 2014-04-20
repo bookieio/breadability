@@ -82,7 +82,7 @@ setup(
         "Topic :: Text Processing :: Filters",
         "Topic :: Text Processing :: Markup :: HTML",
     ],
-    packages=['breadability'],
+    packages=['breadability', 'breadability.scripts'],
     include_package_data=True,
     zip_safe=False,
     install_requires=install_requires,
