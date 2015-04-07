@@ -18,9 +18,6 @@ except ImportError:
             pass
 
 
-MULTIPLE_WHITESPACE_PATTERN = re.compile(r"\s+", re.UNICODE)
-
-
 def is_blank(text):
     """
     Returns ``True`` if string contains only whitespace characters
@@ -36,19 +33,8 @@ def shrink_text(text):
 def normalize_whitespace(text):
     """
     Translates multiple whitespace into single space character.
-    If there is at least one new line character chunk is replaced
-    by single LF (Unix new line) character.
     """
-    return MULTIPLE_WHITESPACE_PATTERN.sub(_replace_whitespace, text)
-
-
-def _replace_whitespace(match):
-    text = match.group()
-
-    if "\n" in text or "\r" in text:
-        return "\n"
-    else:
-        return " "
+    return ' '.join(text.split())
 
 
 def cached_property(getter):
