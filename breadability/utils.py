@@ -26,15 +26,14 @@ def is_blank(text):
     return not text or text.isspace()
 
 
-def shrink_text(text):
-    return normalize_whitespace(text.strip())
-
-
 def normalize_whitespace(text):
     """
     Translates multiple whitespace into single space character.
     """
     return ' '.join(text.split())
+
+
+shrink_text = normalize_whitespace
 
 
 def cached_property(getter):
