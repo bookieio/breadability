@@ -21,7 +21,6 @@ from .scoring import (
 )
 from .utils import cached_property, shrink_text
 
-
 html_cleaner = Cleaner(
     scripts=True, javascript=True, comments=True,
     style=True, links=True, meta=False, add_nofollow=False,
@@ -29,7 +28,6 @@ html_cleaner = Cleaner(
     embedded=False, frames=False, forms=False,
     annoying_tags=False, remove_tags=None, kill_tags=("noscript", "iframe"),
     remove_unknown_tags=False, safe_attrs_only=False)
-
 
 SCORABLE_TAGS = ("div", "p", "td", "pre", "article")
 ANNOTATION_TAGS = (
@@ -193,6 +191,7 @@ def clean_document(node):
             logger.debug("Dropping <%s>, it's insignificant", n.tag)
             to_drop.append(n)
 
+        """ modified by guojw
         # drop block element without content and children
         if n.tag in ("div", "p"):
             text_content = shrink_text(n.text_content())
@@ -204,6 +203,7 @@ def clean_document(node):
         # finally try out the conditional cleaning of the target node
         if clean_conditionally(n):
             to_drop.append(n)
+        """
 
     drop_nodes_with_parents(to_drop)
 
