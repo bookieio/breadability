@@ -16,6 +16,7 @@ python:
 before_install: sudo apt-get install libxml2-dev libxslt-dev
 # command to install dependencies
 install:
+  - pip install -U pip wheel setuptools
   - python setup.py install
   - make deps
 # command to run tests
