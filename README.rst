@@ -1,7 +1,7 @@
 breadability - another readability Python (v2.6-v3.3) port
 ==========================================================
 .. image:: https://api.travis-ci.org/bookieio/breadability.png?branch=master
-   :target: https://travis-ci.org/bookieio/breadability.py
+   :target: https://travis-ci.org/bookieio/breadability
 
 I've tried to work with the various forks of some ancient codebase that ported
 `readability`_ to Python. The lack of tests, unused regex's, and commented out
