@@ -32,9 +32,6 @@ tests_require = [
 ]
 
 
-if sys.version_info < (2, 7):
-    install_requires.append("unittest2")
-
 console_script_targets = [
     "breadability = breadability.scripts.client:main",
     "breadability-{0} = breadability.scripts.client:main",
@@ -76,6 +73,9 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.2",
         "Programming Language :: Python :: 3.3",
+        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: Implementation :: CPython",
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Software Development :: Pre-processors",
@@ -87,7 +87,7 @@ setup(
     zip_safe=False,
     install_requires=install_requires,
     tests_require=tests_require,
-    test_suite="nose.collector",
+    test_suite="tests",
     entry_points={
         "console_scripts": console_script_targets,
     }

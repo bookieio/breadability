@@ -2,3 +2,5 @@ include README.rst
 include CHANGELOG.rst
 include LICENSE.rst
 include AUTHORS.txt
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]

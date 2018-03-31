@@ -1,5 +1,5 @@
 breadability - another readability Python (v2.6-v3.3) port
-===========================================================
+==========================================================
 .. image:: https://api.travis-ci.org/bookieio/breadability.png?branch=master
    :target: https://travis-ci.org/bookieio/breadability.py
 
@@ -55,7 +55,7 @@ Tests
 -----
 .. code-block:: bash
 
-    $ nosetests-2.6 tests && nosetests-3.2 tests && nosetests-2.7 tests && nosetests-3.3 tests
+    $ pytest tests
 
 
 Usage

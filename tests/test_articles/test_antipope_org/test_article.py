@@ -1,42 +1,45 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import
-from __future__ import division, print_function, unicode_literals
+"""Test the scoring and parsing of the Blog Post"""
+
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os
 
+import pytest
+
 from breadability.readable import Article
-from ...compat import unittest
 
 
-class TestAntipopeBlog(unittest.TestCase):
-    """Test the scoring and parsing of the Blog Post"""
+@pytest.fixture(scope="module")
+def article():
+    """Load up the article for us"""
+    article_path = os.path.join(os.path.dirname(__file__), 'article.html')
+    with open(article_path) as file:
+        return file.read()
 
-    def setUp(self):
-        """Load up the article for us"""
-        article_path = os.path.join(os.path.dirname(__file__), 'article.html')
-        self.article = open(article_path).read()
 
-    def tearDown(self):
-        """Drop the article"""
-        self.article = None
+def test_parses(article):
+    """Verify we can parse the document."""
+    doc = Article(article)
 
-    def test_parses(self):
-        """Verify we can parse the document."""
-        doc = Article(self.article)
-        self.assertTrue('id="readabilityBody"' in doc.readable)
+    assert 'id="readabilityBody"' in doc.readable
 
-    def test_comments_cleaned(self):
-        """The div with the comments should be removed."""
-        doc = Article(self.article)
-        self.assertTrue('class="comments"' not in doc.readable)
 
-    def test_beta_removed(self):
-        """The id=beta element should be removed
+def test_comments_cleaned(article):
+    """The div with the comments should be removed."""
+    doc = Article(article)
 
-        It's link heavy and causing a lot of garbage content. This should be
-        removed.
+    assert 'class="comments"' not in doc.readable
 
-        """
-        doc = Article(self.article)
-        self.assertTrue('id="beta"' not in doc.readable)
+
+def test_beta_removed(article):
+    """The id=beta element should be removed
+
+    It's link heavy and causing a lot of garbage content. This should be
+    removed.
+
+    """
+    doc = Article(article)
+
+    assert 'id="beta"' not in doc.readable
