@@ -4,30 +4,15 @@
 
 from __future__ import absolute_import
 
-import re
 import logging
+import re
+
 import chardet
+from lxml.etree import ParserError, XMLSyntaxError, tounicode
+from lxml.html import HTMLParser, document_fromstring
 
-from lxml.etree import (
-    tounicode,
-    XMLSyntaxError,
-)
-from lxml.html import (
-    document_fromstring,
-    HTMLParser,
-)
-
-from ._compat import (
-    to_bytes,
-    to_unicode,
-    unicode,
-    unicode_compatible,
-)
-from .utils import (
-    cached_property,
-    ignored,
-)
-
+from ._compat import to_bytes, to_unicode, unicode, unicode_compatible
+from .utils import cached_property, ignored
 
 logger = logging.getLogger("breadability")
 
@@ -111,7 +96,7 @@ def build_document(html_content, base_href=None):
 
     try:
         document = document_fromstring(html_content, parser=UTF8_PARSER)
-    except XMLSyntaxError:
+    except (ParserError, XMLSyntaxError):
         raise ValueError("Failed to parse document contents.")
 
     if base_href:
