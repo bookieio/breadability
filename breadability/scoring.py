@@ -85,7 +85,7 @@ def get_link_density(node, node_text=None):
     """
     if node_text is None:
         node_text = node.text_content()
-    node_text = normalize_whitespace(node_text.strip())
+    node_text = normalize_whitespace(node_text)
 
     text_length = len(node_text)
     if text_length == 0:
@@ -101,7 +101,7 @@ def get_link_density(node, node_text=None):
 
 
 def _get_normalized_text_length(node):
-    return len(normalize_whitespace(node.text_content().strip()))
+    return len(normalize_whitespace(node.text_content()))
 
 
 def get_class_weight(node):
