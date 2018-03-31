@@ -2,9 +2,7 @@ language: python
 python:
   # https://github.com/travis-ci/travis-ci/issues/2219#issuecomment-41804942
   # https://snarky.ca/how-to-use-your-project-travis-to-help-test-python-itself/
-  - "2.6"
   - "2.7"
-  - "3.2"
   - "3.3"
   - "3.4"
   - "3.5"
