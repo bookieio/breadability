@@ -90,7 +90,7 @@ setup(
     zip_safe=False,
     install_requires=install_requires,
     tests_require=tests_require,
-    test_suite="nose.collector",
+    test_suite="tests",
     entry_points={
         "console_scripts": console_script_targets,
     }
