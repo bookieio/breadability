@@ -32,9 +32,6 @@ tests_require = [
 ]
 
 
-if sys.version_info < (2, 7):
-    install_requires.append("unittest2")
-
 console_script_targets = [
     "breadability = breadability.scripts.client:main",
     "breadability-{0} = breadability.scripts.client:main",

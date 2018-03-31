@@ -35,41 +35,41 @@ TEST_PATH = join(
 
 TEST_TEMPLATE = '''# -*- coding: utf8 -*-
 
-from __future__ import absolute_import
-from __future__ import division, print_function, unicode_literals
+"""
+Test the scoring and parsing of the article from URL below:
+%(source_url)s
+"""
 
-from os.path import join, dirname
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+import os
+
+import pytest
+
 from breadability.readable import Article
-from ...compat import unittest
 
 
-class TestArticle(unittest.TestCase):
-    """
-    Test the scoring and parsing of the article from URL below:
-    %(source_url)s
-    """
+@pytest.fixture(scope="module")
+def article():
+    """Load up the article for us"""
+    article_path = os.path.join(os.path.dirname(__file__), "article.html")
+    with open(article_path, "rb") as file:
+        return Article(file.read(), "%(source_url)s")
 
-    def setUp(self):
-        """Load up the article for us"""
-        article_path = join(dirname(__file__), "article.html")
-        with open(article_path, "rb") as file:
-            self.document = Article(file.read(), "%(source_url)s")
 
-    def tearDown(self):
-        """Drop the article"""
-        self.document = None
+def test_parses(article):
+    """Verify we can parse the document."""
+    assert 'id="readabilityBody"' in article.readable
 
-    def test_parses(self):
-        """Verify we can parse the document."""
-        self.assertIn('id="readabilityBody"', self.document.readable)
 
-    def test_content_exists(self):
-        """Verify that some content exists."""
-        self.assertIn("#&@#&@#&@", self.document.readable)
+def test_content_exists(article):
+    """Verify that some content exists."""
+    assert "#&@#&@#&@" in article.readable
 
-    def test_content_does_not_exist(self):
-        """Verify we cleaned out some content that shouldn't exist."""
-        self.assertNotIn("", self.document.readable)
+
+def test_content_does_not_exist(article):
+    """Verify we cleaned out some content that shouldn't exist."""
+    assert "" not in article.readable
 '''
 
 
