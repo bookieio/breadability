@@ -1,6 +1,10 @@
 *.py[co]
 *.prof
-.coverage
+
+# hide all files starting with dot: .idea, .pytest_cache, .coverage, ...
+.*
+!.gitignore
+!.travis.yml
 
 .installed.cfg
 bin
