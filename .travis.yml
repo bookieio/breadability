@@ -9,6 +9,7 @@ python:
   - "3.5-dev"
   - "3.6"
   - "3.6-dev"
+  - "3.7"
   - "3.7-dev"
   - "nightly"
 before_install: sudo apt-get install libxml2-dev libxslt-dev
