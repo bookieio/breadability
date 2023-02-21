@@ -1,4 +1,4 @@
-docopt>=0.6.1,<0.7
+docopt-ng>=0.6.1
 chardet
 lxml
 

@@ -19,7 +19,7 @@ with open(join(CURRENT_DIRECTORY, "README.rst")) as readme:
 
 
 install_requires = [
-    "docopt>=0.6.1,<0.7",
+    "docopt-ng>=0.6.1",
     "chardet",
     "lxml>=2.0",
 ]
