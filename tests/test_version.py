@@ -1,5 +1,3 @@
-# -*- coding: utf8 -*-
-
 from __future__ import (
     absolute_import,
     division,
@@ -7,4 +5,8 @@ from __future__ import (
     unicode_literals
 )
 
-__version__ = "0.1.20"
+import breadability
+
+
+def test_version():
+    assert breadability.__version__ == "0.1.20"
