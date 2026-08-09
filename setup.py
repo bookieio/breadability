@@ -7,7 +7,7 @@ from os.path import (
 )
 from setuptools import setup
 
-VERSION = "0.1.20"
+VERSION = "0.1.21"
 
 VERSION_SUFFIX = "%d.%d" % sys.version_info[:2]
 CURRENT_DIRECTORY = abspath(dirname(__file__))
