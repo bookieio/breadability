@@ -5,6 +5,8 @@
 .*
 !.gitignore
 !.travis.yml
+!.github
+!.github/**
 
 .installed.cfg
 bin
