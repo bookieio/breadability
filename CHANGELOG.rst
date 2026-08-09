@@ -3,6 +3,10 @@
 Changelog for breadability
 ==========================
 
+0.1.21 (August 9th 2026)
+-------------------------
+- Stop depending on the deprecated ``pkg_resources`` module for ``__version__``
+
 0.1.20 (April 13th 2014)
 -------------------------
 - Don't include tests in sdist builds.

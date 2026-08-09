@@ -9,4 +9,4 @@ import breadability
 
 
 def test_version():
-    assert breadability.__version__ == "0.1.20"
+    assert breadability.__version__ == "0.1.21"
