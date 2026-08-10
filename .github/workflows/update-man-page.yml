@@ -1,0 +1,40 @@
+name: Update man page
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-man-page:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Install help2man
+        run: sudo apt-get update && sudo apt-get install -y help2man
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@29b21a839666e60d6a2015b4010b35b7911d3590 # v7.6
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install package
+        run: uv pip install --system -e .
+
+      - name: Regenerate man page
+        run: help2man breadability --no-info --output=breadability.1
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- breadability.1; then
+            echo "Man page already up to date"
+          else
+            git add breadability.1
+            git commit -m "Update man page"
+            git push
+          fi
