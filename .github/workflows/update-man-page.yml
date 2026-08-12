@@ -21,8 +21,14 @@ jobs:
       - name: Set up Python
         run: uv python install
 
+      - name: Install package
+        run: |
+          uv venv
+          uv pip install -e .
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+
       - name: Regenerate man page
-        run: help2man "uv run breadability" --no-info --output=breadability.1
+        run: help2man breadability --no-info --output=breadability.1
 
       - name: Commit changes
         run: |
