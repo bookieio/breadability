@@ -21,11 +21,8 @@ jobs:
       - name: Set up Python
         run: uv python install
 
-      - name: Install package
-        run: uv pip install --system -e .
-
       - name: Regenerate man page
-        run: help2man breadability --no-info --output=breadability.1
+        run: help2man "uv run breadability" --no-info --output=breadability.1
 
       - name: Commit changes
         run: |
