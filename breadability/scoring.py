@@ -13,7 +13,6 @@ from lxml.etree import tostring
 from ._compat import to_bytes
 from .utils import normalize_whitespace
 
-
 # A series of sets of attributes we check to help in determining if a node is
 # a potential candidate or not.
 CLS_UNLIKELY = re.compile(
@@ -140,7 +139,9 @@ def is_unlikely_node(node):
 
 def score_candidates(nodes):
     """Given a list of potential nodes, find some initial scores to start"""
-    MIN_HIT_LENTH = 25
+    # guojw
+    # MIN_HIT_LENTH = 25
+    MIN_HIT_LENTH = 1
     candidates = {}
 
     for node in nodes:
