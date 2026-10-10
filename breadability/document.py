@@ -78,10 +78,11 @@ def convert_breaks_to_paragraphs(html):
 
 def _replace_break_tags(match):
     tags = match.group()
+    normalized_tags = tags.lower()
 
-    if to_unicode("<hr") in tags:
+    if to_unicode("<hr") in normalized_tags:
         return to_unicode("</p><p>")
-    elif tags.count(to_unicode("<br")) > 1:
+    elif normalized_tags.count(to_unicode("<br")) > 1:
         return to_unicode("</p><p>")
     else:
         return tags
