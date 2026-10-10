@@ -6,6 +6,8 @@ from __future__ import absolute_import
 from __future__ import division, print_function, unicode_literals
 
 from collections import defaultdict
+
+import pytest
 from breadability._compat import (
     to_unicode,
     to_bytes,
@@ -111,3 +113,19 @@ def test_encoding_short():
 
     assert type(html) is unicode
     assert html == "ľščťžýáíé"
+
+
+@pytest.mark.parametrize("breaks", [
+    "<BR><BR>", "<Br/><bR />", "<BR class='break'><br>",
+    "<HR>", "<Hr />", "<BR> \n <HR> \t <br>",
+])
+def test_break_tags_are_case_insensitive(breaks):
+    html = "<div>First" + breaks + "Second</div>"
+    assert convert_breaks_to_paragraphs(html) == (
+        "<div>First</p><p>Second</div>")
+
+
+@pytest.mark.parametrize("break_tag", ["<BR>", "<Br/>", "<br>"])
+def test_single_break_tag_is_preserved(break_tag):
+    html = "<div>First" + break_tag + "Second</div>"
+    assert convert_breaks_to_paragraphs(html) == html
