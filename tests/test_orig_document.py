@@ -8,6 +8,7 @@ from __future__ import division, print_function, unicode_literals
 from collections import defaultdict
 
 import pytest
+from lxml.etree import LIBXML_VERSION
 from breadability._compat import (
     to_unicode,
     to_bytes,
@@ -85,12 +86,16 @@ def test_empty_title():
     assert document.title == ""
 
 
+@pytest.mark.xfail(
+    LIBXML_VERSION < (2, 14),
+    reason="libxml2 < 2.14 parses <title> content as markup (pre-HTML5 behaviour)",
+)
 def test_title_only_with_tags():
     """We convert all <br/> tags to <p> tags"""
     document = OriginalDocument(
         "<html><head><title><em></em></title></head><body></body></html>")
 
-    assert document.title == ""
+    assert document.title == "<em></em>"
 
 
 def test_no_title():

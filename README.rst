@@ -1,7 +1,7 @@
-breadability - another readability Python (v2.6-v3.3) port
-==========================================================
-.. image:: https://api.travis-ci.org/bookieio/breadability.png?branch=master
-   :target: https://travis-ci.org/bookieio/breadability
+breadability - another readability Python (v2.6-v3.15) port
+===========================================================
+.. image:: https://github.com/bookieio/breadability/actions/workflows/tests.yml/badge.svg?branch=master
+   :target: https://github.com/bookieio/breadability/actions/workflows/tests.yml
 
 I've tried to work with the various forks of some ancient codebase that ported
 `readability`_ to Python. The lack of tests, unused regex's, and commented out
@@ -138,6 +138,5 @@ Inspiration
 
 
 .. _readability: http://code.google.com/p/arc90labs-readability/
-.. _TravisCI: http://travis-ci.org/
 .. _decruft: https://github.com/dcramer/decruft
 .. _python-readability: https://github.com/buriy/python-readability
