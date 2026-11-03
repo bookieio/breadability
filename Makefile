@@ -12,6 +12,16 @@ PYTEST := bin/py.test
 test: venv develop $(PYTEST)
 	$(PYTEST) -q --tb native -s tests
 
+# Runs tests on every supported Python version like CI does (requires uv)
+PYTHON_VERSIONS := 3.8 3.9 3.10 3.11 3.12 3.13 3.14 3.15
+
+.PHONY: test-all
+test-all:
+	@for version in $(PYTHON_VERSIONS); do \
+		echo "=== Python $$version ==="; \
+		uv run --isolated --no-project --python $$version --with pytest --with . pytest || exit 1; \
+	done
+
 .PHONY: test-coverage
 test-coverage: venv develop $(PYTEST)
 	$(PYTEST) -q --cov breadability tests
