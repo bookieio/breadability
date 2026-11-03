@@ -6,10 +6,16 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Cancel the previous run of the same PR/branch when a new commit is pushed (but test every commit on master)
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
 jobs:
   tests:
     name: Python ${{ matrix.python }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
     continue-on-error: ${{ matrix.python == '3.15' }}
     strategy:
       fail-fast: false
